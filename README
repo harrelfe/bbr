@@ -1,0 +1,6 @@
+Biostatistics for Biomedical Research
+
+Composition: Quarto Book (.qmd files for chapters, index, and yaml)
+Renders: _book/*.html
+
+Web site for rendered book: https://hbiostat.org/bbr
