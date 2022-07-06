@@ -26,3 +26,8 @@
 # New Bibliographic References
 * Send the link to the publication to Frank who will add to Zotero
   then download into an updated harrelfe.bib
+
+# Overall Suggestions
+* Make ample use of `mermaid` diagrams to illustrate concepts, using
+  the `Quarto` built-in markdown for `mermaid` as seen in `index.qmd`
+  
