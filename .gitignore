@@ -1,0 +1,15 @@
+.Rhistory
+audio
+videos
+_book
+.quarto
+course
+registration
+bbr.pdf
+brms.r
+_freeze
+*_files
+*_cache
+mdlink
+messages.txt
+insert.txt
