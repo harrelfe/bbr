@@ -1,0 +1,83 @@
+project:
+  type: book
+
+book:
+  title: "Biostatistics for Biomedical Research"
+  author:
+    - name: Frank E Harrell Jr
+      url: https://hbiostat.org
+      affiliation: Department of Biostatistics<br>School of Medicine<br>Vanderbilt University
+  date: last-modified
+  site-url: https://hbiostat.org/bbr
+  url: https://hbiostat.org/bbr
+
+  google-analytics: "G-P47K0XF3SM"
+
+  twitter-card:
+    creator: "f2harrell"
+    site: "f2harrell"
+		
+  chapters:
+    - index.qmd
+    - r.qmd
+    - algebra.qmd
+    - overview.qmd
+    - descript.qmd
+    - htest.qmd
+    - prop.qmd
+    - nonpar.qmd
+    - corr.qmd
+    - rmsintro.qmd
+    - reg.qmd
+    - multgroup.qmd
+    - infreview.qmd
+    - ancova.qmd
+    - change.qmd
+    - serial.qmd
+    - obsvar.qmd
+    - propensity.qmd
+    - info.qmd
+    - dx.qmd
+    - hdata.qmd
+    - repro.qmd
+    - alpha.qmd
+    - figures.qmd
+    - references.qmd
+
+  page-footer:
+    background: light
+    left:
+      - text: "Copyright 2022, Frank E Harrell Jr"
+    right:
+      - text: "License"
+        href: https://www.gnu.org/licenses/gpl-3.0.en.html
+
+  navbar:
+    collapse-below: xl
+
+format:
+  html:
+    theme: journal
+    number-depth: 3
+    reference-location: margin
+    fig-cap-location: margin
+    css: mermaidf.css
+    code-tools: true
+    code-fold: true
+    code-block-bg: "#f1f3f5"
+    code-block-border-left: "#31BAE9"
+
+bibliography: harrelfe.bib
+csl: apa-annotated-bibliography.csl
+
+comments:
+  hypothesis:
+    theme: clean
+    openSidebar: false
+    enableExperimentalNewNoteButton: true
+
+execute:
+  warning: false
+  message: false
+  freeze: auto
+	

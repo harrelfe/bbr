@@ -1,0 +1,306 @@
+```{r setup, include=FALSE}
+source('~/r/rmarkdown/qbookfun.r')
+```
+`r apacue <- 0`
+
+
+# Modeling for Observational Treatment Comparisons {#sub-ps}
+
+
+`r mrg(ddisc(18), sound("ps-1"))`
+
+The randomized clinical trial is the gold standard for developing
+evidence about treatment effects, but on rare occasion an RCT is not
+feasible, or one needs to make clinical decisions while waiting years
+for an RCT to complete.  Observational treatment comparisons can
+sometimes help, though many published ones provide information that is
+worse than having no information at all due to missing confounder
+variables or poor statistical practice.
+
+
+## Challenges
+
+`r mrg(sound("ps-2"))`
+
+* Attempt to estimate the effect of a treatment A using data on
+  patients who <em>happen</em> to get the treatment or a comparator B
+* Confounding by indication
+    + indications exist for prescribing A; not a random process
+    + those getting A (or B) may have failed an earlier treatment
+    + they may be less sick, or more sick
+    + what makes them sicker may not be measured
+* Many researchers have attempted to use data collected for other
+  purposes to compare A and B
+    + they rationalize adequacy of the data after seeing what is
+    available
+    + they do not design the study prospectively, guided by unbiased
+    experts who understand the therapeutic decisions
+* If the data are adequate for the task, goal is to adjust for all
+  potential confounders as measured in those data
+* Easy to lose sight of parallel goal: adjust for outcome heterogeneity
+
+
+## Propensity Score {#sec-propens}
+
+`r mrg(sound("ps-3"))`
+
+* In observational studies comparing treatments, need to adjust
+  for nonrandom treatment selection
+* Number of confounding variables can be quite large
+* May be too large to adjust for them using multiple regression,
+  due to overfitting (may have more potential confounders than
+  outcome events)
+* Assume that all factors related to treatment selection that are
+  prognostic are collected
+* Use them in a flexible regression model to predict treatment
+  actually received (e.g., logistic model allowing nonlinear effects)
+* <b>Propensity score</b> (PS) = estimated probability of getting
+  treatment B vs. treatment A
+* Use of the PS allows one to aggressively adjust for measured
+  potential confounders
+* Doing an adjusted analysis where the adjustment variable is the
+  PS simultaneously adjusts for all the variables in the
+  score <em>insofar</em> as confounding is concerned
+  (but <b>not with regard to outcome heterogeneity</b>)
+* If after adjusting for the score there were a residual imbalance
+  for one of the variables, that would imply that the variable was
+  not correctly modeled in the PS
+* E.g.: after holding PS constant there are more subjects above
+  age 70 in treatment B; means that age$>70$ is still predictive of
+  treatment received after adjusting for PS, or age$>70$ was not
+  modeled correctly.
+* An additive (in the logit) model where all continuous baseline
+  variables are splined will result in adequate adjustment in the
+  majority of cases---certainly better than categorization.  Lack of
+  fit will then come only from omitted interaction effects.  E.g.: if
+  older males are much more likely to receive treatment B than
+  treatment A than what would be expected from the effects of age and
+  sex alone, adjustment for the additive propensity would not
+  adequately balance for age and sex.
+
+See [this](https://stats.stackexchange.com/questions/481110) for an excellent discussion of problems with PS matching.
+
+## Misunderstandings About Propensity Scores
+
+`r mrg(sound("ps-4"))`
+
+* PS can be used as a building block to causal inference but PS is not a
+  causal inference tool <em>per se</em>
+* PS is a <em>confounding focuser</em>
+* It is a <em>data reduction</em> tool that may reduce the number of
+  parameters in the outcome model
+* PS analysis is not a simulated randomized trial
+    + randomized trials depend only on chance for treatment
+    assignment
+    + RCTs do not depend on measuring all relevant variables
+* Adjusting for PS is adequate for adjusting for <b>measured</b>
+  confounding if the PS model fits observed treatment selection
+  patterns well
+* But adjusting only for PS is inadequate
+    + to get proper conditioning so that the treatment effect can
+    generalize to a population with a different covariate mix, one
+    must condition on important prognostic factors
+    + non-collapsibility of hazard and odds ratios is not addressed
+    by PS adjustment
+* PS is not necessary if the effective sample size (e.g. number of
+  outcome events) $>$ e.g. $5p$ where $p$ is the number of measured covariates
+* Stratifying for PS does not remove all the measured confounding
+* Adjusting only for PS can hide interactions with treatment
+* When judging covariate balance (as after PS matching) it is
+  <b>not</b> sufficient to examine the mean covariate value in the
+  treatment groups
+
+
+## Assessing Treatment Effect
+
+`r mrg(sound("ps-5"))`
+
+* Eliminate patients in intervals of PS where there is no overlap
+  between A and B, or include an interaction between treatment and a
+  baseline characteristic^[To quote @gel06dat Section 10.3, ``Ultimately, one good solution may be a multilevel model that includes treatment interactions so that inferences explicitly recognize the decreased precision that can be obtained outside the region of overlap.''  For example, if one included an interaction between age and treatment and there were no patients greater than 70 years old receiving treatment B, the B:A difference for age greater than 70 would have an extremely wide confidence interval as it depends on extrapolation.  So the estimates that are based on extrapolation are not misleading; they are just not informative.]
+* Many researchers stratify the PS into quintiles, get treatment
+  differences within the quintiles, and average these to get
+  adjustment treatment effects
+* Often results in imbalances in outer quintiles due to skewed
+  distributions of PS there
+* Can do a matched pairs analysis but depends on matching
+  tolerance and many patients will be discarded when their case has
+  already been matched
+* Inverse probability weighting by PS is a high variance/low power
+  approach, like matching
+* Usually better to adjust for PS in a regression model
+* Model: $Y = \textrm{treat} + \log\frac{PS}{1-PS} +$
+  nonlinear functions of $\log\frac{PS}{1-PS} +$ important prognostic
+    variables
+* Prognostic variables need to be in outcome ($Y$) model even
+  though they are also in the PS, to account for subject outcome heterogeneity
+  (susceptibility bias)
+* If outcome is binary and can afford to ignore prognostic
+  variables, use nonparametric regression to relate PS to outcome
+  separately in actual treatment A vs. B groups
+* Plotting these two curves with PS on $x$-axis and looking at
+  vertical distances between curves is an excellent
+  way to adjust for PS continuously without assuming a model
+
+
+### Problems with Propensity Score Matching {#sec-psmatch}
+
+`r mrg(sound("ps-6"))`
+
+* The choice of the matching algorithm is not principle-based so
+  is mainly arbitrary.  Most matching algorithms are dependent on the
+  order of observations in the dataset.  Arbitrariness of matching
+  algorithms creates a type of non-reproducibility.
+* Non-matched observations are discarded, resulting in a loss of
+  precision and power.
+* Matching not only discards hard-to-match observations (thus
+  helping the analyst correctly concentrate on the propensity overlap
+  region) but also discards many "good" matches in the overlap
+  region.
+* Matching does not do effective interpolation on the interior of
+  the overlap region.
+* The choice of the main analysis when matching is used is not
+  well worked out in the statistics literature.  Most analysts just
+  ignore the matching during the outcome analysis.
+* Even with matching one must use covariate adjustment for strong
+  prognostic factors to get the right treatment effects, due to
+  non-collapsibility of odds and hazards ratios.
+* Matching hides interactions with treatment and covariates.
+Most users of propensity score matching do not even entertain the
+notion that the treatment effect may interact with propensity to
+treat, must less entertain the thought of individual patient
+characteristics interacting with treatment.
+
+
+## Recommended Statistical Analysis Plan
+
+`r mrg(sound("ps-7"))`
+
+1. Be very liberal in selecting a large list of potential
+  confounder variables that are measured pre-treatment.  But respect
+  causal pathways and avoid collider and other biases.
+1. If the number of potential confounders is not large in
+  comparison with the effective sample size, use direct covariate
+  adjustment instead of propensity score adjustment.  For example, if
+  the outcome is binary and you have more than 5 events per covariate,
+  full covariate adjustment probably works OK.
+1. Model the probability of receiving treatment using a flexible
+  statistical model that makes minimal assumptions (e.g., rich
+  additive model that assumes smooth predictor effects).  If there are
+  more than two treatments, you will need as many propensity scores as
+  there are treatments, less one, and all of the logic propensity
+  scores will need to be adjusted for in what follows.
+1. Examine the distribution of estimated propensity score
+  separately for the treatment groups.
+1. If there is a non-overlap region of the two distributions, and
+  you don't want to use a more conservative interaction analysis (see
+  below), exclude those subjects from the analysis.  Recursive
+  partitioning can be used to predict membership in the non-overlap
+  region from baseline characteristics so that the research findings
+  with regard to applicability/generalizability can be better
+  understood.
+1. Overlap must be judged on absolute sample sizes, not proportions.
+1. Use covariate adjustment for propensity score for subjects in
+  the overlap region.  Expand logit propensity using a restricted
+  cubic spline so as to not assume linearity in the logit in relating
+  propensity to outcome. Also include pre-specified important
+  prognostic factors in the model to account for the majority of
+  outcome heterogeneity.  It is not a problem that these prognostic
+  variables are also in the propensity score.
+1. As a secondary analysis use a chunk test to assess whether there
+  is an interaction with logit propensity to treat and actual treatment.
+  For example, one may find that physicians are correctly judging that
+  one subset of patients should usually be treated a certain way.
+1. Instead of removing subjects outside the overlap region, you 
+`r mrg(sound("ps-8"))`
+  could allow
+  propensity or individual predictors to interact with treatment.
+  Treatment effect estimates in the presence of interactions are
+  self-penalizing for not having sufficient overlap.  Suppose for
+  example that age were the only adjustment covariate and a propensity
+  score was not needed.  Suppose that for those with age less than 70
+  there were sufficiently many subjects from either treatment for
+  every interval of age but that when age exceeded 70 there were only
+  5 subjects on treatment B.  Including an age $\times$ treatment
+  interaction in the model and obtaining the estimated outcome difference
+  for treatment A vs. treatment B as a function of age will have
+  a confidence band with minimum width at the mean age, and
+  above age 70 the confidence band will be very wide.  This is to be
+  expected and is an honest way to report what we know about the
+  treatment effect adjusted for age.   If there were no age $\times$
+  treatment interaction, omitting the interaction term would yield a
+  proper model with a relatively narrow confidence interval, and if
+  the shape of the age relationship were correctly specified the
+  treatment effect estimate would be valid.  So one can say that not
+  having comparable subjects on both treatments for some intervals of
+  covariates means that either (1) inference should be restricted to
+  the overlap region, or (2) the inference is based on model
+  assumptions.
+1. See [fharrell.com/post/ia](https://fharrell.com/post/ia)
+    for details about interaction, confidence interval width, and
+    relationship to generalizability.
+
+Using a full regression analysis allows interactions to be explored,
+as briefly described above.
+Suppose that one uses a restricted cubic spline in the logit
+propensity to adjust for confounding, and all these spline terms are
+multiplied by the indicator variable for getting a certain treatment.
+One can make a plot with predicted outcome on the $y$-axis and PS on
+the $x$-axis, with one curve per treatment.  This allows inspection of
+parallelism (which can easily be formally tested with the chunk test)
+and whether there is a very high or very low PS region where treatment
+effects are different from the average effect.  For example, if
+physicians have a very high probability of always selecting a certain
+treatment for patients that actually get the most benefit from the
+treatment, this will be apparent from the plot.
+
+
+## Reasons for Failure of Propensity Analysis
+
+`r mrg(sound("ps-9"))`
+Propensity analysis may not sufficiently adjust for confounding in non-randomized studies when
+
+* prognostic factors that are confounders are not measured and are not highly correlated with factors that are measured
+* the propensity modeling was too parsimonious (e.g., if the researchers excluded baseline variables just because they were insignificant)
+* the propensity model assumed linearity of effects when some were really nonlinear (this would cause an imbalance in something other than the mean to not be handled)
+* the propensity model should have had important interaction terms that were not included (e.g., if there is only an age imbalance in males)
+* the researchers attempted to extrapolate beyond ranges of overlap in propensity scores in the two groups (this happens with covariate adjustment sometimes, but can happen with quantile stratification if outer quantiles are very imbalanced)
+
+
+## Sensitivity Analysis
+
+`r mrg(sound("ps-10"))`
+
+* For $n$ patients in the analysis, generate $n$ random values of
+  a hypothetical unmeasured confounder $U$
+* Constrain $U$ so that the effect of $U$ on the response $Y$ is
+  given by an adjusted odds ratio of $OR_{Y}$ and so that $U$'s distribution is
+  unbalanced in group A vs. B to the tune of an odds ratio of
+  $OR_{treat}$.
+* Solve for how large $OR_{Y}$ and $OR_{treat}$ must be before the
+  adjusted treatment effect reverses sign or changes in statistical
+  significance
+* The larger are $OR_Y$ and $OR_{treat}$ the less plausible it is
+  that such an unmeasured confounder exists
+See the `R` `rms` package [`sensuc`](https://www.rdocumentation.org/packages/rms/topics/sensuc) function.
+
+
+## Reasons To Not Use Propensity Analysis
+
+`r mrg(sound("ps-11"))`
+@che16too demonstrated advantages of using a unified
+regression model to adjust for "too many" predictors by using
+penalized maximum likelihood estimation, where the exposure variable
+coefficients are not penalized but all the adjustment variable
+coefficients have a quadratic (ridge) penalty.
+
+
+## Further Reading
+[Franklin et al](https://ascpt.onlinelibrary.wiley.com/doi/10.1002/cpt.2255) is an outstanding paper on reliability of observational treatment comparisons
+
+[Gelman](http://www.stat.columbia.edu/~gelman/arm/chap10.pdf) has
+a nice chapter on causal inference and matching from @gel06dat
+
+Gary King has expressed a number of reservations about PS
+matching; see<br> [gking.harvard.edu/files/gking/files/psnot.pdf](https://gking.harvard.edu/files/gking/files/psnot.pdf).
+

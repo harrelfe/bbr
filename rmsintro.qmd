@@ -1,0 +1,408 @@
+```{r setup, include=FALSE}
+require(Hmisc)
+getRs('reptools.r')
+hookaddcap()   # make knitr call a function at the end of each chunk
+               # to try to automatically add to list of figure
+options(prType='html')
+source('~/r/rmarkdown/qbookfun.r')
+```
+
+
+# Introduction to the `R` `rms` Package: The Linear Model {#sec-rmsintro}
+
+Some of the purposes of the `rms` package are to`r ipacue()`
+
+* make everyday statistical modeling easier to do
+* make modern statistical methods easy to incorporate into everyday work
+* make it easy to use the bootstrap to validate models
+* provide "model presentation graphics"
+
+
+## Formula Language and Fitting Function
+
+* Statistical formula in `R`:  `r ipacue()`
+```{r eval=FALSE}
+y ~ x1 + x2 + x3
+```
+
+`y` *is modeled as* $\alpha + \beta_{1}x_{1} + \beta_{2}x_{2} + \beta_{3} x_{3}$
+
+* `y` is the dependent variable/response/outcome, `x`'s are
+  predictors (independent variables)
+* The formula is the first argument to a *fitting*
+  function (just as it is the first argument to a `trellis`
+  graphics function)
+* `rms` (*regression modeling strategies*) package @rrms
+  makes many aspects of regression modeling
+  and graphical display of model results easier to do
+* `rms` does a lot of bookkeeping to
+  remember details about the *design matrix* for the model and to
+  use these details in making automatic hypothesis tests, estimates,
+  and plots.  The design matrix is the matrix of independent variables
+  after coding them numerically and adding nonlinear and product terms
+  if needed.
+* `rms` package fitting function for ordinary least squares
+  regression (what is often called the *linear model* or
+  *multiple linear regression*): `ols`
+* Example: `r ipacue()`
+```{r eval=FALSE}
+f <- ols(y ~ age + sys.bp, data=mydata)
+```
+* `age` and `sys.bp` are the two predictors (independent
+variables) assumed to have linear and additive effects (do not
+interact or have synergism)
+* `mydata` is an `R` *data frame* containing at least
+  three columns for the model's variables
+* `f` (the *fit object*) is an `R` list object, containing
+  coefficients, variances, and many other quantities
+* Below, the fit object will be `f` throughout.  In practice,
+  use any legal `R`  name, e.g. `fit.full.model`
+
+
+## Operating on the Fit Object
+
+`r ipacue()`
+
+* Regression coefficient estimates may be obtained by any of the
+  methods listed below
+
+```{r eval=FALSE}
+f$coefficients
+f$coef          # abbreviation
+coef(f)         # use the coef extractor function
+coef(f)[1]      # get intercept
+f$coef[2]       # get 2nd coefficient (1st slope)
+f$coef['age']   # get coefficient of age
+coef(f)['age']  # ditto
+```
+
+* But often we use *methods* which do something more interesting with the model fit.
+    + `print(f)`: print coefficients, standard errors, $t$-test, other statistics; can also just type `f` to print
+    + `fitted(f)`: compute $\hat{y}$
+    + `predict(f, newdata)`: get predicted values, for subjects
+   described in data frame `newdata`^[You can get
+     confidence limits for predicted means or predicted individual
+     responses using the `conf.int` and `conf.type` arguments to
+     `predict`.  `predict(f)` without the `newdata` argument
+     yields the same result as `fitted(f)`.]
+    + <tt>r <- resid(f)</tt>: compute the vector of $n$ residuals
+   (here, store it in `r`)
+    + `formula(f)`: print the regression formula fitted
+    + `anova(f)`: print ANOVA table for all total and partial
+   effects
+    + `summary(f)`: print estimates partial effects using
+   meaningful changes in predictors
+    + `Predict(f)`: compute predicted values varying a few
+   predictors at a time (convenient for plotting)
+    + `ggplot(p)`: plot partial effects, with predictor ranging
+   over the $x$-axis, where `p` is the result of `Predict`
+    + `g <- Function(f)`: create an `R` function that
+   evaluates the analytic form of the fitted function
+    + `nomogram(f)`: draw a nomogram of the model
+
+**Note**: Some of othe functions can output `html` if `options(prType='html')` is set, as is done in this chapter.  When using that facility you often need to add `results='asis'` in the `knitr` chunk header.
+
+## The `rms` `datadist` Function
+
+`r ipacue()`
+
+To use `Predict, summary`, or `nomogram` in the `rms`
+  package, you need to let `rms` first compute summaries of the
+  distributional characteristics of the predictors:
+```{r eval=FALSE}
+dd <- datadist(x1,x2,x3,...)   # generic form
+dd <- datadist(age, sys.bp, sex)
+dd <- datadist(mydataframe)    # for a whole data frame
+options(datadist='dd')         # let rms know where to find
+```
+Note that the name `dd` can be any name you choose as long as you
+use the same name in quotes to `options` that you specify
+(unquoted) to the left of <- `datadist(...)`.  It is best to
+invoke `datadist` early in your program before fitting any
+models.  That way the `datadist` information is stored in the fit
+  object so the model is self-contained.  That allows you to make
+  plots in later sessions without worrying about `datadist`.  `datadist` must be re-run if you add a new predictor or recode an
+old one.  You can update it using for example
+```{r eval=FALSE}
+dd <- datadist(dd, cholesterol, height)
+# Adds or replaces cholesterol, height summary stats in dd
+```
+
+
+## Short Example {#sec-rmsintro-leadcontinuous}
+
+`r ipacue()`
+
+`r mrg(sound("rrms-4"), bmovie(15), ddisc(15))`
+
+Consider the lead exposure dataset from B. Rosner _Fundamentals of Biostatistics_ and originally from Landrigan PJ *et al*, Lancet
+1:708-715, March 29, 1975.  The study was of psychological and
+neurologic well-being of children who lived near a lead smelting
+plant.  The primary outcome measures are the Wechsler full-scale IQ
+score (`iqf`) and the finger-wrist tapping score `maxfwt`.  The
+dataset is available at [hbiostat.org/data](hbiostat.org/data)
+and can be automatically downloaded and `load()`'d into `R` using
+the `Hmisc` package `getHdata` function.  For now we just
+analyze lead exposure levels in 1972 and 1973, age, and
+`maxfwt`^[`maxfwt` might be better analyzed as an ordinal variable but as will be seen by residual plots it is also reasonably considered to be continuous and to satisfy ordinary regression assumptions.].
+
+`r ipacue()` 
+**Note**: To easily run all the following commands, open [fharrell.com/code/bbr.zip](http://fharrell.com/code/bbr.zip) and then open the file `8-rmsintro.r` contained in the `.zip` file using `RStudio`.  Commands listed in previous sections were not actually executed so they are marked with the `R` comment symbol
+(#) and can be ignored.
+
+```{r lead}
+# For an Rmarkdown version of similar analyses see
+# https://github.com/harrelfe/rscripts/raw/master/lead-ols.md
+require(rms)    # also loads the Hmisc package
+getHdata(lead)
+# Subset variables just so contents() and describe() output is short
+# Override units of measurement to make them legal R expressions
+lead <- upData(lead,
+               keep=c('ld72', 'ld73', 'age', 'maxfwt'),
+               labels=c(age='Age'),
+               units=c(age='years', ld72='mg/100*ml', ld73='mg/100*ml'))
+```
+
+`r ipacue()`
+```{r leaddesc,results='asis'}
+html(contents(lead))
+html(describe(lead))
+```
+`r ipacue()`
+```{r datadistfit}
+dd <- datadist(lead); options(datadist='dd')
+dd    # show what datadist computed 
+# Fit an ordinary linear regression model with 3 predictors assumed linear
+f <- ols(maxfwt ~ age + ld72 + ld73, data=lead)
+```
+`r ipacue()`
+```{r printf,results='asis'}
+f         # same as print(f)
+```
+`r ipacue()`
+```{r coefspecs}
+coef(f)   # retrieve coefficients
+specs(f, long=TRUE)   # show how parameters are assigned to predictors,
+                      # and predictor distribution summaries driving plots
+```
+`r ipacue()`
+```{r Function}
+g <- Function(f)  # create an R function that represents the fitted model
+# Note that the default values for g's arguments are medians
+g
+# Estimate mean maxfwt at age 10, .1 quantiles of ld72, ld73 and .9 quantile of ld73
+# keeping ld72 at .1 quantile
+g(age=10, ld72=21, ld73=c(21, 47))  # more exposure in 1973 decreased y by 6
+```
+
+`r ipacue()`
+```{r predictll}
+# Get the same estimates another way but also get std. errors 
+predict(f, data.frame(age=10, ld72=21, ld73=c(21, 47)), se.fit=TRUE)
+```
+
+## Operating on Residuals
+
+`r ipacue()`
+
+`r mrg(sound("rrms-5"))`
+Residuals may be summarized and plotted just like any raw data
+variable.
+
+* To plot residuals vs. each predictor, and to make a q-q plot to check normality of residuals, use these examples:
+```{r h=5,w=5,top=1}
+r <- resid(f)
+par(mfrow=c(2,2))   # 2x2 matrix of plots
+plot(fitted(f), r); abline(h=0)  # yhat vs. r
+with(lead, plot(age,  r));    abline(h=0)
+with(lead, plot(ld73, r));    abline(h=0)
+qqnorm(r)           # linearity indicates normality
+qqline(as.numeric(r))
+```
+
+
+## Plotting Partial Effects
+`r ipacue()`<br>
+`r mrg(sound("rrms-6"))`
+
+* `Predict` and `ggplot` makes one plot for each predictor
+* Predictor is on $x$-axis, $\hat{y}$ on the $y$-axis
+* Predictors not shown in plot are set to constants
+    + median for continuous predictors
+    + mode for categorical ones
+* For categorical predictor, estimates are shown only at data
+  values
+* 0.95 pointwise confidence limits for $\hat{E}(y|x)$ are shown
+  (add `conf.int=FALSE` to `Predict()` to suppress CLs)
+* Example:  `r ipacue()`
+```{r w=6,h=5}
+ggplot(Predict(f))
+```
+
+* To take control of which predictors are plotted, or to specify
+  customized options:  `r ipacue()` 
+```{r }
+ggplot(Predict(f, age))   # plot age effect, using default range,
+                          # 10th smallest to 10th largest age
+```
+`r ipacue()`
+```{r }
+ggplot(Predict(f, age=3:15))  # plot age=3,4,...,15 
+```
+`r ipacue()`
+```{r }
+ggplot(Predict(f, age=seq(3,16,length=150)))   # plot age=3-16, 150 points 
+```
+
+* To get confidence limits for $\hat{y}$:  `r ipacue()`
+```{r }
+ggplot(Predict(f, age, conf.type='individual'))
+```
+* To show both types of 0.99 confidence limits on one plot:  `r ipacue()`
+```{r }
+p1 <- Predict(f, age, conf.int=0.99, conf.type='individual')
+p2 <- Predict(f, age, conf.int=0.99, conf.type='mean')
+p <- rbind(Individual=p1, Mean=p2)
+ggplot(p)
+```
+
+* Non-plotted variables are set to reference values (median and
+  mode by default)
+* To control the settings of non-plotted values use e.g.  `r ipacue()`
+```{r }
+ggplot(Predict(f, ld73, age=3))
+```
+
+* To make separate lines for two ages:  `r ipacue()`
+```{r }
+ggplot(Predict(f, ld73, age=c(3,9)))  # add ,conf.int=FALSE to suppress conf. bands
+```
+
+* To plot a 3-d surface for two continuous predictors against
+  $\hat{y}$; color coding for predicted mean `maxfwt`  `r ipacue()` 
+```{r w=7,h=5}
+bplot(Predict(f, ld72, ld73))
+```
+
+
+## Nomograms: Overall Depiction of Fitted Models 
+`r mrg(sound("rrms-7"))`
+`r ipacue()` 
+```{r w=6,h=4}
+plot(nomogram(f))
+```
+See [this](http://stats.stackexchange.com/questions/155430/clarifications-regarding-reading-a-nomogram)
+for excellent examples showing how to read such nomograms.
+
+
+### Point Estimates for Partial Effects 
+`r mrg(sound("rrms-8"))`
+`r ipacue()` 
+The `summary` function can compute point estimates and confidence
+intervals for effects of individual predictors, holding other
+predictors to selected constants.  The constants you hold other
+predictors to will only matter when the other predictors interact with
+the predictor whose effects are being displayed.
+
+How predictors are changed depend on the type of predictor:`r ipacue()`
+
+* Categorical predictors: differences against the reference (most
+  frequent) cell by default
+* Continuous predictors: inter-quartile-range effects by default
+The estimated effects depend on the type of model: `r ipacue()`
+
+* `ols`: differences in means
+* logistic models: odds ratios and their logs
+* Cox models: hazard ratios and their logs
+* quantile regression: differences in quantiles
+
+`r ipacue()`
+```{r results='asis'}
+summary(f)         # inter-quartile-range effects 
+summary(f, age=5)  # adjust age to 5 when examining ld72,ld73
+                   # (no effect since no interactions in model)
+summary(f, ld73=c(20, 40))  # effect of changing ld73 from 20 to 40
+```
+
+When a predictor has a linear effect, its slope is the one-unit change
+in $Y$ when the predictor increases by one unit.  So the following
+trick can be used to get a confidence interval for a slope: use
+`summary` to get the confidence interval for the one-unit change:
+
+`r ipacue()`
+```{r results='asis'}
+summary(f, age=5:6)    # starting age irrelevant since age is linear 
+```
+
+There is a `plot` method for `summary` results.  By default it
+shows 0.9, 0.95, and 0.99 confidence limits.  `r ipacue()` 
+```{r h=2.5,top=2}
+plot(summary(f))
+```
+
+
+## Getting Predicted Values
+`r mrg(sound("rrms-9"))`
+
+* Using `predict`    `r ipacue()`
+```{r }
+predict(f, data.frame(age=3, ld72=21, ld73=21))
+# must specify all variables in the model
+
+predict(f, data.frame(age=c(3, 10), ld72=21, ld73=c(21, 47)))
+# predictions for (3,21,21) and (10,21,47)
+
+newdat <- expand.grid(age=c(4, 8), ld72=c(21, 47), ld73=c(21, 47))
+newdat
+predict(f, newdat)     # 8 predictions
+```
+`r ipacue()`
+```{r morepred}
+predict(f, newdat, conf.int=0.95)  # also get CLs for mean 
+predict(f, newdat, conf.int=0.95, conf.type='individual')  # CLs for indiv.
+```
+See also `gendata`.
+
+* The brute-force way
+```{r}
+# Model is b1 + b2*age + b3*ld72 + b4*ld73
+b <- coef(f)
+# For 3 year old with both lead exposures 21
+b[1] + b[2]*3 + b[3]*21 + b[4]*21
+```
+
+* Using `Function` function  `r ipacue()`
+```{r}
+g <- Function(f)
+g(age=c(3, 8), ld72=21, ld73=21)       # 2 predictions
+g(age=3)              # 3 year old at median ld72, ld73
+```
+
+
+## ANOVA
+`r mrg(sound("rrms-10"))`
+
+* Use `anova(fitobject)` to get all total effects and
+  individual partial effects
+* Use `anova(f,age,sex)` to get combined partial effects of
+  `age` and `sex`, for example
+* Store result of `anova` in an object in you want to print it
+  various ways, or to plot it:`r ipacue()`
+```{r results='asis'}
+an <- anova(f)
+an                     # same as print(an)
+anova(f, ld72, ld73)   # combine effects into a 2 d.f. test 
+```
+Enhanced output to better explain which parameters are being tested is available if you are not using `html`:
+```{r plainanova}
+options(prType='plain')
+print(an, 'names')     # print names of variables being tested
+```
+
+`r ipacue()`
+```{r plainanova2}
+print(an, 'subscripts')# print subscripts in coef(f) (ignoring 
+                       # the intercept) being tested
+print(an, 'dots')      # a dot in each position being tested
+options(prType='html')
+```

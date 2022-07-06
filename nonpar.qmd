@@ -1,0 +1,874 @@
+```{r setup, include=FALSE}
+require(Hmisc)
+getRs('reptools.r')
+hookaddcap()   # make knitr call a function at the end of each chunk
+               # to try to automatically add to list of figure
+options(prType='html')
+source('~/r/rmarkdown/qbookfun.r')
+knitr::set_alias(w   = 'fig.width', h    = 'fig.height',
+                 cap = 'fig.cap',   scap ='fig.scap')
+```
+
+
+# Nonparametric Statistical Tests {#sec-nonpar}
+`r mrg(bmovie(10), ddisc(10))`
+
+## When to use non-parametric methods
+
+* Short answer: Good default when $P$-values are needed and there are no covariates to adjust for
+* Nonparametric methods are those not requiring one to assume a certain distribution for the raw data
+    + In contrast, parametric methods assume data come from some underlying distribution
+    + $t$-tests assume the data come form a Gaussian distribution
+* Response variable ordinal or interval
+* For ordinal responses nonparametric methods are preferred because they assume no spacing between categories
+* No problem in using nonparametric tests on interval data
+    + if normality holds, nonpar. test 0.95 efficient, i.e., has about the same power as the parametric test done on 0.95 of the observations^[The large-sample efficiency of the Wilcoxon and Spearman tests compared to $t$ and $r$ tests is $\frac{3}{\pi} = 0.9549$.]
+    + if normality does not hold, nonpar. tests can be arbitrarily more efficient and powerful than the corresponding parametric test
+    + an elegant and non-arbitrary way to deal with extreme values or outliers
+    + rank-based nonparametric tests give the analyst freedom from having to choose the correct transformation of the measurement (as long as the optimum transformation is monotonic)
+* Nonparametric methods are robust, many parametric methods are
+  not
+    + Example: $t$-test comparing two sets of measurements
+
+| Group 1 | Group 2 | Means | $P$ |
+|:--------|:--------|:------|----:|
+| 1 2 3 4 5 6 7 8 9 10 | 7 8 9 10 11 12 13 14 15 16 17 18 19 20 | 5.5 and 13.5 | 0.000019 |
+| 1 2 3 4 5 6 7 8 9 10 | 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **200**| 5.5 and **25.9** | 0.12 |
+
+The SD is a particularly **non-robust** statistical estimator.
+
+* Example: Fecal calprotectin being evaluated as a possible biomarker of disease severity (@fig-nonpar-calpro)
+    + Calprotectin has an upper detection limit
+    + Median can be calculated (mean cannot)
+* If all you want is a $P$-value nonpar. tests are preferred
+    + Especially if response is univariate and no need to adjust for covariates
+* Pre-testing for normality and deciding nonparametric vs. parametric analysis is a bad idea
+    + Tests for normality do not have a power of 1.0 and type I error of 0.0
+    + Leads to temptation, e.g., an investigator might "forget" to do the test of normality if the $t$-test is significant
+    + Doesn't acknowledge that nonparametric tests are very efficient even under normality
+    + Pre-testing for normality alters the type I error and confidence interval coverage
+* A drawback is that nonpar. tests do not correspond to usual confidence limits for effects
+    + E.g., a CL for the difference in 2 means may include zero whereas the Wilcoxon test yields $P=0.01$
+    + Point estimate that exactly corresponds to the Wilcoxon two-sample test is the Hodges-Lehman estimate of the location difference
+  
+       - median of all possible differences between a measurement from group 1 and a measurement from group 2
+* Nonparametric tests are often obtained by replacing the data with ranks across subjects and then doing the parametric test
+* Many nonpar. tests give the same $P$-value regardless of how the data are transformed; a careful choice of transformation (e.g., log) must sometimes be used in the context of parametric tests
+* $P$-values computed using e.g. the $t$ distribution are quite accurate for nonparametric tests
+* In case of ties, midranks are used, e.g., if the raw data were 105 120 120 121 the ranks would be 1 2.5 2.5 4
+
+
+| Parametric Test | Nonparametric Counterpart | Semiparametric Model Counterpart |
+|:-----|:-----|:-----|
+| 1-sample $t$    | Wilcoxon signed-rank |  |
+| 2-sample $t$    | Wilcoxon 2-sample rank-sum | Proportional odds  |
+| $k$-sample ANOVA           | Kruskal-Wallis  | Proportional odds  |
+| Pearson $r$     | Spearman $\rho$ |   |
+
+
+
+## One Sample Test: Wilcoxon Signed-Rank 
+
+* Almost always used on paired data where the column of values represents differences (e.g., post-pre) or log ratios
+* The _sign test_ is the simplest test for the median difference being zero in the population
+    + it just counts the number of positive differences after tossing out zero differences
+    + tests $H_{0}:~$Prob$[x>0]=\frac{1}{2}$, i.e., that it is equally likely in the population to have a value below zero as it is to have a value above zero
+    + as it ignores magnitudes completely, the test is inefficient
+* By contrast, with the much more powerful Wilcoxon signed rank one-sample test, ranks of absolute differences are given the sign of the original difference
+* Magnitudes of raw data matter more here than with the Wilcoxon 2-sample test
+* Example: A crossover study in which the treatment order is randomized <br> Data arranged so that treatment A is in the first column, no matter which order treatment A was given
+
+
+
+| A | B | B-A | Rank $|\mathrm{B-A}|$ | Signed Rank   |
+|-----|-----|-----:|-----:|-----:|
+| 5 | 6 | 1 | 1.5 | 1.5  |
+| 6 | 5 | -1 | 1.5 | -1.5  |
+| 4 | 9 | 5 | 4.0 | 4.0  |
+| 7 | 9 | 2 | 3.0 | 3.0   |
+
+
+* A good approximation to an exact $P$-value may be obtained by computing
+$$z = \frac{\sum{SR_{i}}}{\sqrt{\sum{SR_{i}^{2}}}},$$
+where the signed rank for observation $i$ is $SR_{i}$.  This formula
+already takes ties into account without using Rosner's messy Eq.
+9.5.  We look up $|z|$ against the normal distribution.  Here
+$z=\frac{7}{\sqrt{29.5}}=1.29$ and and the 2-tailed $P$-value is given below.
+
+```{r wsr}
+sr <- c(1.5, -1.5, 4, 3)
+z <- sum(sr) / sqrt(sum(sr ^ 2))
+pval <- 2 * (1 - pnorm(abs(z)))
+c(z=z, pval=pval)
+```
+* If all differences are positive or all are negative, the exact 2-tailed $P$-value is $\frac{1}{2^{n-1}}$
+    + implies that $n$ must exceed 5 for any possibility of significance at the $\alpha=0.05$ level for a 2-tailed test
+
+
+### One sample/Paired Test Example
+
+
+* Sleep Dataset
+    + Compare the effects of two soporific drugs.
+    + Each subject receives placebo, Drug 1, and Drug 2
+    + Study question: Is Drug 1 or Drug 2 more effective at increasing sleep?[Side comment: why did the investigators believe that the original 4-level ordinal outcome was so defective that it needed to be transformed in an information-losing way?]{.aside}
+    + Dependent variable: Difference in hours of sleep comparing Drug 2 to Drug 1
+    + $H_0:$ For any given subject, the difference in hours of sleep is equally likely to be positive or negative
+    + See @sec-htest-sleeppaired for a parametric test on these data
+    + Ignore the RD column for now
+
+| Subject | Drug 1 | Drug 2 | Diff (2-1) | Sign | Rank   | RD |
+|-----:|-----:|-----:|-----:|-----:|-----:|-----:|
+| 1  | 0.7| 1.9|1.2|+|3   |  5|
+| 2  |-1.6| 0.8|2.4|+|8   |8.5|
+| 3  |-0.2| 1.1|1.3|+|4.5 | 8|
+| 4  |-1.2| 0.1|1.3|+|4.5 | 5|
+| 5  |-0.1|-0.1|0.0|NA|   | 0|
+| 6  | 3.4| 4.4|1.0|+|2   | 2.5|
+| 7  | 3.7| 5.5|1.8|+|7   | 3|
+| 8  | 0.8| 1.6|0.8|+|1   | 2.5|
+| 9  | 0.0| 4.6|4.6|+|9   | 13.0|
+| 10 | 2.0| 3.4|1.4|+|6   | 1.5|
+
+: Hours of extra sleep on drugs 1 and 2, differences, signs and signed ranks of sleep study data.  Rank differences (RD) are also shown (@sec-nonpar-rd).
+
+```{r wsrsleep}
+drug1 <- c(.7, -1.6, -.2, -1.2, -.1, 3.4, 3.7, .8, 0, 2)
+drug2 <- c(1.9, .8, 1.1, .1, -.1, 4.4, 5.5, 1.6, 4.6, 3.4)
+wilcox.test(drug2, drug1, paired=TRUE)
+wilcox.test(drug2 - drug1)
+wilcox.test(drug2 - drug1, correct=FALSE)
+sr <- c(3, 8, 4.5, 4.5, 0, 2, 7, 1, 9, 6)
+z <- sum(sr) / sqrt(sum(sr ^ 2))
+c(z=z, pval=2 * (1 - pnorm(abs(z))))
+d <- data.frame(Drug=c(rep('Drug 1', 10), rep('Drug 2', 10),
+                  rep('Difference', 10)),
+                extra=c(drug1, drug2, drug2 - drug1))
+
+```
+
+* Interpretation: Reject $H_0$, Drug 2 increases sleep by the same hours as Drug 1 ($p = 0.008$)
+* Could also perform sign test on sleep data
+    + If drugs are equally effective, should have same number of `+' and '-'
+    + Observed data: 0 - 9 +, throw out 1 "no change"
+    + Sign test (2-sided) $P$-value: Probability of observing 9 of 9 + or 9 of 9 -
+    + $p = 0.004$, so evidence against $H_0$
+
+```{r signtest}
+2 * (1 / 2) ^ 9    # 2 * to make it two-tailed
+```
+
+
+* The signed rank test assumes that the distribution of differences is symmetric
+* It tests whether the median difference is zero
+* Also tests that the mean is zero
+* In general it tests that, for two randomly chosen observations $i$ and $j$ with values (differences) $x_i$ and $x_j$, that the probability that $x_{i}+x_{j} > 0$ is $\frac{1}{2}$
+* The estimator that corresponds exactly to the test in all situations is the pseudomedian, the median of all possible pairwise averages of $x_i$ and $x_j$, so one could say that the signed rank test tests $H_{0}$: pseudomedian=0
+* The value $\frac{\overline{SR}}{n+1}-\frac{1}{2}$ estimates the probability that two randomly chosen observations have a positive sum, where $\overline{SR}$ is the mean of the column of signed ranks
+* To test $H_{0}:\eta=\eta_{0}$, where $\eta$ is the population median (not a difference) and $\eta_{0}$ is some constant, we create the $n$ values $x_{i} - \eta_{0}$ and feed those to the signed rank test, assuming the distribution is symmetric
+* When all nonzero values are of the same sign, the test reduces to the _sign test_ and the 2-tailed $P$-value is $(\frac{1}{2})^{n-1}$ where $n$ is the number of nonzero values
+
+Test whether the continuity correction makes $P$-values closer to the
+exact calculation^[The exact $P$-value is available only when there are no ties.}, and compare to our simple formula.]
+
+```{r wsrcompare}
+# Assume we are already starting with signed ranks as x
+wsr <- function(x, ...) wilcox.test(x, ...)$p.value
+sim <- function(x) {
+  z <- sum(x) / sqrt(sum(x ^ 2))
+  2 * (1 - pnorm(abs(z))) }
+alls <- function(x) round(c(
+  continuity=wsr(x, correct=TRUE, exact=FALSE),
+  nocontinuity=wsr(x, correct=FALSE, exact=FALSE),
+  exact=wsr(x, exact=TRUE),
+  simple=sim(x)), 4)
+alls(1:4)
+alls(c(-1, 2 : 4))
+alls(c(-2, c(1, 3, 4)))
+alls(c(-1, -2, 3 : 5))
+alls(c(-5, -1, 2, 3, 4, 6))
+```
+From these examples the guidance is to:
+
+* Use the exact calculation if there are no ties
+* Otherwise use the continuity correction (i.e., the default in `wilcox.test`) unlike the recommendation for the Pearson $\chi^2$ test
+
+### Rank Difference Test {#sec-nonpar-rd}
+
+Unlike the Wilcoxon two-sample comparison, the Wilcoxon signed-rank test has a significant disadvantage in depending on how the response varible is transformed.  The rank difference test of @kor90ran^[Also available [here](https://www.researchgate.net/publication/230264296_The_rank_difference_test_A_new_and_meaningful_alternative_to_the_Wilcoxon_signed_ranks_test_for_ordinal_data)] solves this problem.  Kornbrot's procedure is as follows
+
+* Combine the $n$ "pre" and $n$ "post" observations into $2n$ observations
+* Rank these values from 1 to $2n$ assigning midranks to ties in the usual Wilcoxon fashion
+* Perform the Wilcoxon signed-rank test on the paired ranks
+
+The test is implemented in the `R` [`rankdifferencetest`](https://cran.r-project.org/web/packages/rankdifferencetest) package by Brett Klamer^[The `rankdifferencetest` package will provide exact p-values in case of ties.] but the essence of the calculation is below where we run the rank difference test on the data analyzed previously.  The rank differences RD are shown in the data table there.
+
+```{r rdt}
+m <- length(drug1)
+ranks <- rank(c(drug1, drug2))
+rank.diffs <- ranks[-(1 : m)] - ranks[1 : m]
+wilcox.test(rank.diffs)
+```
+
+The results were identical to the signed-rank test because every subject had a higher drug 2 response than their drug 1 response except for the one that was tied which is excluded from both analyses.
+
+## Two Sample Test: Wilcoxon--Mann--Whitney 
+
+* The Wilcoxon--Mann--Whitney (WMW) 2-sample rank sum test is for testing for equality of central tendency of two distributions (for unpaired data)
+* Ranking is done by combining the two samples and ignoring which sample each observation came from
+* Example:
+
+|                   |     |     |     |      |
+|:------------------|----:|----:|----:|-----:|
+| Females           | 120 | 118 | 121 | 119  |
+| Males             | 124 | 120 | 133 |      |
+| Ranks for Females | 3.5 | 1   | 5   | 2    |
+| Ranks for Males   | 6   | 3.5 | 7   |      |
+
+
+* Doing a 2-sample $t$-test using these ranks as if they were raw data and computing the $P$-value against 4+3-2=5 d.f. will work quite well
+* Some statistical packages compute $P$-values exactly (especially if there are no ties)
+* Loosely speaking the WMW test tests whether the population medians of the two groups are the same
+* More accurately and more generally, it tests whether observations in one population tend to be larger than observations in the other
+* Letting $x_1$ and $x_2$ respectively be randomly chosen observations from populations one and two, WMW tests $H_{0}:c=\frac{1}{2}$, where $c=$Prob$[x_{1} > x_{2}]$
+* The $c$ index (_concordance probability_) may be estimated by computing
+$$c = \frac{\bar{R}-\frac{n_{1}+1}{2}}{n_{2}},$$
+where $\bar{R}$ is the mean of the ranks in group 1; <br> For the above data $\bar{R} = 2.875$ and $c=\frac{2.875-2.5}{3}=0.125$, so we estimate that the probability is 0.125 that a randomly chosen female has a value greater than a randomly chosen male.
+
+* In diagnostic studies where $x$ is the continuous result of a medical test and the grouping variable is diseased vs. non-diseased, $c$ is the area under the receiver operating characteristic (ROC) curve
+* Test still has the "probability of ordering" interpretation when the variances of the two samples are markedly different, but it no longer tests anything like the difference in population medians
+If there is no overlap between measurements from group 1 and those from group 2, the exact 2-sided $P$-value for the Wilcoxon test is $2/ \frac{n!}{n_{1}! n_{2}!}$.  If $n_{1}=n_{2}$, $n_{1}$ must be $\geq 4$ to obtain $P < 0.05$ (in this case $P = 0.029$).
+<!--  Thanks: Rameela and Bill--->
+<!-- If R1 denotes the rank sum of the group with sample size m, then the--->
+<!-- smallest possible value of R1 is the sum of the m smallest ranks 1 + 2 +--->
+<!-- ... m = m*(m+1)/2. The probability of this value is 1/[(m+n)Cm] -- C--->
+<!-- implies choose.--->
+
+
+### Two Sample WMW example {#sec-calprotectin}
+
+* Fecal calprotectin being evaluated as a possible biomarker of disease severity
+* Calprotectin measured in 26 subjects, 8 observed to have no/mild activity by endoscopy
+* Calprotectin has upper detection limit at 2500 units
+    + A type of missing data, but need to keep in analysis
+* Study question: Are calprotectin levels different in subjects with no or mild activity compared to subjects with moderate or severe activity?
+* Statement of the null hypothesis
+    + $H_0:$ Populations with no/mild activity have the same distribution of calprotectin as populations with moderate/severe activity
+    + $H_0: c = \frac{1}{2}$
+
+```{r calpro,w=6,h=3,cap='Fecal calprotectin by endoscopy severity rating. Red dotted line is the detection limit.  Ordinal disease categories should not have been combined.',scap='Fecal calprotectin by severity'}
+#| label: fig-nonpar-calpro
+#Fecal Calprotectin: 2500 is above detection limit
+calpro <- c(2500, 244, 2500, 726, 86, 2500, 61, 392, 2500, 114, 1226,
+            2500, 168, 910, 627, 2500, 781, 57, 483, 30, 925, 1027,
+            2500, 2500, 38, 18)
+
+# Endoscopy score: 1 = No/Mild, 2=Mod/Severe Disease
+# Would have been far better to code dose as 4 ordinal levels
+endo <- c(2, 1, 2, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 1, 2,
+          2, 2, 2, 2, 2, 1, 1)
+endo <- factor(endo, 1 : 2,
+               c("No or Mild Activity", "Moderate or Severe Activity"))
+require(ggplot2)
+ggplot(data.frame(endo, calpro), aes(y=calpro, x=endo)) +
+  geom_boxplot(color='lightblue', alpha=.85, width=.4) +
+  geom_dotplot(binaxis='y', stackdir='center', position='dodge') +
+    xlab('') + ylab('Fecal Calprotectin') + coord_flip() +
+      geom_hline(aes(yintercept=2500, col=I('red')), linetype='dotted')
+wilcox.test(calpro ~ endo)
+```
+<!--  See http://docs.ggplot2.org/0.9.3/geom_dotplot.html--->
+The following plots the ranks that are used in the
+Wilcoxon-Mann-Whitney two-sample rank sum test.
+
+```{r calpror,w=6,h=3,cap='Ranks of calprotectin'}
+#| label: fig-nonpar-calpror
+ggplot(data.frame(endo, calpro), aes(y=rank(calpro), x=endo)) +
+  geom_dotplot(binaxis='y', stackdir='center', position='dodge') +
+    xlab('') + ylab('Rank of Fecal Calprotectin') + coord_flip()
+```
+
+* Test statistic $W$ equals the sum of the ranks in the no/mild group minus $n_1 \times (n_1 + 1) / 2$, where $n_1$ is the number of subjects in then no/mild sample
+* $W = 59.5 - \frac{8\times 9}{2} = 23.5$
+* A common (but loose) interpretation: People with moderate/severe activity have higher _median_ fecal calprotectin levels than people with no/mild activity ($p = 0.007$).
+* Better: remove _median_ and supplement with the $c$-index (concordance probability) or Somers' $D_{xy}$ rank correlation between calprotectin and endoscopy status.  The code for the `R` `somers2` function shows how the concordance probability is computed from the mean of the ranks in one of the two groups.
+
+```{r cendo}
+require(Hmisc)
+# Convert endo to a binary variable
+somers2(calpro, endo=='Moderate or Severe Activity')
+```
+If you type `somers2` to list the code for the function you will
+see that the $c$-index is tightly related to the Wilcoxon test when
+you see this code:
+
+```{r ccode,eval=FALSE}
+mean.rank <- mean(rank(x)[y == 1])
+c.index <- (mean.rank - (n1 + 1)/2) / (n - n1)
+```
+
+
+### Point and Interval Estimates for Wilcoxon Two-Sample Comparison {#sec-nonpar-mf}
+As mentioned earlier, the effect estimate that is exactly consistent
+with the Wilcoxon two-sample test is the robust Hodges-Lehman estimator---the
+median of all possible differences between a measurement from group 1
+and a measurement from group 2.  There is a confidence interval for
+this estimator.
+
+* Assume data come from distributions with same shape and differ only in location
+* Consider a sample of 4 males and 3 females
+* Difference in sample medians is 124 - 119.5 = 4.5
+* Consider all possible differences between sample 1 and sample 2
+
+|  | Female $\rightarrow$  | | | |
+|:-----|-----:|---:|----:|----:|
+| Male $\downarrow$ | 120 | 118 | 121 | 119   |
+| 124 | 4 | 6 | 3 | 5  |
+| 120 | 0 | 2 | -1 | 1  |
+| 133 | 13 | 15 | 12 | 14   |
+
+
+* Hodges-Lehman estimate of the sex effect: median of the 12 differences = 4.5
+* In this case equaled difference in sample medians just by coincidence
+
+```{r hlest}
+female <- c(120, 118, 121, 119)
+male   <- c(124, 120, 133)
+differences <- outer(male, female, '-')
+differences
+median(differences)
+# Can't figure out how difference in location is computed below
+# It's not the Hodges-Lehman estimate
+wilcox.test(male, female, conf.int=TRUE)
+```
+In general, $1 - \alpha$ confidence intervals are the set of values that if
+hypothesized to be the true location parameter would not be rejected
+at the $\alpha$ level.  `wilcox.test` computes the location shift
+by solving for the hypothesized value that yields $P=1.0$ instead of
+the more proper median of all differences.  Look into this further by
+plotting the $P$-value as a function of the hypothesized value.
+
+```{r checkhl,cap='Wilcoxon $P$-value vs. hypothesized male-female difference.  Horizontal line is $P=0.05$.  Vertical lines from left to right are the lower 0.95 confidence limit from `wilcox.test`, the median difference, the Hodges-Lehman estimator as computed by `wilcox.test`, and the upper 0.95 confidence limit from `wilcox.test`.',scap='Wilcoxon $P$-value vs. hypothesized difference.'}
+#| label: fig-nonpar-checkhl
+#| fig-height: 3.5
+#| fig-width: 4.25
+dif  <- seq(-3, 15, by=.1)
+n    <- length(dif)
+pval <- numeric(n)
+for(i in 1 : n) pval[i] <- wilcox.test(male - dif[i], female)$p.value
+ggplot(data.frame(dif, pval), aes(x=dif, y=pval)) +
+  geom_step() +
+  geom_hline(yintercept=.05, col='red', linetype='dotted') +
+  geom_vline(xintercept=c(4.5, 4.791, -1, 15), col='red', linetype='dotted') +
+  xlab('Difference') + ylab('P-value')
+```
+See @sec-nonpar-clmed for a more approximate confidence interval.
+
+
+## Confidence Intervals for Medians and Their Differences {#sec-nonpar-clmed}
+
+* Confidence intervals for the median (one sample)
+    + Table 18.4 (Altman) gives the ranks of the observations to be used to give approximate confidence intervals for the median
+    + e.g., if $n = 12$, the $3^\mathrm{rd}$ and $10^\mathrm{th}$ largest values give a $0.961$ confidence interval
+    + For larger sample sizes, the lower ranked value ($r$) and upper ranked value ($s$) to select for an approximate $0.95$ confidence interval for the population median is
+$$r = \frac{n}{2} - 1.96*\frac{\sqrt{n}}{2} ~~~\mathrm{and}~~~ s = 1 + \frac{n}{2} + 1.96*\frac{\sqrt{n}}{2}$$
+
+*
+    + e.g., if $n = 100$ then $r = 40.2$ and $s = 60.8$, so we would pick the $40^\mathrm{th}$ and $61^\mathrm{st}$ largest values from the sample to specify a $0.95$ confidence interval for the population median
+    + For exact confidence interval for the median see<br> [stats.stackexchange.com/questions/186957](https://stats.stackexchange.com/questions/186957), which also discusses why there is no exact nonparametric confidence interval for the mean.  Let's get the exact order statistics that result in an exact confidence interval for the median:
+
+```{r medciexact}
+# Exact CI for median from DescTools package SignTest.default
+# See also ttp://www.stat.umn.edu/geyer/old03/5102/notes/rank.pdf,
+# http://de.scribd.com/doc/75941305/Confidence-Interval-for-Median-Based-on-Sign-Test
+cimed <- function(x, alpha=0.05, na.rm=FALSE) {
+  if(na.rm) x <- x[! is.na(x)]
+  n <- length(x)
+  k <- qbinom(p=alpha / 2, size=n, prob=0.5, lower.tail=TRUE)
+  ## Actual CL: 1 - 2 * pbinom(k - 1, size=n, prob=0.5) >= 1 - alpha
+  sort(x)[c(k, n - k + 1)]
+}
+cimed(1 : 100)
+```
+
+For $n=100$ we see that the approximate interval happened to be exact.
+
+* Confidence intervals for the difference in two medians (two samples)
+    + We don't have a nonparametric interval for this
+    + Instead get Hodges-Lehman estimate
+    + Assume data come from distributions with same shape and differ only in location
+    + Considers all possible differences between sample 1 and sample 2 using male-female data in @sec-nonpar-mf
+    + An estimate of the median difference (males - females) is the median of these 12 differences, with the $3^\mathrm{rd}$ and $10^\mathrm{th}$ largest values giving an (approximate) 0.95 CI
+    + Median estimate = 4.5, 0.95 CI = [1, 13]
+    + Specific formulas found in Altman, pages 40-41
+* Bootstrap
+    + General method, not just for medians
+    + Non-parametric, does not assume symmetry (but may not be accurate)
+    + Iterative method that repeatedly samples from the original data
+    + Algorithm for creating a $0.95$ CI for the difference in two medians
+
+1. Sample _with replacement_ from sample 1 and sample 2
+1. Calculate the difference in medians, save result
+1. Repeat Steps 1 and 2 1000 times
+    + A (naive) $0.95$ CI is given by the $25^\mathrm{th}$ and $975^\mathrm{th}$ largest values of your $1000$ median differences
+    + For the male/female data, median estimate = 4.5, 0.95 CI = [-0.5, 14.5], which agrees with the conclusion from a WMW rank sum test ($p = 0.15$).  Note that the more accurate CI for the Hodges-Lehman estimate of $[-1, 15]$ was given earlier (output of `wilcox.test`).
+
+```{r diffmedboot}
+#| label: fig-nonpar-diffmedboot
+#| fig-cap: "Bootstrapped differences in medians"
+diffs <- numeric(1000)
+set.seed(13)
+for(i in 1 : 1000) diffs[i] <-
+  median(sample(male, replace=TRUE)) - median(sample(female, replace=TRUE))
+ggplot(data.frame(diffs), aes(x=diffs)) + xlab('Differences in Medians') +
+  geom_histogram(bin_widith=.01, color='blue', fill='white')
+quantile(diffs, c(0.025, 0.975))
+```
+But recall that the Wilcoxon test does not really test the difference
+in medians but rather the median of all differences.
+
+
+## Strategy
+
+* Don't assess normality of data
+* Use nonparametric test in any case, to get $P$-values
+* Use nonparametric confidence intervals for means and medians^[A good nonparametric confidence for a population mean that does not even assume a symmetric distribution can be obtained from the bootstrap simulation procedure.] which will be more in conformance to what the nonpar. test is testing
+* To obtain nonparametric confidence limits for means and differences in means, the bootstrap percentile method may easily be used and it does not assume symmetry of the data distribution
+
+
+## Generalization of the Wilcoxon/Kruskal-Wallis Test
+`r mrg(bmovie(11), ddisc(11))`
+
+* Proportional odds (PO) ordinal logistic model
+* Contains Wilcoxon 2-sample and Kruskal-Wallis tests as special cases
+    + numerator of the score test for the PO model, when there is only the grouping variable in the model, is exactly the Wilcoxon statistic
+* Special case of PO model is the ordinary binary logistic model
+* Advantages over nonparametric tests:
+    + can adjust for covariates
+    + more accurate $P$-values even with extreme number of tied values
+    + provides a framework for consistent pairwise comparisons^[When using the Kruskal-Wallis test followed by pairwise Wilcoxon tests, these pairwise tests can be inconsistent with each other, because they re-rank the data based only on two groups, destroying the transitivity property, e.g. treatment A can be better than B which is better than C but C is better than A.]
+    + provides estimates of means, quantiles, and exceedance probabilities
+    + sets the stage for a Bayesian PO model, so can get a Bayesian Wilcoxon test
+* Other ordinal response models are available, e.g., Cox proportional hazards model
+* These models are _semiparametric models_
+    + parametric in additivity and linearity (by default) assumptions
+    + nonparametric in not assuming a distribution for the response variable
+* Like nonparametric tests, $P$-values are unaffected by monotonic transformations of $Y$
+* If the response variable $Y$ has $k$ distinct values $y_1, y_2, \dots, y_k$ in the sample, semiparametric models have $k-1$ intercepts
+* Binary logistic model deals with prob. of only one event ($Y=1$ vs. $Y=0$)
+* For ordinal $Y$ there are $k-1$ events
+* Model these as cumulative probabilities to make use of ordering of $Y$ values
+* Model: $P(Y \geq y | X) = \frac{1}{1 + \exp[-(\alpha_y + \beta_1 x_1 + \beta_2 x_2 + \dots)]}$
+* $\alpha_y$ is the $j^{\mathrm{th}}$ intercept when $y = y_{j+1}$, e.g. the first intercept corresponds to the second lowest distinct $Y$ value $y_2$
+* Special case: 2-group problem: $P(Y \geq y | \mathrm{group}) = \frac{1}{1 + \exp[-(\alpha_y + \beta_1[\mathrm{group B}])]}$
+    + $\exp(\beta_1)$ is the ratio of odds that $Y \geq y$ in group B vs. $Y \geq y$ in group A, for all $y > y_1$
+    + as before $[x]$ is the 0-1 indicator variable for $x$ being true
+    + $\beta_1 > 0 \rightarrow Y$ values higher in group B
+    + $k=2 \rightarrow$ model is the binary logistic model (where we take $\alpha_1 = \beta_0$)
+* These intercepts $\alpha_1, \alpha_2, \dots, \alpha_{k-1}$ encode the entire empirical distribution of $Y$ for one of the groups
+    + $\rightarrow$ the model assumes nothing about the $Y$ distribution
+    + it only assumes how the distribution of $Y$ for one type of subject is connected to the distribution for another type of subject
+    + PO model for a two-group problem assumes that the logit of the two cumulative distribution functions are parallel
+    + if PO doesn't hold, PO model may still be better than alternatives
+    + PO is also what the Wilcoxon/Kruskal-Wallis test assumes to have optimal power
+    + don't need an $\alpha$ for the lowest observed $Y$ value since $P(Y \geq ~\mathrm{minimum } Y) = 1$
+* `R` `rms` package `orm` function fits the PO model^[`orm` also fits other models using link functions other than the logit.] and is especially made for continuous $Y$, with fast run times for up to 6000 intercepts
+
+
+### Kruskal-Wallis Test
+
+* Notice we haven't described rank ANOVA---the Kruskal-Wallis test
+* Don't need it; just form a PO model with more than one indicator variable
+* E.g., to test for any differences among four groups A B C D form 3 indicator variables for B C D and let A be the reference cell that corresponds to the $\alpha$ intercepts
+    + model is logit$P(Y \geq y | \mathrm{group}) = \alpha_y + \beta_1 [B] + \beta_2 [C] + \beta_3 [D]$
+* Use the likelihood ratio $\chi^2$ test from this model to test the global null hypothesis A=B=C=D with 3 d.f.
+* Solves the transitivity problem mentioned earlier
+* Can obtain consistent pairwise comparisons by forming odds ratios for any comparison
+    + e.g. C:A comparison will use $\exp(\hat{\beta_{2}})$
+    + C:B comparison OR: $\exp(\hat{\beta_{2}} - \hat{\beta_{1}})$
+* As before can convert the ORs to differences in medians/means because unlike the original nonparametric tests, the PO model can be used to obtain many types of predictions^[The predicted mean for a set of covariate settings is obtained by using all the intercepts and $\beta$s to get exceedance probabilities for $Y \geq y$, taking successive differences in those probabilities to get cell probabilities that $Y=y$, then multiplying cell probabilities by the $y$ value attached to them, and summing.  This is the formula for the mean for a discrete distribution.]
+* Illustrate this by a non-PO example, checking to see how well the PO model can recover the sample means when assuming (the slightly incorrect) PO
+* Take 4 samples from normal distributions with the same variances but different means
+* Also show how to compare two of the samples without re-ranking the data as inconsistent Wilcoxon tests would do
+
+```{r orm4,cacne=FALSE,results='asis'}
+set.seed(1)
+group <- rep(c('A','B','C','D'), 100)
+y <- rnorm(400, 100, 15) + 10*(group == 'B') + 20*(group=='C') + 30*(group=='D')
+require(rms)
+options(prType='html')
+dd <- datadist(group, y); options(datadist='dd')
+f <- orm(y ~ group)
+f    # use LR chi-square test as replacement for Kruskal-Wallis
+```
+
+```{r orm4b}
+# Derive R function to use all intercepts and betas to compute predicted means
+M <- Mean(f)
+Predict(f, group, fun=M)
+# Compare with sample means
+summarize(y, group, smean.cl.normal)
+# Compare B and C
+k <- contrast(f, list(group='C'), list(group='B'))
+k
+# Show odds ratios instead of differences in betas
+print(k, fun=exp)
+```
+
+
+### PO Re-analysis
+
+* Reconsider the calprotectin data analyzed in @sec-calprotectin
+* Wilcoxon: $P=0.0068, c=0.837$
+* Frequentist PO model:
+
+<small>
+
+```{r po,results='asis',cache=FALSE}
+require(rms)
+options(prType='html')
+dd <- datadist(calpro, endo); options(datadist='dd')
+f <- orm(calpro ~ endo)
+print(f, intercepts=TRUE)
+```
+</small>
+
+* Intercept -3.1166 corresponds $Y$ being at or above the upper detection limit
+* Use the likelihood ratio (LR) $\chi^2$ test from the model
+* To estimate an exceedance probability just select the corresponding intercept and compute as for a binary logistic model
+* The 18 intercepts for 19 distinct $Y$ values represent the logit of the empirical cumulative distribution function for the no/mild reference group if the two groups are in proportional odds^[The intercepts really represent the logit of one minus the CDF, moved one $Y$ value.].  Add 2.7586 to those intercepts to get the logit CDF for the moderate/severe group.
+* Compute odds ratio and CI
+
+<small>
+
+```{r poor,results='asis'}
+summary(f, endo='No or Mild Activity')
+```
+</small>
+
+* The above odds ratio of 15.8 is the odds of having calprotectin $\geq y$ in the moderate/severe activity group vs. the no/mild activity group
+    + By the PO assumption this odds ratio is the same for all $y$
+* Simulations provided an empirical conversion of the PO regression coefficient to $c$:
+
+```{r approxc}
+b <- coef(f)['endo=Moderate or Severe Activity']
+cindex <- plogis((b - 0.0029) / 1.5405)
+cindex
+```
+
+Compare this to the exact value of 0.837.
+
+* From the fitted PO model obtain for each group, compute along with sample estimates:
+    + prob. calprotectin at or above the upper limit of normal
+    + mean
+    + median
+* In the output of `Predict()` see the point estimates under `yhat`, starting with the estimates for $P(Y \geq 2500)$, i.e., marker value at or above the upper detection limit
+
+```{r poderived}
+ex <- ExProb(f)
+exceed <- function(lp) ex(lp, y=2500)
+ymean  <- Mean(f)
+yquant <- Quantile(f)
+ymed   <- function(lp) yquant(0.5, lp=lp)
+Predict(f, endo, fun=exceed)
+# Compute empirical exceedance probabilities
+tapply(calpro >= 2500, endo, mean)
+# Note that imposing PO assumption made modeled means closer together than
+# stratified sample means
+Predict(f, endo, fun=ymean)
+tapply(calpro, endo, mean)
+Predict(f, endo, fun=ymed)
+tapply(calpro, endo, median)
+```
+* Note: confidence intervals for these derived quantities are approximate
+
+
+## Checking Assumptions of the Wilcoxon Test
+
+* Proportional odds (PO) model and its special case the Wilcoxon test assume PO
+* What does it mean to _assume_ PO?
+    + Under $H_0$: the two distributions are **identical** there is no assumption, i.e., type I error probability will behave as advertised
+    + Under $H_1$ the test may still work OK but it will not be _optimal_ unless PO holds
+* To check PO:
+    + Compute the empirical cumulative distribution function (ECDF) for the response variable, stratified by group (see @sec-desc-dist)
+    + Take the logit transformation of each ECDF
+    + Check for parallelism
+    + Linearity would be required **only** if using a parametric logistic distribution instead of using our semiparametric PO model
+* Parametric $t$-test requires parallelism **and** linearity when the ECDFs are normal-inverse transformed
+    + linearity: normal distribution (like q-q plot)
+    + parallelism: equal variances
+* Problem with assumption checking is that with small samples ECDFs are too noisy to see patterns clearly
+* Example from a larger dataset: Mayo Clinic Primary Biliary Cirrhosis Dataset
+* Compare distribution of serum bilirubin for those patients with spider veins vs. those without
+
+```{r pbc}
+#| label: fig-nonpar-pbc
+#| fig-cap: "Checking for parallelism on the logit scale (proportional odds Wilcoxon assumption)"
+#| fig-scap: "Checking Wilcoxon assumption"
+#| fig-height: 3.5
+#| fig-width: 4.25
+getHdata(pbc)
+# Take logit of ECDF
+Ecdf(~ bili, group = spiders, data=pbc, fun=qlogis)
+```
+
+* The curves are primarily parallel (even at the far left, despite the optical illusion)
+* Nonlinearity is irrelevant
+* Check $t$-test assumptions
+
+```{r pbc2}
+#| label: fig-nonpar-pbc2
+#| fig-cap: "Checking for parallelism on the normal inverse scale (equal variance $t$-test and normal scores rank test assumptions)"
+#| fig-scap: "Checking $t$-test assumption"
+#| fig-height: 3.5
+#| fig-width: 4.25
+Ecdf(~ bili, group=spiders, data=pbc, fun=qnorm)
+```
+* Curves are primarily parallel (variances are equal; probit ordinal regression or normal scores rank test would work)
+* **But** they are not straight lines as required by $t$-test normality assumption
+
+
+## Power and Sample Size
+
+### Normal Approximation
+
+* Common to get power/sample size estimates for the Wilcoxon two-sample comparison using the unpaired $t$-test power formula
+* Are assuming normality and (usually) equal variances
+* To reflect the slight inefficiency of the Wilcoxon two-sample test if normality were to magically hold, multiply the $t$-test sample size by $\frac{3}{\pi} = 1.047$
+* When the response within-group distribution is far from normal this approach is suspect
+    + e.g., $Y$ has many ties at one value, has a floor or ceiling effect, is asymmetric, or has heavy tails
+* Need a general approach
+
+
+### More on Relative Efficiency
+
+* Relative efficiency of $\frac{3}{\pi}$ for the Wilcoxon 2-sample test can be derived as a correlation coefficient
+* As $n \rightarrow \infty$ it is the squared correlation between the weights Wilcoxon gives to order statistics (sorted data values) and the optimal weights
+* Wilcoxon is a _linear rank statistic_ with weights equal to ordinary ranks
+* Optimal linear rank test (normal scores test) for a normal distribution uses the probit link (normal inverse weights), i.e., $\Phi^{-1}(\frac{\mathrm{ranks}}{n+1})$
+* Compute correlation of ordinary ranks with normal scores
+
+```{r rankeff}
+for(n in c(10, 100, 1000, 10000, 100000, 1000000)) {
+  ranks  <- 1 : n
+  zranks <- qnorm(ranks / (n + 1))
+  cat('n:', n, '  r2:', cor(ranks, zranks)^2, '\n')
+}
+cat('3/pi: ', 3 / pi, '\n')
+```
+
+
+### Tailoring Power Calculations to the Wilcoxon Test
+
+* Whitehead @whi93sam derived simple formulas related to the proportional odds model score test
+* Formulas assume that a frequency-tabulated distribution estimate is available for the combined groups
+* Power is computed as a function of the group 2 : group 1 odds ratio for exceedance probabilities
+* See example below for conversion of ORs to differences in means or medians
+    + OR=1 $\rightarrow$ distributions are the same, so differences in means/medians are zero
+* See `R` `Hmisc` package `popower` and `posamsize` functions
+
+
+### Discrete $Y$
+
+* Example: response variable has clumping at zero (with prob. 0.3) and is otherwise uniformly distributed over the values 1, 2, 4, 8, 16, 32, 64
+    + note: actual data values do not affect power Calculations
+    + don't come into play until translate to means/medians
+
+```{r popower}
+p <- c(.3, rep(.1, 7))
+popower(p, 1.25, 1000)  # compute power to detect OR=1.25, combined N=1000
+posamsize(p, 1.25, power=0.9)  # N for power=0.9
+```
+* Show how cell probabilities are translated by OR=1.25, and compute the mean and median of Y for a series of ORs for simpler interpretation
+
+```{r popower2}
+pomodm(p=p, odds.ratio=1.25)
+x <- c(0, 2 ^ (0:6))
+sum(p * x)  # check mean with OR=1
+ors <- c(1, 1.05, 1.1, 1.2, 1.25, 1.5, 2)
+w <- matrix(NA, nrow=length(ors), ncol=2,
+            dimnames=list(OR=ors, c('mean', 'median')))
+i <- 0
+for(or in ors) {
+  i <- i + 1
+  w[i, ] <- pomodm(x, p, odds.ratio=or)
+}
+w
+```
+
+
+### Gaussian $Y$
+
+* Suppose response variable for control group has a normal distribution with mean 100 and SD 10
+* Start by assuming the experimental arm has the same distribution as control except with the mean shifted upwards 3 units
+* This will result in non-proportional odds so the Wilcoxon test is not optimal but will still be 0.95 efficient
+* When the sample size per group is 150, the power of the $t$-test to detect a 3-unit difference in means is:
+
+```{r powert}
+require(pwr)
+pwr.t.test(d=3 / 10, n=150, sig.level=0.05, type='two.sample')
+```
+
+* To get the power of the Wilcoxon test when both populations have a normal distribution, we can easily use simulation
+
+```{r powerwsim}
+getRs('hashCheck.r')   # defines runifChanged
+s <- 1000    # number of simulated trials
+pval <- numeric(s)
+set.seed(1)  # so can reproduce results
+for(i in 1 : s) {
+  y1 <- rnorm(150, 100, 10)
+  y2 <- rnorm(150, 103, 10)
+  w  <- wilcox.test(y1, y2)
+  pval[i] <- w$p.value
+  }
+mean(pval < 0.05)   # proportion of simulations with p < 0.05
+# Simulate the power by actually running the prop. odds model 300 times
+g <- function() simRegOrd(300, nsim=400, delta=3, sigma=10)$power    # slower
+as.vector(runifChanged(g))
+```
+
+* For the Wilcoxon test to be optimal (PO holds) shifting the control distribution by an odds ratio will result in a non-Gaussian distribution for the experimental arm
+* Solve for the odds ratio that shifts the mean from 100 to 103, assume PO and compute the power
+
+```{r powerwmean}
+#| label: fig-nonpar-powerwmean
+#| fig-cap: "Relationship between odds ratio and assumed mean in the experimental arm"
+#| fig-height: 3.5
+#| fig-width: 4.25
+# Use an arbitrary large sample to mimic population computations
+m   <- 200000
+y1  <- sort(rnorm(m, 100, 10))
+ors <- means <- seq(1, 4, by=.025)
+i   <- 0
+for(or in ors) {
+  i <- i + 1
+  means[i] <- pomodm(y1, rep(1/m, m), odds.ratio=or)['mean']
+}
+needed.or <- approx(means, ors, xout=103)$y
+needed.or
+ggplot(mapping=aes(ors, means)) + geom_line() +
+  geom_hline(yintercept=103, alpha=I(0.25)) +
+	geom_vline(xintercept=needed.or, alpha=I(0.25)) +
+  xlab('Group B:A Odds Ratio') +
+	ylab('Mean in Population B')
+# Compute power at that odds ratio assuming no ties in data
+popower(rep(1/300, 300), odds.ratio=needed.or, n=300)
+```
+
+* Check how non-normal the experimental arm responses would be if PO holds and OR=10
+
+```{r hownn}
+#| label: fig-nonpar-nownn
+#| fig-cap: "Assessing departure from normality in the experimental arm that is induced by assuming proportional odds instead of a shift in means.  The nearly equivalent normal distribution was determined by matching quartiles of the distribution to the logistic distribution."
+#| fig-scap: "Departure from normality induced by assuming proportional odds"
+#| fig-height: 3.5
+#| fig-width: 4.25
+# First do this theoretically
+# Control arm has Gaussian Y with mean 100, SD 10
+# Create experimental arm distribution using OR=10
+y    <- seq(60, 145, length=150)
+Fy   <- 1 - pnorm(y, mean=100, sd=10)    # P(Y >= y | group A)
+Gy   <- 1 - plogis(qlogis(Fy) + log(10)) # P(Y >= y | group B)
+qu   <- approx(Gy, y, xout=c(0.25, 0.5, 0.75))$y
+qu    # Q1, median, Q2
+s    <- (qu[3] - qu[1]) / (qnorm(0.75) - qnorm(0.25))
+mu   <- qu[1] - s * qnorm(0.25)
+ncdf <- pnorm(y, mean=mu, sd=s)
+d    <- rbind(data.frame(Distribution='logistic', x=y, y=Gy),
+              data.frame(Distribution='normal',   x=y, y=ncdf))
+ggplot(d, aes(x, y, col=Distribution)) + geom_line() +
+  xlab(expression(y)) + ylab(expression(P(Y <= y)))
+```
+
+```{r hownn2}
+#| label: fig-nonpar-hownn2
+#| fig-cap: "Theoretical $q-q$ plot assessing normality of experimental arm distribution induced by proportional odds"
+#| fig-height: 3.5
+#| fig-width: 4.25
+#| fig-scap: "Assessing normality of experimental arm"
+ggplot(mapping=aes(x=y, y=qnorm(Gy))) + geom_line() +
+  geom_smooth(method=lm, se=FALSE, col=I('blue')) +
+	xlab(expression(y))
+```
+
+```{r hownn3}
+#| label: fig-nonpar-hownn3
+#| fig-cap: "Creation of 200,000 point discrete distribution for the experimental arm, obtained by converting the control distribution under proportional odds.  Blue curve is the normal cumulative distribution function; black curve is for the experimental arm assuming a proportional odds shift from the control arm."
+#| fig-scap: "Discrete distribution for the experimental arm"
+#| fig-height: 3.5
+#| fig-width: 4.25
+p <- pomodm(p=rep(1/m, m), odds.ratio=10)
+range(p)  # control arm: all 1/200000
+wtd.mean(y1, p)  # mean shifted by about 12 units
+
+# Form new distribution by repeating each observation a number
+# of times equal to the ratio of the new probability to the
+# minimum of all new probabilities
+y2 <- rep(y1, round(p / min(p)))  # 2M obs instead of 200K
+mean(y2)
+quantile(y2, c(.25, .5, .75))
+# The following plot is similar to the previous one
+ncdf <- pnorm(y, mean=mean(y2), sd=sd(y2))
+ggplot(mapping=aes(x=y2)) + stat_ecdf(geom='step') +
+  geom_line(mapping=aes(x=y, y=ncdf, col=I('blue'))) +
+	xlab(expression(y)) + ylab(expression(Proportion <= x))
+```
+
+* Little non-normality of the 2nd group if the treatment effect operates by multiplying the odds that $Y \geq y$ instead of incrementing the mean
+    + relates to similarity of normal and logistic distributions
+
+
+### Heavy-tailed $Y$
+
+* Get power to detect a shift in mean of 0.3 units for a heavy-tailed control distribution (t with 4 d.f.) with 150 subjects per group
+* Loss of efficiency of $t$-test
+    + mean and SD are no longer optimal data summaries
+* Can use above method to compute Wilcoxon power quickly if willing to assume PO
+* Let's not assume PO, and instead use simulation
+* Compare with power of $t$-test
+* Do for both null and non-null cases to verify type I error prob.
+
+```{r simtw}
+s <- 1000    # number of simulated trials
+pvalt <- pvalw <- numeric(s)
+set.seed(1)  # so can reproduce results
+for(delta in c(0, 0.3)) {
+  for(i in 1 : s) {
+    y1 <- rt(150, 4)
+    y2 <- rt(150, 4) + delta
+    pvalt[i] <- t.test(y1, y2)$p.value
+    pvalw[i] <- wilcox.test(y1, y2)$p.value
+  }
+  cat('Delta:', delta, '\n')
+  P <- function(x) round(mean(x), 2)
+  cat('Proportion of simulations with W p-value < t p-value:',
+      P(pvalw < pvalt), '\n')
+  cat('Mean p-value for t:', P(pvalt), '\n')
+  cat('Mean p-value for W:', P(pvalw), '\n')
+  cat('Power for t:', P(pvalt < 0.05), '\n')
+  cat('Power for W:', P(pvalw < 0.05), '\n\n')
+}
+```
+
+* `Hmisc` `simRegOrd` function can also simulate power for an adjusted two-sample comparison if there is one adjustment covariate
+
+
+## Bayesian Proportional Odds Model
+
+* PO model and other cumulative probability semiparametric ordinal regression models are readily extended to a Bayesian framework
+* Need special care in selecting priors for the intercepts for the continuous $Y$ case
+* Nathan James of Vanderbilt University has an implementation using Stan available at<br> [github.com/ntjames/bayes_cpm](https://github.com/ntjames/bayes_cpm)
+* See also the `R` `brms` package: [bit.ly/brms-ordinal](http://bit.ly/brms-ordinal) and this discussion:<br> [github.com/paul-buerkner/brms/issues/762](http://github.com/paul-buerkner/brms/issues/762)
+* Bayesian version of the Wilcoxon test is the posterior probability that $\beta_1 > 0$ in the PO model
+* Advantages of Bayes for PO models:
+    + does not need approximations such as large sample normality of $\hat{\beta}$ or $\chi^{2}$ distribution approximation to likelihood ratio test statistic
+    + inference is more interpretable and direct
+    + can bring outside information to the analysis
+    + can incorporate shrinkage/penalization/skepticism and still have exact inference
+    + automatically obtain exact distributions and credible intervals for derived quantities^[One merely takes each posterior sample for the $\alpha$s and $\beta$s and computes the quantity of interest, thereby automatically generating posterior samples for the derived quantity for which quantiles can compute credible intervals, etc.], e.g. mean, quantiles, differences in means and quantiles, differences in exceedance probs, $P(Y=y | X)$
+    + can relax PO assumption without huge instabilities that result from using polytomous logistic models; prior distributions can favor PO while allowing non-PO
+
+```{r echo=FALSE}
+saveCap('07')
+```

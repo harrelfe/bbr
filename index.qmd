@@ -1,0 +1,64 @@
+<img src="logo.png" width=70%>
+
+```{mermaid}
+%%| column: screen-inset-right
+%%| fig-width: 8
+flowchart LR
+Q[Research<br>Question] --> M[Measurements] --> D[Design] --> Ac[Data<br>Acquisition] --> Des[Description] --> A[Analysis] --> I[Interpretation] & Pred[Prediction]
+Pred --> V[Validation]
+I --> K[New Knowledge] & Dec[Decisions]
+```
+
+# Preface {.unnumbered}
+
+The book is aimed at exposing biomedical researchers to modern biostatistical methods and statistical graphics, highlighting those methods that make fewer assumptions, including nonparametric statistics and robust statistical measures. In addition to covering traditional estimation and inferential techniques, the course contrasts those with the Bayesian approach, and also includes several components that have been increasingly important in the past few years, such as challenges of high-dimensional data analysis, modeling for observational treatment comparisons, analysis of differential treatment effect (heterogeneity of treatment effect), statistical methods for biomarker research, medical diagnostic research, and methods for reproducible research.  A glossary of statistical terms for non-statisticians is [here](http://hbiostat.org/doc/glossary.pdf).[[BBR course](https://hbiostat.org/bbrc)]{.aside} [`R Workflow`](https://hbiostat.org/rflow) is a useful companion to this book, especially for those needing to manipulate data in preparation for analysis and for those interested in embedding statistical analyses in state-of-the-art reproducible reports.
+
+```{r include=FALSE}
+source('~/r/rmarkdown/qbookfun.r')
+```
+
+For information about adding annotations, comments, and questions inside the text click here: `r hypcomment`
+
+### Symbols Used in the Right Margin of the Text
+
+* Blue symbols in the right margin starting with ABD designate section
+numbers (and occasionally page numbers preceeded by $p$) in _The
+Analysis of Biological Data, Second Edition_ by MC Whitlock and D
+Schluter, Greenwood Village CO, Roberts and Company, 2015.
+* Right blue symbols starting with RMS designate section numbers in _Regression
+Modeling Strategies, 2nd ed._ by FE Harrell, Springer, 2015.
+* <img src="movie.png" width="15px"> in the right margin is a
+  hyperlink to a YouTube video related to the subject.
+* <img src="discourse.png" width="15px"> is a hyperlink to the
+  discussion topic in `datamethods.org` devoted to the specific
+  `YouTube` video session.  You can go directly to the discussion
+  about session `n` by going to `bit.ly/datamethods-bbrn`.  Some of
+  the sessions on `YouTube` also had live chat which you can select to
+  replay while watching the video.
+* Boxed <span style="color:blue;">blue text</span> in the right margin represents a mnemonic key for linking to discussions about that section in
+  [datamethods](http://datamethods.org).  Anyone starting a new
+  discussion about a topic related to the section should include the
+  mnemonic somewhere in the posting.  When you click on the blue boxed
+  text the `datamethods` search result of all topics containing that mnemonic will appear, and the user can navigate from it to the topic of interest to read or add content.
+* An audio player symbol indicates that narration elaborating on the
+  notes is available for the section.  Red letters and
+numbers in the right margin are cues referred to within the audio
+recordings.
+* <span style="color:blue;">blog</span> in the right margin is a link to a blog entry
+that further discusses the topic.
+
+## Other Information
+
+* [BBR course](https://hbiostat.org/bbrc)
+* YouTube channel [`BBRcourse`](http://bit.ly/yt-bbr) for these notes
+* [Discussion board about the overall course](http://datamethods.org/t/bbr-video-course)
+* Go directly to a YouTube video for BBR Session `n` by going to `bit.ly/yt-bbrn`
+* [Study questions](https://hbiostat.org/bbr/qstudy.html)
+* [Datamethods discussion board](http://datamethods.org)
+* [Statistical papers written for clinical researchers](https://hbiostat.org/bib)
+* [Statistical Thinking blog](https://fharrell.com)
+* [Statistical Thinking News](https://paper.li/stn)
+
+## Acknowledgement
+
+This material grew largely out of teaching clinical scholars and in Master of Science in Clinical Investigation programs at Duke University, University of Virginia, and Vanderbilt University. I benefitted immensely from lecture notes from colleagues such as Kerry Lee of Duke University.  Thanks also goes to Vanderbilt Biostatistics colleague James C. Slaughter who made several contributions to an earlier version of the book at [hbiostat.org/doc/bbr.pdf](https://hbiostat.org/doc/bbr.pdf).

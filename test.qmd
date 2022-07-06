@@ -1,0 +1,112 @@
+---
+title: "Untitled"
+format: html
+---
+
+```{r setup, include=FALSE}
+require(Hmisc)
+getRs('reptools.r')
+hookaddcap()   # make knitr call a function at the end of each chunk
+               # to try to automatically add to list of figure
+options(prType='html')
+source('~/r/rmarkdown/qbookfun.r')
+```
+
+# Diagnosis
+`r mrg(movie("https://www.youtube.com/watch?v=uULhuuSjBww"))`
+
+Medical diagnostic research, as usually practiced, is prone to bias
+and even more importantly to yielding information that is not useful
+to patients or physicians and sometimes overstates the value of
+diagnostic tests.  Important sources of these problems are conditioning on
+the wrong statistical information, reversing the flow of time, and
+categorization of inherently continuous test outputs and disease
+severity.  It will be shown that sensitivity and specificity are not
+properties of tests in the usual sense of the word, and that
+they were never natural choices for describing
+test performance.  This implies that ROC curves are unhelpful
+(although areas under them are sometimes useful).  So is
+categorical thinking.[Much of this material is from "Direct Measures of Diagnostic Utility Based on Diagnostic Risk Models" by FE Harrell presented at the FDA Public Workshop on Study Methodology for Diagnostics in the Postmarket Setting, 2011-05-12.]{.aside}
+
+This chapter outlines the many advantages of diagnostic risk modeling,
+showing how pre-and post-test diagnostic models give
+rise to clinically useful displays of pre-test vs. post-test
+probabilities that themselves quantify diagnostic utility in a way
+that is useful to patients, physicians, and diagnostic device makers.
+And unlike sensitivity and specificity, post-test probabilities are
+immune to certain biases, including workup bias.
+
+Case-control studies use a design where sampling is done on final disease
+status and patient exposures are "along for the ride."  In other
+words, one conditions on the outcome and considers the distribution of
+exposures using outcome-dependent sampling.  Sensitivity and
+specificity are useful for proof-of-concept case-control studies
+because sensitivity and specificity also condition on the final diagnosis.
+The use of sensitivity and specificity in prospective cohort studies
+is the mathematical equivalent of making three left turns in order to
+turn right.   Like the complex adjustments needed for $P$-values when
+doing sequential trials, sensitivity and specificity require complex
+adjustments for workup bias just because of their backward
+consideration of time and information.  In a cohort study one can use
+a vanilla regression model to estimate the probability of a final
+diagnostic outcome given patient characteristics and diagnostic test results.
+
+
+## Problems with Traditional Indexes of Diagnostic Utility
+
+sensitivity = Prob$[T^{+} | D^{+}]$<br>
+
+specificity = Prob$[T^{-} | D^{-}]$<br>
+
+Prob$[D^{+} | T^{+}] = \frac{\mathrm{sens} \times \mathrm{prev}}{\mathrm{sens} \times \mathrm{prev} +
+(1-\mathrm{spec})\times (1-\mathrm{prev})}$
+
+Problems:
+
+* Diagnosis forced to be binary
+* Test force to be binary
+* Sensitivity and specificity are in backwards time order
+* Confuse decision making for groups vs. individuals
+* Inadequate utilization of pre-test information
+* Dichotomization of continuous variables in general
+
+
+#### Example: BI-RADS Score in Mammography
+Does Category 4 Make **Any** Sense?
+
+
+|  | Diagnosis | Number of Criteria^[Breast Imaging Reporting and Data System, American College of Radiologists [breastcancer.about.com/od/diagnosis/a/birads.htm](http://breastcancer.about.com/od/diagnosis/a/birads.htm). American College of Radiology. BI-RADS US (PDF document) Copyright 2004. BI-RADS US. arc.org] |
+|-----|-----|-----|
+| 0 | Incomplete | Your mammogram or ultrasound didn't give the radiologist enough information to make a clear diagnosis; follow-up imaging is necessary   |
+| 1 | Negative | There is nothing to comment on; routine screening recommended  |
+| 2 | Benign   | A definite benign finding; routine screening recommended  |
+| 3 | Probably Benign | Findings that have a high probability of being benign ($>98$%); six-month short interval follow-up  |
+| 4 | Suspicious Abnormality | Not characteristic of breast cancer, but reasonable probability of being malignant (3 to 94%); biopsy should be considered  |
+| 5 | Highly Suspicious of Malignancy | Lesion that has a high probability of being malignant ($\geq 95$%); take appropriate action  |
+| 6 | Known Biopsy Proven Malignancy | Lesions known to be malignant that are being imaged prior to definitive treatment; assure that treatment is completed  |
+
+
+How to Reduce False Positives and Negatives?
+
+* Do away with "positive" and "negative"
+* Provide risk estimates
+* Defer decision to decision maker
+* Risks have self-contained error rates
+* Risk of 0.2 $\rightarrow$ Prob[error]=.2 if don't treat
+* Risk of 0.8 $\rightarrow$ Prob[error]=.2 if treat
+
+See
+[thehealthcareblog.com/blog/2015/12/01/rethinking-about-diagnostic-tests-there-is-nothing-positive-or-negative-about-a-test-result](http://thehealthcareblog.com/blog/2015/12/01/rethinking-about-diagnostic-tests-there-is-nothing-positive-or-negative-about-a-test-result)
+for a nice article on the subject.
+
+
+#### Binary Diagnosis is Problematic Anyway
+`r quoteit('The act oference.', '@vic08aga')`
+
+@new09evi have a strong section about the problems with considering diagnosis to be binary.
+
+
+
+## Problems with ROC Curves and Cutoffs
+`r quoteit("this", "that")`
+

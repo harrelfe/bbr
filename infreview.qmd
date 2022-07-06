@@ -1,0 +1,70 @@
+# Statistical Inference Review
+
+* Emphasize confidence limits, which can be computed from adjusted or unadjusted analyses, with or without taking into account multiple comparisons
+* $P$-values can accompany CLs if formal hypothesis testing needed
+* When possible construct $P$-values to be consistent with how CLs are computed
+
+
+## Types of Analyses
+
+* Except for one-sample tests, all tests can be thought of as testing for an association between at least one variable with at least one other variable
+* Testing for group differences is the same as testing for association between group and response
+* Testing for association between two continuous variables can be done using correlation (especially for unadjusted analysis) or regression methods; in simple cases the two are equivalent
+* Testing for association between group and outcome, when there are more than 2 groups which are not in some solid order^[The dose of a drug or the severity of pain are examples of ordered variables.] means comparing a summary of the response between $k$ groups, sometimes in a pairwise fashion
+
+
+## Covariable-Unadjusted Analyses
+
+Appropriate when
+
+* Only interested in assessing the relationship between a single $X$ and the response, or
+* Treatments are randomized and there are no strong prognostic factors that are measureable
+* Study is observational and variables capturing confounding are unavailable (place strong caveats in the paper)
+
+See  @sec-ancova
+
+
+### Analyzing Paired Responses
+
+| Type of Response | Recommended Test | Most Frequent Test   |
+|-----|-----|-----|
+| binary     | McNemar | McNemar  |
+| continuous | Wilcoxon signed-rank | paired $t$-test   |
+
+
+
+### Comparing Two Groups
+
+| Type of Response | Recommended Test | Most Frequent Test   |
+|-----|-----|-----|
+| binary     | $2\times 2~\chi^{2}$ | $\chi^{2}$, Fisher's exact test  |
+| ordinal    | Wilcoxon 2-sample | Wilcoxon 2-sample  |
+| continuous | Wilcoxon 2-sample | 2-sample $t$-test  |
+| time to event^[The response variable may be right-censored, which happens if the subject ceased being followed before having the event.  The value of the response variable, for example, for a subject followed 2 years without having the event is 2+.] | Cox model^[If the treatment is expected to have more early effect with the effect lessening over time, an accelerated failure time model such as the lognormal model is recommended.]| log-rank^[The log-rank is a special case  of the Cox model.  The Cox model provides slightly more accurate $P$-values than the $\chi^2$ statistic from the log-rank test.]  |
+
+
+### Comparing $>2$ Groups
+
+| Type of Response | Recommended Test | Most Frequent Test   |
+|-----|-----|-----|
+| binary     | $r\times 2~\chi^{2}$ | $\chi^{2}$, Fisher's exact test  |
+| ordinal    | Kruskal-Wallis | Kruskal-Wallis  |
+| continuous | Kruskal-Wallis | ANOVA  |
+| time to event | Cox model | log-rank   |
+
+
+### Correlating Two Continuous Variables
+Recommended: Spearman $\rho$ <br>
+Most frequently seen: Pearson $r$
+
+
+## Covariable-Adjusted Analyses
+
+* To adjust for imbalances in prognostic factors in an observational study or for strong patient heterogeneity in a randomized study
+* Analysis of covariance is preferred over stratification, especially if continuous adjustment variables are present or there are many adjustment variables
+    + Continuous response: multiple linear regression with appropriate transformation of $Y$
+    + Binary response: binary logistic regression model
+    + Ordinal response: proportional odds ordinal logistic regression model
+    + Time to event response, possibly right-censored:
+       - chronic disease: Cox proportional hazards model
+       - acute disease: accelerated failure time model

@@ -1,0 +1,66 @@
+# Algebra Review
+
+## Overview
+Algebra, arthmetic, and probability are underlying frameworks for statistics.  The
+following elements of algebra are particularly important:
+
+* Understanding symbols as variables, and what they can stand for
+* Factoring out common terms: $axw + bx = x(aw + b)$
+* Factoring out negation of a series of added terms: $-a - b = -
+  (a + b)$
+* Simplification of fractions
+* Addition, subtraction, multiplication, and division of fractions
+* Exponentiation with both fractional and whole number exponents
+* Re-writing exponentials of sums: $b^{u + v} = b^{u}\times b^{v}$
+* Logarithms
+    + log to the base $b$ of $x$ = $\log_{b}x$ is the number $y$ such
+   that $b^{y} = x$
+    + $\log_{b}b = 1$
+    + $\log_{b}b^{x} = x \log_{b}b = x$
+    + $\log_{b}a^{x} = x \log_{b}a$
+    + $\log_{b}a^{-x} = -x \log_{b}a$
+    + $\log_{b}(xy) = \log_{b}x + \log_{b}y$
+    + $\log_{b}\frac{x}{y} = \log_{b}x - \log_{b}y$
+    + When $b = e = 2.71828\ldots$, the base of the natural log,
+   $\log_{e}(x)$ is often written as $\ln{x}$ or just $\log(x)$
+    + $\log e = \ln e = 1$
+* Anti-logarithms: anti-log to the base $b$ of $x$ is $b^{x}$
+    + The natural anti-logarithm is $e^{x}$, often often written as
+   $\exp(x)$
+    + Anti-log is the inverse function of log; it 'undoes' a log
+* Understanding functions in general, including $\min(x, a)$ and
+  $\max(x, a)$
+* Understanding indicator variables such as $[x=3]$ which can be
+  thought of as true if $x=3$, false otherwise, or 1 if $x=3$, 0
+  otherwise
+    + $[x=3]\times y$ is $y$ if $x=3$, 0 otherwise
+    + $[x=3]\times[y=2] = [x=3 \,\textrm{and}\, y=2]$
+    + $[x=3] + 3\times [y=2] = 4$ if $x=3$ and $y=2$, $3$ if $y=2$
+   and $x\neq 3$
+    + $x\times \max(x, 0) = x^{2}[x>0]$
+    + $\max(x, 0)$ or $w \times [x>0]$ are algebraic ways of saying
+   to ignore something if a condition is not met
+* Quadratic equations
+* Graphing equations
+Once you get to multiple regression, some elements of vectors/linear
+algebra are helpful, for example the vector or dot product, also
+called the inner product:
+
+* Let $x$ stand for a vector of quantities $x_{1}, x_{2}, \ldots,
+  x_{p}$ (e.g., the values of $p$ variables for an animal such as age,
+  blood pressure, etc.)
+* Let $\beta$ stand for another vector of quantities $\beta_{1},
+  \beta_{2}, \ldots, \beta_{p}$ (e.g., weights / regression
+  coefficients / slopes)
+* Then $x\beta$ is shorthand for $\beta_{1}x_{1}+\beta_{2}x_{2} +
+  \ldots + \beta_{p}x_{p}$
+* $x\beta$ might represent a predicted value in multiple
+  regression, and is known then as the <em>linear predictor</em>
+
+
+## Some Resources
+
+* [tutorial.math.lamar.edu/pdf/Algebra_Cheat_Sheet.pdf](http://tutorial.math.lamar.edu/pdf/Algebra_Cheat_Sheet.pdf)
+* [www.khanacademy.org/math/algebra](https://www.khanacademy.org/math/algebra)
+* [biostat.app.vumc.org/PrereqAlgebra](http://biostat.app.vumc.org/PrereqAlgebra)
+* [www.purplemath.com/modules/index.htm](http://www.purplemath.com/modules/index.htm)
