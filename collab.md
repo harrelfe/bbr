@@ -15,7 +15,7 @@
 
 ```
 ::: {.callout-note collapse="true"}
-....
+. . . .
 
 :::
 ```
@@ -30,4 +30,15 @@
 # Overall Suggestions
 * Make ample use of `mermaid` diagrams to illustrate concepts, using
   the `Quarto` built-in markdown for `mermaid` as seen in `index.qmd`
+* Make ample use of marginal notes.  Small notes that don't need to
+  show any code or formatted output are best created using `[... note
+  ...]{.aside}` whereas longer notes or ones requiring formatting are
+  best produced with:
+  
+```
+::: {.column-margin}
+. . .
+
+:::
+
   
