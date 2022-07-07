@@ -60,3 +60,17 @@ install the following R packages:
 
 Don't use `tidyverse` (e.g., `dplyr`) in any R code.  It is messy and has too many
 dependencies, and sometimes conflicts with `Hmisc`.
+
+# Compilation
+It's probably best to compile individual chapters and not recompile
+the whole book.  E.g. use from the command line `quarto render
+chaptername.qmd` or click on `Render` in `RStudio`.  If recompiling
+the chapter changed or added figures, the table if figures will need
+to be updated by running `quarto render figures.qmd`.
+
+The resulting `html` files will be in the `_book` directory underneath
+the `bbr` directory.  The `.gitignore` files in `bbr` will keep these
+from being put on `Github`.  To update the web site `hbiostat.org/bbr`
+Frank will have to compile changed chapters on his machine, which he
+will do when others change and commit chapter `.qmd` files.
+
