@@ -11,6 +11,9 @@
   drill-down collapsed text
 
 # Conventions to Follow
+In what follows `chapterbasename` usually refers to the prefix of
+`.qmd` in the chapter's file name.
+
 * Figures
 
    ```{r}
@@ -19,9 +22,10 @@
    #| fig-scap: "This is a short caption for the table of figures ..."
    #| fig-height: (inches)
    #| fig-width: (inches)
-   ... base, ggplot2, or plotly graphic commands
+   ... base, ggplot2, or plotly graphic commands ...
    ```
    
+* Section label: `## ... {#sec-chapterbasename-sectionname}`
 * Drill-down collapsed text:
 
 ```
@@ -30,9 +34,6 @@
 
 :::
 ```
-
-* Section label: `... {#sec-chapterfilenameprefix-sectionname}`
-* Figure label: `#| label: fig-chapterfilenameprefix-figname}`
 
 # New Bibliographic References
 * Send the link to the publication to Frank who will add to Zotero
