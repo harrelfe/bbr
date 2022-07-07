@@ -37,9 +37,11 @@
   
 ```
 ::: {.column-margin}
-. . .
-
+. . . stuff here . . .
+(blank line)
 :::
+(blank line)
+```
 
 
 # R Packages Needed
