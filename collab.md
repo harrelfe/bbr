@@ -11,6 +11,17 @@
   drill-down collapsed text
 
 # Conventions to Follow
+* Figures
+
+   ```{r}
+   #| label: fig-chapterbasename-figurelabel
+   #| fig-cap: "This is a long caption for the figure ..."
+   #| fig-scap: "This is a short caption for the table of figures ..."
+   #| fig-height: (inches)
+   #| fig-width: (inches)
+   ... base, ggplot2, or plotly graphic commands
+   ```
+   
 * Drill-down collapsed text:
 
 ```
