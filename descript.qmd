@@ -69,6 +69,7 @@ x <- seq(-3, 35, length=150)
 # spar makes base graphics look better
 spar <- function(bot=0, top=0, ...)
   par(mar=c(3+bot, 2.75+top, .5, .5), mgp=c(2, .475, 0), ...)
+spar <- function(...) {}
 spar(mfrow=c(1,2)); xl <- expression(x)
 plot(x, dt(x, 4, 6), type='l', xlab=xl, ylab='')
 plot(x, pt(x, 4, 6), type='l', xlab=xl, ylab='')

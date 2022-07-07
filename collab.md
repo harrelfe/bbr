@@ -41,4 +41,22 @@
 
 :::
 
-  
+
+# R Packages Needed
+To be able to run all the examples in the entire book you will need to
+install the following R packages:
+
+* Hmisc
+* rms
+* data.table
+* gpplot2
+* mvtnorm (for corr.qmd)
+* lattice (for descript.qmd, info.qmd)
+* brms (htest.qmd, prop.qmd)
+* pwr (htest.qmd)
+* nlme (serial.qmd)
+* rmsb (serial.qmd)
+* kableExtra
+
+Don't use `tidyverse` (e.g., `dplyr`) in any R code.  It is messy and has too many
+dependencies, and sometimes conflicts with `Hmisc`.
