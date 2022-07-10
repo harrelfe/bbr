@@ -22,7 +22,7 @@ book:
     - r.qmd
     - algebra.qmd
     - overview.qmd
-    - test.qmd
+    - descript.qmd
     - htest.qmd
     - prop.qmd
     - nonpar.qmd
