@@ -63,7 +63,7 @@ format:
     fig-cap-location: margin
     css: mermaidf.css
     code-tools: true
-    code-fold: true
+    code-fold: show
     code-block-bg: "#f1f3f5"
     code-block-border-left: "#31BAE9"
 
