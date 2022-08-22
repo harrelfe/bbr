@@ -9,6 +9,11 @@
 * New chapter
 * New material that makes it logical to convert old material to
   drill-down collapsed text
+  
+## Other Contributions
+* Get an account on hypothes.is and use that account to highlight,
+  annotate, and discuss sections of the html notes
+* Requires no coordination with other authors
 
 # Conventions to Follow
 In what follows `chapterbasename` usually refers to the prefix of
