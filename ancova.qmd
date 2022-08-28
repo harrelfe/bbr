@@ -4,7 +4,7 @@ getRs('reptools.r')
 hookaddcap()   # make knitr call a function at the end of each chunk
                # to try to automatically add to list of figure
 options(prType='html')
-source('~/r/rmarkdown/qbookfun.r')
+getRs('qbookfun.r')
 ```
 
 `r hypcomment`
@@ -225,7 +225,8 @@ having heterogeneity in their expected outcomes.  See
 * @gai84bia showed that for unadjusted treatment estimates to be unbiased, regression must be linear or exponential
 * @gai86adj showed that for logistic, Cox, and paired survival models unadjusted treatment effects are asymptotically biased low in absolute value
 * Gail also studied normal, exponential, additive risk, Poisson
-<div id="boxes"><div id="leftbox">Part of the problem with Poisson, proportional hazard and logistic regression approaches is that they use a single parameter, the linear predictor, with no equivalent of the variance parameter in the Normal case.  This means that lack of fit impacts on the estimate of the predictor.</div><div id="rightbox">@sen04con, p. 3747</div></div><div class="clear"></div>
+
+`r quoteit('Part of the problem with Poisson, proportional hazard and logistic regression approaches is that they use a single parameter, the linear predictor, with no equivalent of the variance parameter in the Normal case.  This means that lack of fit impacts on the estimate of the predictor.', '@sen04con, p. 3747')`
 
 
 ## Cox / Log--Rank Test for Time to Event
@@ -269,7 +270,10 @@ having heterogeneity in their expected outcomes.  See
 
 * @hau98sho, who have an excellent review of covariable adjustment in nonlinear models, state:
 
-> For use in a clinician--patient context, there is only a single person, that patient, of interest.  The subject-specific measure then best reflects the risks or benefits for that patient.  Gail has noted this previously [ENAR Presidential Invited Address, April 1990], arguing that one goal of a clinical trial ought to be to predict the direction and size of a treatment benefit for a patient with specific covariate values.  In contrast, population--averaged estimates of treatment effect compare outcomes in groups of patients.  The groups being compared are determined by whatever covariates are included in the model.  The treatment effect is then a comparison of average outcomes, where the averaging is over all omitted covariates. `r ipacue()`
+
+`r quoteit('For use in a clinician--patient context, there is only a single person, that patient, of interest.  The subject-specific measure then best reflects the risks or benefits for that patient.  Gail has noted this previously [ENAR Presidential Invited Address, April 1990], arguing that one goal of a clinical trial ought to be to predict the direction and size of a treatment benefit for a patient with specific covariate values.  In contrast, population--averaged estimates of treatment effect compare outcomes in groups of patients.  The groups being compared are determined by whatever covariates are included in the model.  The treatment effect is then a comparison of average outcomes, where the averaging is over all omitted covariates.', '@hau98sho')`
+
+`r ipacue()`
 
 
 ## How Many Covariables to Use?
@@ -491,7 +495,7 @@ scale.  This logic leads to the following recommended strategy:  `r ipacue()`
 1. Use the same model to estimate absolute risk differences (as in the next section) as a function both of interacting factors and of baseline variables in the model that do not interact with treatment (but will still expand the absolute treatment effect)
 1. Even better: since expansion of risk differences is a general function of overall risk and not of individual risk factors only display effects of individual risk factors that interact with treatment (interacting on the scale that would have allowed them not to interact---the relative scale such as log odds) and show the general risk difference expansion as in Figures @fig-ancova-or-diff (think of the "risk factor" as treatment) and  @fig-ancova-gusto-nomogram
 
-<div id="boxes"><div id="leftbox">To translate the results of clinical trials into practice may require a lot of work involving modelling and further background information.  `Additive at the point of analysis but relevant at the point of application' should be the motto.</div><div id="rightbox">[Stephen Senn](http://errorstatistics.com/2013/04/19/stephen-senn-when-relevance-is-irrelevant)</div></div><div class="clear"></div>
+`r quoteit('To translate the results of clinical trials into practice may require a lot of work involving modelling and further background information.  \'Additive at the point of analysis but relevant at the point of application\' should be the motto.', '[Stephen Senn](http://errorstatistics.com/2013/04/19/stephen-senn-when-relevance-is-irrelevant)')`
 
 ### Estimating Absolute Treatment Effects
 `r mrg(sound("anc-10"), disc("ancova-absolute"))`
@@ -745,7 +749,7 @@ contrast(fit, list(treat='b', site=sites),
     + Exploratory analyses may be carried out to improve the understanding of covariates not included in the primary analysis, and to help the sponsor with the ongoing development of the drug.
     + A primary analysis, unambiguously pre-specified in the protocol or statistical analysis plan, correctly carried out and interpreted, should support the conclusions which are drawn from the trial.  Since there may be a number of alternative valid analyses, results based on pre-specified analyses will carry most credibility.''
 
-<div id="boxes"><div id="leftbox">In confirmatory trials, a model is pre-specified, and it is necessary to pretend that it is true.  In most other statistical applications, the choice of model is data--driven, but it is necessary to pretend that it is not.</div><div id="rightbox">@edw99mod</div></div><div class="clear"></div> See also @sig99tre
+`r quoteit('In confirmatory trials, a model is pre-specified, and it is necessary to pretend that it is true.  In most other statistical applications, the choice of model is data--driven, but it is necessary to pretend that it is not.', '@edw99mod; see also @sig99tre')`
 
 * Choose predictors based on expert opinion  `r ipacue()`
 * Impute missing values rather than discarding observations
@@ -783,9 +787,9 @@ contrast(fit, list(treat='b', site=sites),
 
 `r mrg(disc("ancova-plan"))`
 
-<div id="boxes"><div id="leftbox">The decision to fit prognostic factors has a far more dramatic effect on the precision of our inferences than the choice of an allocation based on covariates or randomization approach and one of my chief objections to the allocation based on covariates approach is that trialists have tended to use the fact that they have balanced as an excuse for not fitting.  This is a grave mistake.</div><div id="rightbox">@sen04con p. 3748; see also @sen10com</div></div><div class="clear"></div>
+`r quoteit('The decision to fit prognostic factors has a far more dramatic effect on the precision of our inferences than the choice of an allocation based on covariates or randomization approach and one of my chief objections to the allocation based on covariates approach is that trialists have tended to use the fact that they have balanced as an excuse for not fitting.  This is a grave mistake.', '@sen04con p. 3748; see also @sen10com')`
 
-<div id="boxes"><div id="leftbox">My view \ldots was that the form of analysis envisaged (that is to say, which factors and covariates should be fitted) justified the allocation and _not vice versa_.</div><div id="rightbox">@sen04con, p. 3747</div></div><div class="clear"></div>
+`r quoteit('My view .. was that the form of analysis envisaged (that is to say, which factors and covariates should be fitted) justified the allocation and _not vice versa_.', '@sen04con, p. 3747')`
 
 ## Robustness {#sec-ancova-robust}
 
@@ -797,7 +801,10 @@ In general, violation of model assumptions about treatment effect parameters do 
 An example of poor model fitting where type I assertion probability $\alpha$ for testing treatment the difference was not preserved is in the analysis of longitudinal ordinal response under a [first-order Markov process](http://hbiostat.org/R/examples/simMarkovOrd/sim.html) when there is a strong time effect that is mis-modeled.  If the mixture of outcome states changes arbitrarily over time so that time operates in a non-proportional odds manner but proportional odds is falsely assumed, the ordinary standard error estimates for the treatment effect are too small and $\alpha$ is significantly larger than the intended 0.05.  Using the cluster sandwich covariance matrix estimator in place of the usual information matrix-based standard errors completely fixed that problem[But as shown in the linked report, a complete solution is had by using a partial proportional odds model to relax the proportional odds assumption with respect to absolute time.]{.aside}.
 
 ## Summary
-<div id="boxes"><div id="leftbox">The point of view is sometimes defended that analyses that ignore covariates are superior because they are simpler. I do not accept this.  A value of $\pi=3$ is a simple one and accurate to one significant figure \ldots However very few would seriously maintain that if should generally be adopted by engineers.</div><div id="rightbox">@sen04con, p. 3741</div></div><div class="clear"></div>  `r ipacue()`
+
+`r quoteit('The point of view is sometimes defended that analyses that ignore covariates are superior because they are simpler. I do not accept this.  A value of $\\pi=3$ is a simple one and accurate to one significant figure ... However very few would seriously maintain that if should generally be adopted by engineers.', '@sen04con, p. 3741')`
+
+`r ipacue()`
 
 
 * As opposed to simple treatment group comparisons, modeling can
@@ -816,12 +823,9 @@ An example of poor model fitting where type I assertion probability $\alpha$ for
 
 
 ## Notes
-From a posting by Harrell to the Medstats google group on 19Jan09:
 
+`r quoteit('I think it is most important to decide what it is you want to estimate, and then formulate a model that will accomplish that.  Unlike ordinary linear models, which provide unbiased treatment effects if balanced covariates are mistakenly omitted from the model in an RCT, most models (such as the Cox PH model) result in biased treatment effects even when there is perfect balance in covariates, if the covariates have nonzero effects on the outcome.  This is another way of talking about residual outcome heterogeneity.<br><br>If you want to estimate the effect of variable $X$ on survival time, averaging over males and females in some strange undocumented way, you can get the population averaged effect of $X$ without including sex in the model.  Recognize however this is like comparing some of the males with some of the females when estimating the $X$ effect.  This is seldom of interest.  More likely we want to know the effect of $X$ for males, the effect for females, and if there is no interaction we pool the two to more precisely estimate the effect of $X$ conditional on sex.  Another way to view this is that the PH assumption is more likely to hold when you condition on covariates than when you don\'t.  No matter what happens though, if PH holds for one case, it cannot hold for the other, e.g., if PH holds after conditioning, it cannot hold when just looking at the marginal effect of X.', 'From a posting by Harrell to the Medstats google group on 19Jan09')`
 
->I think it is most important to decide what it is you want to estimate, and then formulate a model that will accomplish that.  Unlike ordinary linear models, which provide unbiased treatment effects if balanced covariates are mistakenly omitted from the model in an RCT, most models (such as the Cox PH model) result in biased treatment effects even when there is perfect balance in covariates, if the covariates have nonzero effects on the outcome.  This is another way of talking about residual outcome heterogeneity.
-> 
-> If you want to estimate the effect of variable $X$ on survival time, averaging over males and females in some strange undocumented way, you can get the population averaged effect of $X$ without including sex in the model.  Recognize however this is like comparing some of the males with some of the females when estimating the $X$ effect.  This is seldom of interest.  More likely we want to know the effect of $X$ for males, the effect for females, and if there is no interaction we pool the two to more precisely estimate the effect of $X$ conditional on sex.  Another way to view this is that the PH assumption is more likely to hold when you condition on covariates than when you don't.  No matter what happens though, if PH holds for one case, it cannot hold for the other, e.g., if PH holds after conditioning, it cannot hold when just looking at the marginal effect of X.
 
 
 See the excellent Tweetorial by Darren Dahly

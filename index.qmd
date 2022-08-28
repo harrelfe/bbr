@@ -14,7 +14,8 @@ I --> K[New Knowledge] & Dec[Decisions]
 The book is aimed at exposing biomedical researchers to modern biostatistical methods and statistical graphics, highlighting those methods that make fewer assumptions, including nonparametric statistics and robust statistical measures. In addition to covering traditional estimation and inferential techniques, the course contrasts those with the Bayesian approach, and also includes several components that have been increasingly important in the past few years, such as challenges of high-dimensional data analysis, modeling for observational treatment comparisons, analysis of differential treatment effect (heterogeneity of treatment effect), statistical methods for biomarker research, medical diagnostic research, and methods for reproducible research.  A glossary of statistical terms for non-statisticians is [here](http://hbiostat.org/doc/glossary.pdf).[[BBR course](https://hbiostat.org/bbrc)]{.aside} [`R Workflow`](https://hbiostat.org/rflow) is a useful companion to this book, especially for those needing to manipulate data in preparation for analysis and for those interested in embedding statistical analyses in state-of-the-art reproducible reports.
 
 ```{r include=FALSE}
-source('~/r/rmarkdown/qbookfun.r')
+require(Hmisc)
+getRs('qbookfun.r')
 ```
 
 For information about adding annotations, comments, and questions inside the text click here: `r hypcomment`

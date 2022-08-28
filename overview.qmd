@@ -1,6 +1,6 @@
 ```{r setup, include=FALSE}
 require(Hmisc)
-source('~/r/rmarkdown/qbookfun.r')
+getRs('qbookfun.r')
 ```
 
 `r apacue <- 0`

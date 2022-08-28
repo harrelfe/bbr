@@ -61,11 +61,11 @@ format:
     number-depth: 3
     reference-location: margin
     fig-cap-location: margin
-    css: mermaidf.css
     code-tools: true
     code-fold: show
     code-block-bg: "#f1f3f5"
     code-block-border-left: "#31BAE9"
+    css: h.css
 
 bibliography: harrelfe.bib
 csl: apa-annotated-bibliography.csl

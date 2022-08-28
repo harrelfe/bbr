@@ -4,7 +4,7 @@ getRs('reptools.r')
 hookaddcap()   # make knitr call a function at the end of each chunk
                # to try to automatically add to list of figure
 options(prType='html')
-source('~/r/rmarkdown/qbookfun.r')
+getRs('qbookfun.r')
 knitr::set_alias(w   = 'fig.width', h    = 'fig.height',
                  cap = 'fig.cap',   scap = 'fig.scap')
 ```

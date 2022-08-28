@@ -1,5 +1,6 @@
 ```{r setup, include=FALSE}
-source('~/r/rmarkdown/qbookfun.r')
+require(Hmisc)
+getRs('qbookfun.r')
 ```
 
 # Reproducible Research {#sec-repro}
@@ -195,6 +196,7 @@ See [www.ctan.org/tex-archive/help/LitProg-FAQ](http://www.ctan.org/tex-archive/
 * Friedrich Leisch developed Sweave in 2002
 * Yihui Xie developed `knitr` in 2011
 * `knitr` is used with `R Markdown` and `Quarto` to produce reproducible reports
+* RStudio developed `quarto` in 2022
 
 A Bad Alternative to `knitr`
 

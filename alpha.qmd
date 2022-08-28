@@ -1,5 +1,6 @@
 ```{r setup, include=FALSE}
-source('~/r/rmarkdown/qbookfun.r')
+require(Hmisc)
+getRs('qbookfun.r')
 ```
 
 `r quoteit('Discounting a result because of long-run operating characteristics (controlling α) is analogous to one making a $10 bet and offering to pay $8 when his team lost, saying "My team might have won".')`
