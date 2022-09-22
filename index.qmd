@@ -63,3 +63,14 @@ that further discusses the topic.
 ## Acknowledgement
 
 This material grew largely out of teaching clinical scholars and in Master of Science in Clinical Investigation programs at Duke University, University of Virginia, and Vanderbilt University. I benefitted immensely from lecture notes from colleagues such as Kerry Lee of Duke University.  Thanks also goes to Vanderbilt Biostatistics colleague James C. Slaughter who made several contributions to an earlier version of the book at [hbiostat.org/doc/bbr.pdf](https://hbiostat.org/doc/bbr.pdf).
+
+
+::: {.callout-note collapse="true"}
+# Update History
+
+| Date | Sections | Changes | Thanks To |
+|:-----|:---------|:--------|:----------|
+| 2022-08-02 | [-@sec-dx]     | Quote about weaknesses in sens and spec; link to CrossValidated discussion | |
+| 2022-08-31 | [-@sec-corr-n] | New material on sample size vs. P(correct sign on r) | |
+
+:::

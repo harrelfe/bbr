@@ -261,7 +261,7 @@ ggplot(esopH2, aes(x=time, y=diffpH)) +
 ```
 
 
-### Sample Size for $r${#sec-sec:corr-n}
+### Sample Size for $r$ {#sec-corr-n}
 
 * Without knowledge of population variances, etc., $r$ can be useful for planning studies
 * Choose $n$ so that margin for error (half-width of C.L.) for $r$ is acceptable
@@ -280,6 +280,39 @@ abline(h=seq(0, .4, by=0.025),
 
 See also [stats.stackexchange.com/questions/415131](https://stats.stackexchange.com/questions/415131).
 
+Another way to to compute needed sample size is to solve for $n$ such that the probability that the observed correlation is in the right direction is high.  Again using Fisher's $z$-transformation $z(r) = 0.5 \log{\frac{1 + r}{1 - r}}$, and letting $r$ and $\rho$ denote the sample and population correlation coefficients, respectively, $z(r)$ is approximately normally distributed with mean $z(\rho)$ and standard deviation $\frac{1}{\sqrt{n-3}}$. The probability that $r > 0$ is the same as $\Pr(z(r) > 0)$, which equals $\Pr(z(r) - z(\rho) > -z(\rho))$ = $\Pr(\sqrt{n-3} z(r) - \sqrt{n-3} z(\rho) > -\sqrt{n-3} z(\rho))$ = $\Phi(\sqrt{n-3}z(\rho))$, where $\Phi$ is the $n(0,1)$ cumulative distribution function.  If we desired a probability of 0.95 of $r$ having the right sign, we set the right hand side to 0.95 and solve for $n$:
+
+$$n = (\frac{\Phi^{-1}(0.95)}{z(\rho)})^{2} + 3$$
+
+When the true correlation $\rho$ is close to 0.0 it makes sense that the sample size required to be confidence that $r$ is in the right direction is very large, and the direction will be very easy to determine if $\rho$ is far from zero.  So we are most interested in $n$ when $\rho \in [0.1, 0.5]$.  The approximate sample sizes required for various $\rho$ are shown in the graph below.
+
+```{r w=4.5,h=3.75}
+#| label: fig-corr-direction
+#| fig-cap: "Sample size required to ensure a high probability of the sample correlation coefficient being in the right direction"
+z   <- function(x) 0.5 * log((1 + x) / (1 - x))
+rho <- seq(0.1, 0.5, by=0.01)
+n   <- 3 + (qnorm(0.95) / z(rho)) ^ 2
+ggplot(mapping=aes(x=rho, y=n)) + geom_line() +
+  scale_x_continuous(minor_breaks=seq(0.1, 0.5, by=0.01)) +
+  scale_y_continuous(minor_breaks=seq(10, 270, by=10)) +
+  xlab(expression(rho))
+```
+
+To have at least a 0.95 chance of being in the right direction when the true correlation is 0.1 (or -0.1) requires $n > 250$.
+
+For a given $n$ we can compute the probability of being in the right direction for a few values of $\rho$ as shown below.
+
+```{r w=4.5,h=3.75}
+#| label: fig-corr-ndirection
+#| fig-cap: "Probability of having the correct sign on $r$ as a function of $n$ and true correlation $\\rho$"
+d <- expand.grid(n=10:400, rho=c(0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5))
+d <- transform(d, p=pnorm(sqrt(n - 3) * z(rho)))
+ggplot(d, aes(x=n, y=p, color=factor(rho))) + geom_line() +
+  scale_x_continuous(minor_breaks=seq(10, 390, by=10)) +
+  scale_y_continuous(minor_breaks=seq(0.5, 1, by=0.01)) +
+  ylab('Pr(correct sign on r)') +
+  guides(color=guide_legend(title=expression(rho)))
+```
 
 ### Comparing Two $r$'s
 

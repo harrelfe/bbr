@@ -9,8 +9,11 @@ knitr::set_alias(w   = 'fig.width', h    = 'fig.height',
                  cap = 'fig.cap',   scap ='fig.scap')
 ```
 
-# Diagnosis
+# Diagnosis {#sec-dx}
+
 `r mrg(movie("https://www.youtube.com/watch?v=uULhuuSjBww"))`
+
+`r quoteit('Sensitivity and specificity are far less useful than they seem, and they are properties not just of tests **but of patients also**.  Probabilistic diagnosis is better developed through logistic regression models, which handle pre-test probabilities, tests with non-binary or multiple outputs, multiple correlated tests, and multiple disease stages/severities (using ordinal logistic regression).')`
 
 Medical diagnostic research, as usually practiced, is prone to bias
 and even more importantly to yielding information that is not useful
@@ -116,7 +119,7 @@ for a nice article on the subject.
     + Sensitivity $\uparrow$ with any covariate related to disease severity if diagnosis is dichotomized
 * Require adjustment for workup bias
     + Diagnostic risk models do not; only suffer from under-representation
-* Good for proof of concept of a diagnostic method in a case--control study; not useful for utility
+* Good for proof of concept of a diagnostic method in a case--control study; not useful for utility [See [here](https://stats.stackexchange.com/questions/328550) for a discussion of how sensitivity and specificity change with prevalence.]{.aside}
 
 @hla84fac; @moo97lim; @moo03sen; @gne07str
 
