@@ -1,6 +1,6 @@
 ```{r setup, include=FALSE}
 require(Hmisc)
-getRs('reptools.r')
+require(qreport)
 hookaddcap()   # make knitr call a function at the end of each chunk
                # to try to automatically add to list of figure
 options(prType='html')
@@ -100,7 +100,7 @@ coef(f)['age']  # ditto
    evaluates the analytic form of the fitted function
     + `nomogram(f)`: draw a nomogram of the model
 
-**Note**: Some of othe functions can output `html` if `options(prType='html')` is set, as is done in this chapter.  When using that facility you often need to add `results='asis'` in the `knitr` chunk header.
+**Note**: Some of othe functions can output `html` if `options(prType='html')` is set, as is done in this chapter.  When using that facility you do not need to add `results='asis'` in the `knitr` chunk header as the `html` is sensed automatically.
 
 ## The `rms` `datadist` Function
 
@@ -147,8 +147,7 @@ analyze lead exposure levels in 1972 and 1973, age, and
 `maxfwt`^[`maxfwt` might be better analyzed as an ordinal variable but as will be seen by residual plots it is also reasonably considered to be continuous and to satisfy ordinary regression assumptions.].
 
 `r ipacue()` 
-**Note**: To easily run all the following commands, open [fharrell.com/code/bbr.zip](http://fharrell.com/code/bbr.zip) and then open the file `8-rmsintro.r` contained in the `.zip` file using `RStudio`.  Commands listed in previous sections were not actually executed so they are marked with the `R` comment symbol
-(#) and can be ignored.
+Commands listed in previous sections were not actually executed because their chunk headers contained `eval=FALSE`.
 
 ```{r lead}
 # For an Rmarkdown version of similar analyses see
@@ -164,9 +163,9 @@ lead <- upData(lead,
 ```
 
 `r ipacue()`
-```{r leaddesc,results='asis'}
-html(contents(lead))
-html(describe(lead))
+```{r leaddesc}
+contents(lead)
+describe(lead)
 ```
 `r ipacue()`
 ```{r datadistfit}
@@ -176,7 +175,7 @@ dd    # show what datadist computed
 f <- ols(maxfwt ~ age + ld72 + ld73, data=lead)
 ```
 `r ipacue()`
-```{r printf,results='asis'}
+```{r printf}
 f         # same as print(f)
 ```
 `r ipacue()`
@@ -210,9 +209,10 @@ Residuals may be summarized and plotted just like any raw data
 variable.
 
 * To plot residuals vs. each predictor, and to make a q-q plot to check normality of residuals, use these examples:
+
 ```{r h=5,w=5,top=1}
+spar(mfrow=c(2,2))   # spar is in qreport; 2x2 matrix of plots
 r <- resid(f)
-par(mfrow=c(2,2))   # 2x2 matrix of plots
 plot(fitted(f), r); abline(h=0)  # yhat vs. r
 with(lead, plot(age,  r));    abline(h=0)
 with(lead, plot(ld73, r));    abline(h=0)
@@ -222,6 +222,7 @@ qqline(as.numeric(r))
 
 
 ## Plotting Partial Effects
+
 `r ipacue()`<br>
 `r mrg(sound("rrms-6"))`
 
@@ -336,7 +337,9 @@ summary(f, age=5:6)    # starting age irrelevant since age is linear
 
 There is a `plot` method for `summary` results.  By default it
 shows 0.9, 0.95, and 0.99 confidence limits.  `r ipacue()` 
-```{r h=2.5,top=2}
+```{r}
+#| fig.height: 2.4
+spar(top=2)
 plot(summary(f))
 ```
 
@@ -393,9 +396,8 @@ an <- anova(f)
 an                     # same as print(an)
 anova(f, ld72, ld73)   # combine effects into a 2 d.f. test 
 ```
-Enhanced output to better explain which parameters are being tested is available if you are not using `html`:
-```{r plainanova}
-options(prType='plain')
+Enhanced output to better explain which parameters are being tested is available:
+```{r}
 print(an, 'names')     # print names of variables being tested
 ```
 
@@ -404,5 +406,14 @@ print(an, 'names')     # print names of variables being tested
 print(an, 'subscripts')# print subscripts in coef(f) (ignoring 
                        # the intercept) being tested
 print(an, 'dots')      # a dot in each position being tested
-options(prType='html')
 ```
+
+## Study Questions
+
+**Section 9.6**
+
+1. What about our ANOVA is consistent with the color image plot for the two continuous lead exposure predictors?
+
+**Section 9.7**
+
+1. Define the IQR effect of ld73.

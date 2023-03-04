@@ -1,6 +1,6 @@
 ```{r setup, include=FALSE}
 require(Hmisc)
-getRs('reptools.r')
+require(qreport)
 hookaddcap()   # make knitr call a function at the end of each chunk
                # to try to automatically add to list of figure
 options(prType='html')
@@ -626,7 +626,7 @@ r <- ABM[, {
    + for each new calculation move up $\frac{n}{200}$ observations (1 observation if $n < 200$) to form the new window
 * Example using the glucose data but estimating 3 quartiles plus the mean
 
-```{r glratiom,results='asis'}
+```{r results='asis'}
 #| label: fig-corr-glratiom
 #| fig-cap: 'Moving quartiles and mean (blue line) to relate CSF:blood glucose ratio to total CSF polymorph count in patients with either bacterial or viral meningitis.  Black line is the moving median.  The band depicts outer quartiles.'
 #| fig-scap: 'Moving statistics for glucose ratio'
@@ -641,11 +641,11 @@ ggplot(u, aes(x=tpolys, y=`Moving Median`)) + geom_line() +
 
 * Age example
 
-```{r age-abmm,results='asis'}
+```{r}
 #| label: fig-corr-age-abmm
 #| fig-cap: 'Moving proportions relating age to the probability of bacterial meningitis given a patient has bacterial or viral meningitis, with a spike histogram and an extended box plot showing the age distribution.  Moving proportions before smoothing are also shown.  To the right of the extended box plot is a dot for the 0.99 quantile of age'
 #| fig-scap: "Moving proportions"
-getRs('reptools.r')   # provides addggLayers
+require(qreport)   # provides addggLayers
 u <- movStats(abm ~ age, msmooth='both', data=ABM, melt=TRUE, pr='margin')
 g <- ggplot(u, aes(x=age, y=abm)) + geom_line(aes(col=Type)) +
   xlab('Age at Admission, years') +
@@ -659,11 +659,12 @@ addggLayers(g, ABM, value='age', type='ebp', pos='top')
 * For each moving window compute the Kaplan-Meier 6m and 12m survival estimates
 * Subtract cumulative survival from 1.0 to get cumulative incidence
 
-```{r movsurv,results='asis'}
+```{r}
 #| label: fig-corr-movsurv
 #| fig-cap: "Moving 6m and 12m mortality as a function of age using VA lung cancer dataset"
 #| fig-scap: "Moving 6m and 12m mortality estimates"
 getHdata(valung)
+require(survival)    # for Surv()
 u <- movStats(Surv(t / (365.25 / 12), dead) ~ age, times=c(6, 12),
               eps=25, data=valung, melt=TRUE, pr='margin', tunits='month')
 g <- ggplot(u, aes(x=age, y=incidence)) + geom_line(aes(col=Statistic)) +

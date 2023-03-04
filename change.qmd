@@ -1,6 +1,6 @@
 ```{r setup, include=FALSE}
 require(Hmisc)
-getRs('reptools.r')
+require(qreport)
 hookaddcap()   # make knitr call a function at the end of each chunk
                # to try to automatically add to list of figure
 options(prType='html')
@@ -53,7 +53,7 @@ knitr::set_alias(w   = 'fig.width', h    = 'fig.height',
 * Response: Urinary $\beta$-thromboglobulin ($\beta$-TG) excretion in 24 subjects
 * 24 total subjects: 12 diabetic, 12 normal
 
-```{r diabetes,w=6,h=2.5,cap='$\\beta$-TG levels by diabetic status with a median line.  The left plot is on the original (non-transformed) scale and includes median lines.  The right plot displays the data on a log scale.',scap='$\\beta$-TG levels by diabetic status'}
+```{r w=6,h=2.5,cap='$\\beta$-TG levels by diabetic status with a median line.  The left plot is on the original (non-transformed) scale and includes median lines.  The right plot displays the data on a log scale.',scap='$\\beta$-TG levels by diabetic status'}
 #| label: fig-change-diabetes
 d <- rbind(
   data.frame(status='normal',
@@ -141,9 +141,9 @@ wilcox.test(log(btg) ~ status, data=d)
 * Subjects having large initial values may have largest differences
 * Subjects having very small initial values may have largest post/pre ratios
 
-## What's Wrong with Change in General? {#sec-changegen}
+## What's Wrong with Change in General? {#sec-change-gen}
 
-### Change from Baseline in Randomized Studies 
+### Change from Baseline in Randomized Studies {#sec-change-rct}
 `r mrg(sound("change-7"))`
 Many authors and pharmaceutical clinical trialists make the mistake of analyzing change from baseline instead of making the raw follow-up measurements the primary outcomes, covariate-adjusted for baseline.  The purpose of a parallel-group randomized clinical trial is to compare the parallel groups, not to compare a patient with herself at baseline. The central question is for two patients with the same pre measurement value of x, one given treatment A and the other treatment B, will the patients tend to have different post-treatment values? This is exactly what analysis of covariance assesses.  Within-patient change is affected strongly by regression to the mean and measurement error.  When the baseline value is one of the patient inclusion/exclusion criteria, the only meaningful change score requires one to have a second baseline measurement post patient qualification to cancel out much of the regression to the mean effect.  It is the second baseline that would be subtracted from the follow-up measurement.
 
@@ -168,7 +168,8 @@ References may be found [here](https://hbiostat.org/bib/change.html), and also s
 Regarding 3. above, if pre is not linearly related to post, there is 
 `r mrg(sound("change-9"))`
 no transformation that can make a change score work.  Two unpublished
-examples illustrate this problem.  In a large degression study using
+examples illustrate this problem.  The first is detailed in @sec-change-ex.
+Briefly, in a large depression study using
 longitudinal measurements of the Hamilton-D depression scale, there
 was a strong nonlinear relationship between baseline Hamilton D and
 the final measurement.  The form of the relationship was a flattening
@@ -181,7 +182,7 @@ average change indicates).  Doing an ordinal ANCOVA adjusting for a
 smooth nonlinear effect of baseline using a spline function would have
 been a much better analysis than the change from baseline analysis
 done by study leaders.  In the second example, a similar result was
-found for a quality of life measure, KCCQ.  Again, a flattening
+found for a quality of life measure, KCCQ.  Similar to the depression trial example, a flattening
 relationship for large KCCQ indicated that subtracting from baseline
 provided a nearly meaningless average change score.
 
@@ -190,7 +191,7 @@ Regarding 7. above, often the baseline is not as relevant as thought and the slo
 @bla11com have an excellent [article](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3286439) about how misleading change from baseline is for clinical trials.  [This](http://www.fharrell.com/post/errmed#change) blog article has several examples of problematic change score analyses in the clinical trials literature.
 
 The following `R` code exemplifies how to do a powerful, robust
-analysis without computing change from baseline.  This analysis
+analysis with a likely-to-fit model, without computing change from baseline.  This analysis
 addresses the fundamental treatment question posed at the top of this
 section.  This example uses a semiparametric ANCOVA that utilizes only
 the ranks of $Y$ and that provides the same test statistic no matter
@@ -231,6 +232,74 @@ vs. ANCOVA vs. ignoring baseline completely, as a function of the
 
 <img src="sennChange.jpg" width="70%">
 
+### Example of a Misleading Change Score {#sec-change-ex}
+
+As discussed above, for a change from baseline to be meaningful, the relationship between baseline and follow-up measurements must be linear with a slope of 1.0.  Otherwise the amount of change will be baseline-dependent.  Consider a real example taken from a randomized clinical trial of an anti-depressive medication. [The data from the actual trial were perturbed for confidentiality reasons.  The amount of perturbation makes the original data not identifiable but preserves the relationships among variables.]{.aside}  The [Hamilton-D depression scale](https://en.wikipedia.org/wiki/Hamilton_Rating_Scale_for_Depression) was assessed at baseline and 8 weeks after randomization in this two-arm parallel-group randomized trial.  The dataset `hamdp` is available from [hbiostat.org/data](https://hbiostat.org/data) by using the R `Hmisc` package `getHdata` function.
+
+Start with plotting the raw data and adding nonparametric smoothers.
+
+```{r}
+#| label: fig-change-hamd
+#| fig-cap: "8w vs. baseline Hamilton-D depression scores along with _loess_ nonparametric smoothers by treatment"
+getHdata(hamdp)
+h <- hamdp
+ggplot(h, aes(x=Dbase, y=D8w, color=treatr)) + geom_point() + geom_smooth(span=1, se=FALSE)
+```
+
+Relationships are not linear due to the fact that patients with more severe depression symptoms at baseline had the greatest reduction in symptoms.  Those with mild to moderate depression had less room to move.  See how this affects change from baseline.
+
+```{r}
+#| label: fig-change-hamdd
+#| fig-cap: "Change from baseline at 8w vs. baseline Hamilton-D depression scores and _loess_ nonparametric smoothers by treatment"
+ggplot(h, aes(x=Dbase, y=D8w - Dbase, color=treatr)) + geom_point() + geom_smooth(span=1, se=FALSE)
+```
+
+There is a strong relationship between baseline and change from baseline for both treatments.  Computing the average change score ignoring baseline results in a meaningless estimate.
+
+Fit the preferred model---one that allows for floor and ceiling effects and does not assume a distribution for Hamilton-D---the proportional odds (PO) model.  Allow baseline to have a smooth nonlinear effect through the use of a restricted cubic spline function with 4 knots, and allow the shape of this effect to differ by treatment.  Use the PO model to estimate the mean 8w Hamilton-D as a function of baseline and treatment.
+
+```{r}
+require(rms)
+dd <- datadist(h); options(datadist='dd')   # needed by rms package
+f  <- orm(D8w ~ rcs(Dbase, 4) * treatr, data=h)
+f 
+anova(f)
+```
+
+The ANOVA table shows very little evidence for a treatment $\times$ baseline interaction.  Plot predicted means from this model. [If the interaction is removed from the model, the $P$-value for treatment is 0.01.]{.aside}
+
+```{r}
+#| label: fig-change-hamdorm
+#| fig-cap: "Estimated mean Hamilton-D score at 8w using the proportional odds model, allowing for nonlinear and interaction effects.  The fitted spline function does more smoothing than the earlier _loess_ estimates."
+p <- Predict(f, Dbase, treatr, fun=Mean(f), conf.int=FALSE)
+ggplot(p)
+```
+
+Use the PO model to estimate the difference in means.
+
+```{r}
+#| label: fig-change-hamdorm2
+#| fig-cap: "Estimated treatment difference in mean Ham-D allowing for interaction, thus allowing for non-constant differences.  Keep in mind the slight evidence for non-constancy (interaction)."
+w <- data.frame(Dbase      = p$Dbase[p$treatr=='Active'],
+                Difference = p$yhat[p$treatr=='Active'] -
+                             p$yhat[p$treatr=='Placebo'])
+ggplot(w, aes(x=Dbase, y=Difference)) + geom_line()
+```
+
+::: {.callout-note collapse="true"}
+
+## Estimates from an Ordinary Linear Model
+
+Just for comparisons with the estimated means from the PO model, here are estimates using ordinary least squares.
+
+```{r}
+f <- ols(D8w ~ rcs(Dbase, 4) * treatr, data=h)
+f
+anova(f)
+ggplot(Predict(f, Dbase, treatr, conf.int=FALSE))
+```
+
+:::
 
 ### Special Problems Caused By Non-Monotonic Relationship With Ultimate Outcome {#sec-change-anova}
 
@@ -248,7 +317,7 @@ change in serum creatinine (SCr).  Problems with the definitions include
 As an example consider the estimated relationship between baseline SCr
 and mortality in critically ill ICU patients.
 
-```{r suppcr,w=5,h=3.75,cap='Estimated risk of hospital death as a function of day 3 serum creatinine and sex for 7772 critically ill ICU patients having day 1 serum creatinine $< 2$ and surviving to the start of day 3 in the ICU',scap='Hospital death as a function of creatinine',results='asis'}
+```{r w=5,h=3.75,cap='Estimated risk of hospital death as a function of day 3 serum creatinine and sex for 7772 critically ill ICU patients having day 1 serum creatinine $< 2$ and surviving to the start of day 3 in the ICU',scap='Hospital death as a function of creatinine'}
 #| label: fig-change-suppcr
 require(rms)
 load('~/Analyses/SUPPORT/combined.sav')
@@ -283,6 +352,30 @@ in the NHANES study of asymptomatic subjects, a very significant
 proportion of subjects have SCr $< 1$.
 
 
+
+
+### Current Status vs. Change {#sec-change-current}
+
+In most cases, change from baseline does not even answer the right question.  Unlike analysis of covariance on the final response adjusted for baseline, change from baseline is a response variable that most patients find to be irrelevant.  This is because for most diseases patients care most about their current status and little about how they got there.  Consider patient outcomes and satisfaction with their outcomes after [spine surgery for lumbar degenerative disease](https://www.thespinejournalonline.com/article/S1529-9430(17)30233-4/fulltext) by @cho17eff.
+
+In this study the Oswestry Disability Index (ODI) was assessed at baseline and at 12 months following surgery, and satisfaction with outcomes of spine surgery was also assessed at 12 months.  ODI is a 0-100 scale measuring back-related functional status and response to treatment.  Satisfaction was assessed using a four-point scale and aimed at gauging "the degree to which a patient feels that they have achieved the highest quality of care."  Satisfaction levels were defined as
+
+1. Surgery met my expectations.
+1. I did not improve as much as I had hoped but I would undergo the same operation for the same results.
+1. Surgery helped but I would not undergo the same operation for the same results.
+1. I am the same or worse as compared to before surgery.
+
+The respective proportions of patients in each satisfaction category were 0.64, 0.21, 0.06, and 0.09.
+
+The satisfaction outcome gives much weight to the patient's perceived change in status, making the following results even more convincing.
+
+The authors did a simple analysis that is neglected by most authors: Use both the baseline and 12-month ODI to predict 12-month satisfaction with surgical outcomes, analyzed with a proportional odds ordinal logistic model.  Such an analysis allows the data to speak to us without injecting any prior bias.  If relationships with outcome are linear and the coefficients of baseline and 12m ODI are equal in magnitude but have opposite signs, then the change in functional status is the best way to capture patients' ultimate satisfaction with care.  Instead of that, ODI at 12m explained 0.86 of the total ordinal model $\chi^2$, and baseline ODI explained only 0.05 of the total explainable variation in 12m satisfaction.  Combined with age, sex, education, occupation, dominant symptom, diagnosis, coronary disease, and ambulation, baseline ODI still only explained 0.09 of the total model $\chi^2$.  
+
+The near irrelevance of baseline state is shown in Figure 3 of @cho17eff reproduced below.  The hue represents the degree of satisfaction.  Differences in hues are almost undetectable when moving from left to right across baseline ODI levels.  Moving from bottom to top across levels of 12m ODI, differences in satisfaction are apparent.
+
+<img src="cho17effFig3.png" width="100%">
+
+Analyses such as this support the use of absolute current status as endpoints in clinical trials and as basis for modeling outcomes.  This is completely consistent with using ANCOVA as described in @sec-change-rct where one answers the most relevant question: Do patients on different treatments end up differently if they started the same?  ANCOVA allows for regression to the mean and even allows the baseline status to be irrelevant.
 
 ## What's Wrong with Percent Change? 
 `r mrg(sound("change-13"))`
@@ -339,7 +432,7 @@ See also [fharrell.com/post/percent](http://fharrell.com/post/percent)
 
 ### Example Analysis
 
-```{r analysis,w=6,h=5,cap='Difference vs. baseline plots for three transformations'}
+```{r w=6,h=5,cap='Difference vs. baseline plots for three transformations'}
 # Now add simulated some post data to the analysis of beta TG data
 # Assume that the intervention effect (pre -> post effect) is
 # multiplicative (x 1/4) and that there is a multiplicative error
@@ -396,7 +489,7 @@ Classic paper on shrinkage: @efr77sti
 * Shrunken estimates (middle) have too little variation but this discounting made the estimates closer to the truth (final batting averages at the end of the season)
 * You can see the regression to the mean for the <em>apparently</em> very hot and very cold hitters
 
-```{r baseball,w=5.5,h=4.5,bot=1,left=-3,rt=.5,cap='Initial batting averages as estimates of final batting averages for players, along with shrunken estimates that account for regression to the mean',scap='Baseball batting averages and regression to the mean'}
+```{r w=5.5,h=4.5,bot=1,left=-3,rt=.5,cap='Initial batting averages as estimates of final batting averages for players, along with shrunken estimates that account for regression to the mean',scap='Baseball batting averages and regression to the mean'}
 #| label: fig-change-baseball
 nam <- c('Roberto Clemente','Frank Robinson','Frank Howard','Jay Johnstone',
   	 'Ken Berry','Jim Spencer','Don Kessinger','Luis Alvarado',

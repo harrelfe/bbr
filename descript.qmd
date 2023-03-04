@@ -1,6 +1,6 @@
 ```{r setup, include=FALSE}
 require(Hmisc)
-getRs('reptools.r')
+require(qreport)
 hookaddcap()   # make knitr call a function at the end of each chunk
                # to try to automatically add to list of figure
 options(prType='html')
@@ -63,7 +63,7 @@ characterized by the following.
 
 
 ### Continuous Distributions
-```{r pdfcdf,w=6,h=3,cap='Example probability density (a) and cumulative probability distribution (b) for a positively skewed random variable (skewed to the right)',scap='Density and cumulative distribution functions'}
+```{r w=6,h=3,cap='Example probability density (a) and cumulative probability distribution (b) for a positively skewed random variable (skewed to the right)',scap='Density and cumulative distribution functions'}
 #| label: fig-descript-pdfcdf
 x <- seq(-3, 35, length=150)
 # spar makes base graphics look better
@@ -74,7 +74,7 @@ plot(x, dt(x, 4, 6), type='l', xlab=xl, ylab='')
 plot(x, pt(x, 4, 6), type='l', xlab=xl, ylab='')
 ```
 
-```{r normalhist,cap='Example of a continuous distribution that is symmetric: the Gaussian (normal) distribution with mean 0 and variance 1, along with a histogram from a sample of size 1000 from this distribution',scap='Symmetric continuous distribution'}
+```{r cap='Example of a continuous distribution that is symmetric: the Gaussian (normal) distribution with mean 0 and variance 1, along with a histogram from a sample of size 1000 from this distribution',scap='Symmetric continuous distribution'}
 #| label: fig-descript-normalhist
 spar()
 set.seed(1); x <- rnorm(1000)
@@ -83,7 +83,7 @@ x <- seq(-4, 4, length=150)
 lines(x, dnorm(x, 0, 1), col='blue', lwd=2)
 ```
 
-```{r bimode,cap='Example of a bimodal distribution from sampling from a mixture of normal distributions with different means and variances and estimating the underlying density function.  Vertical red lines indicate true population means of the two component populations.  Such a distribution can occur naturally or by failing to condition on a binary characteristic such as sex.',scap='Bimodal distribution'}
+```{r cap='Example of a bimodal distribution from sampling from a mixture of normal distributions with different means and variances and estimating the underlying density function.  Vertical red lines indicate true population means of the two component populations.  Such a distribution can occur naturally or by failing to condition on a binary characteristic such as sex.',scap='Bimodal distribution'}
 #| label: fig-descript-bimode
 spar()
 set.seed(2)
@@ -104,7 +104,7 @@ abline(v=c(0, 6), col='red')
     + Poisson or negative binomial do not handle extreme clumping at zero
 * Example ordinal variables are below
 
-```{r orda,cap='Distribution of number of days in the hospital in the year following diagnosis',scap='Count variable with clumping at zero'}
+```{r cap='Distribution of number of days in the hospital in the year following diagnosis',scap='Count variable with clumping at zero'}
 #| label: fig-descript-orda
 #| fig-width: 4
 #| fig-height: 2.5
@@ -115,7 +115,7 @@ plot(x, y, xlab=xl, ylab='', type='n')
 segments(x, 0, x, y)
 ```
 
-```{r ordb,cap='Distribution of a functional status score that does not have points in the middle',scap='Ordinal variable with strange distribution'}
+```{r cap='Distribution of a functional status score that does not have points in the middle',scap='Ordinal variable with strange distribution'}
 #| label: fig-descript-ordb
 #| fig-width: 4
 #| fig-height: 2.5
@@ -128,7 +128,7 @@ segments(x, 0, x, y)
 The `getHdata` function in the `Hmisc` package @Hmisc
 finds, downloads, and `load()`s datasets from
 [hbiostat.org/data](https://hbiostat.org/data).
-```{r ordc,cap='Distribution of serum creatinine where the patient requiring dialysis is taken to have the worst renal function.  The variable is mostly continuous but is best analyzed as ordinal so that no assumption is made about how to score dialysis except for being worse than all non-dialysis patients. Data taken from NHANES where no patients were actually dialyzed.',scap='Continuous distribution with clumping at the end'}
+```{r cap='Distribution of serum creatinine where the patient requiring dialysis is taken to have the worst renal function.  The variable is mostly continuous but is best analyzed as ordinal so that no assumption is made about how to score dialysis except for being worse than all non-dialysis patients. Data taken from NHANES where no patients were actually dialyzed.',scap='Continuous distribution with clumping at the end'}
 #| label: fig-descript-ordc
 #| fig-width: 5
 #| fig-height: 4.25
@@ -146,7 +146,7 @@ hist(scr, nclass=50, xlab='Serum Creatinine', ylab='Density', prob=TRUE, main=''
 
 ### Categorical Variables
 
-* Proportions of observations in each category <br> Note: The mean of a binary variable coded 1/0 is the proportion of ones.
+* Proportions of observations in each category[The mean of a binary variable coded 1/0 is the proportion of ones.]{.aside}
 * For variables representing counts (e.g., number of comorbidities), the mean is a good summary measure (but not the median)
 * Modal (most frequent) category
 
@@ -258,7 +258,7 @@ from time zero.  When the sample size is not huge, spaghetti plots are
 most effective for graphing longitudinal data because all points from
 the same subject over time are connected.  An
 example @davis-repmeas pp. 161-163 is below.
-```{r spaghetti,w=7,h=5,cap='Spaghetti plot showing all the raw data on the response variable for each subject, stratified by dose and study site (1--9).  Importantly, week 0 (baseline) measurements are included.',scap='Spaghetti plot'}
+```{r w=7,h=5,cap='Spaghetti plot showing all the raw data on the response variable for each subject, stratified by dose and study site (1--9).  Importantly, week 0 (baseline) measurements are included.',scap='Spaghetti plot'}
 #| label: fig-descript-spaghetti
 require(Hmisc)   # also loads ggplot2
 getHdata(cdystonia)
@@ -290,7 +290,7 @@ Graphing the raw data is usually essential.
        - categories within a single line of dots
     + easy to show 2-sided error bars
 
-```{r counts-dotchart,cap='Dot chart showing frequencies from cross-classifications of discrete variables for Titanic passengers',scap='Frequency dot chart'}
+```{r cap='Dot chart showing frequencies from cross-classifications of discrete variables for Titanic passengers',scap='Frequency dot chart'}
 #| label: fig-descript-counts-dotchart
 getHdata(titanic3)
 d <- upData(titanic3,
@@ -324,11 +324,13 @@ knitr::include_graphics('aevents.png')
 ### Continuous Variables
 
 #### Raw Data
+
 For graphing two continuous variable, scatterplots are often
 essential.  The following example draws a scatterplot on a very large
 number of observations in a measurement comparison study where the
 goal is to measure esophageal pH longitudinally and across subjects.
-```{r pH,w=5,h=4,cap='Scatterplot of one measurement mode against another'}
+
+```{r w=5,h=4,cap='Scatterplot of one measurement mode against another'}
 #| label: fig-descript-ph
 getHdata(esopH)
 contents(esopH)
@@ -338,12 +340,14 @@ ggplot(esopH, aes(x=conv, y=orophar)) + geom_point(pch='.') +
   xlab(xl) + ylab(yl) +
   geom_abline(intercept = 0, slope = 1)
 ```
+
 With large sample sizes there are many collisions of data points and
 hexagonal binning is an effective substitute for the raw
 data scatterplot.  The number of points represented by one hexagonal
 symbol is stratified into 20 groups of approximately equal numbers of
 points. 
-```{r pHhhex,w=5.5,h=4.5,cap='Hexagonal binning replacing scatterplot for large $n$'}
+
+```{r w=5.5,h=4.5,cap='Hexagonal binning replacing scatterplot for large $n$'}
 #| label: fig-descript-phhex
 ggplot(esopH, aes(x=conv, y=orophar)) +
   stat_binhex(aes(alpha=..count.., color=Hmisc::cut2(..count.., g=20)),
@@ -351,10 +355,12 @@ ggplot(esopH, aes(x=conv, y=orophar)) +
   xlab(xl) + ylab(yl) +
   guides(alpha=FALSE, fill=FALSE, color=guide_legend(title='Frequency'))
 ```
+
 Use the `Hmisc` `ggfreqScatter` function to bin the
 points and represent frequencies of overlapping points with color and
 transparency levels.
-```{r pHh2,w=5.5,h=4.5,cap='Binned points (2500 total bins) with frequency counts shown as color and transparency level'}
+
+```{r w=5.5,h=4.5,cap='Binned points (2500 total bins) with frequency counts shown as color and transparency level'}
 #| label: fig-descript-phh2
 with(esopH, ggfreqScatter(conv, orophar, bins=50, g=20) +
               geom_abline(intercept=0, slope=1))
@@ -368,7 +374,8 @@ with(esopH, ggfreqScatter(conv, orophar, bins=50, g=20) +
     + requires arbitrary binning of data
     + not optimal for comparing multiple distributions
 * cumulative distribution function: proportion of values $\leq x$ vs. $x$ (@fig-descript-ecdf) <br> Can read all quantiles directly off graph.
-```{r ecdf,w=6,h=5.25,cap='Empirical cumulative distributions of baseline variables  stratified by treatment in a randomized controlled trial. $m$ is the number of missing values.',scap='Empirical cumulative distribution functions'}
+
+```{r w=6,h=5.25,cap='Empirical cumulative distributions of baseline variables  stratified by treatment in a randomized controlled trial. $m$ is the number of missing values.',scap='Empirical cumulative distribution functions'}
 #| label: fig-descript-ecdf
 getHdata(pbc)
 pbcr <- subset(pbc, drug != 'not randomized')
@@ -380,7 +387,7 @@ Ecdf(pbcr[,c('bili','albumin','protime','sgot')],
 
 * Box plots shows quartiles plus the mean.  They are a good way to compare many groups as shown below. [Note that this approach is very ineffective in handling continuous baseline variables]{.aside}
 
-```{r glybox,h=5,w=6,cap='Box plots for glycohemoglobin stratified by quartiles of age (vertical), two-tiles of waist circumference (horizontal), and sex (vertical)',scap='Box plots for glycohemoglobin'}
+```{r h=5,w=6,cap='Box plots for glycohemoglobin stratified by quartiles of age (vertical), two-tiles of waist circumference (horizontal), and sex (vertical)',scap='Box plots for glycohemoglobin'}
 #| label: fig-descript-glybox
 require(lattice)
 getHdata(diabetes)
@@ -393,14 +400,14 @@ bwplot(cut2(age,g=4) ~ glyhb | wst*gender, data=diabetes,
 
 Regular box plots have a high ink:information ratio.  Using extended box plots we can show more quantiles.  The following schematic shows how to interpret them.
 
-```{r bpplt,w=6,h=4.75,cap='Schematic for extended box plot'}
+```{r w=6,h=4.75,cap='Schematic for extended box plot'}
 #| label: fig-descript-bpplt
 bpplt()
 ```
 
 Here are extended box plots stratified by a single factor.
 
-```{r bwplot,w=5,h=3.25,cap='Extended plots showing the distribution of serum creatinine stratified by major diagnosis.  Asymmetry of distributions can be seen by both disagreement between $Q_{3}-Q_{2}$ and $Q_{2}-Q_{1}$ and by disagreement between $Q_{2}$ and $\\bar{x}$.',scap='Extended box plots'}
+```{r w=5,h=3.25,cap='Extended plots showing the distribution of serum creatinine stratified by major diagnosis.  Asymmetry of distributions can be seen by both disagreement between $Q_{3}-Q_{2}$ and $Q_{2}-Q_{1}$ and by disagreement between $Q_{2}$ and $\\bar{x}$.',scap='Extended box plots'}
 #| label: fig-descript-bwplot
 getHdata(support)
 s <- summaryM(crea ~ dzgroup, data=support)
@@ -412,7 +419,7 @@ plot(s)
 
 Using `plotly` graphics we can make an interactive extended box plot whose elements are self-explanatory; hover the mouse over graphical elements to see their definitions and data values.
 
-```{r bwplotp,cap='Interactive extended box plots for serum creatinine stratified by diagnosis',scap='Interactive extended box plot'}
+```{r cap='Interactive extended box plots for serum creatinine stratified by diagnosis',scap='Interactive extended box plot'}
 #| label: fig-descript-bwplotp
 options(grType='plotly')   # set to use interactive graphics output for
                            # certain Hmisc and rms package functions
@@ -465,7 +472,7 @@ knitr::include_graphics('cchem-byx-cont-a.png')
 `r hb <- 'HbA$_{\\mathrm{1c}}$'`
 As an example let's estimate the upper quartile of glycohemoglobin (`r hb`) and the variability in `r hb`, both as a function of age.  Our measure of variability will be Gini's mean difference.  Use an NHANES dataset.  The raw age distribution is shown in the first panel.  Instead of using the default window sample size of $\pm 15$ observations use 30.
 
-```{r mov,results='asis'}
+```{r results='asis'}
 #| label: fig-descript-movstats1
 #| fig-cap: "Moving upper quartile and Gini's mean difference of HbA$_{\\mathrm 1c}$ as a function of age for NHANES, with and without smoothing.  An extended box plot and spike histogram is included in the first facet (Gmd for Gini's mean difference) to show the age distribution.  The extended box plot is supplemented by 0.01 and 0.99 quantiles (outer dots)."
 #| fig-scap: "Moving upper quartile and Gini mean difference for HbA$_{\\mathrm 1c}$"
@@ -508,7 +515,7 @@ addggLayers(g, d, value='age', type='spike', pos='bottom')
 
 * Dot charts with optional error bars (for confidence limits) can display any summary statistic (proportion, mean, median, mean difference, etc.)
 * It is not well known that the confidence interval for a difference in two means cannot be derived from individual confidence limits.^[In addition, it is not necessary for two confidence intervals to be separated for the difference in means to be significantly different from zero.] <br> Show individual confidence limits as well as actual CLs for the difference.
-```{r cldif,cap='Means and nonparametric bootstrap 0.95 confidence limits for HbA$_{\\mathrm 1c}$ for males and females, and confidence limits for males - females.  Lower and upper $x$-axis scales have same spacings but different centers.  Confidence intervals for differences are generally wider than those for the individual constituent variables.',scap='Showing group means and differences'}
+```{r cap='Means and nonparametric bootstrap 0.95 confidence limits for HbA$_{\\mathrm 1c}$ for males and females, and confidence limits for males - females.  Lower and upper $x$-axis scales have same spacings but different centers.  Confidence intervals for differences are generally wider than those for the individual constituent variables.',scap='Showing group means and differences'}
 #| label: fig-descript-cldif
 #| fig-height: 3
 #| fig-width: 6
@@ -548,7 +555,7 @@ abline(h=c(2 + 3.5)/2, col=gray(.85))
 * Replace with
     + Dot plot (smaller sample sizes)
     + Box plot (larger sample size)
-```{r dynamite,w=5,h=3,cap='Bar plot with error bars---"dynamite plot"'}
+```{r w=5,h=3,cap='Bar plot with error bars---"dynamite plot"'}
 #| label: fig-descript-dynamite
 getHdata(FEV); set.seed(13)
 FEV <- subset(FEV, runif(nrow(FEV)) < 1/8)   # 1/8 sample
@@ -566,7 +573,7 @@ the many problems caused by dynamite plots, plus some solutions.
 Instead of the limited information shown in the bar chart, show the
 raw data along with box plots.  Modify default box plots to replace
 whiskers with the interval between 0.1 and 0.9 quantiles.
-```{r tplot,w=6,h=2,cap='Jittered raw data and box plots.  Middle vertical lines indicate medians and diamonds indicate means. Horizontal lines indicate 0.1 to 0.9 quantiles when $n\\geq 10$.  The ink:information ratio for this plot is far better than a dynamite plot.',scap='Dot plot with superimposed box plots'}
+```{r w=6,h=2,cap='Jittered raw data and box plots.  Middle vertical lines indicate medians and diamonds indicate means. Horizontal lines indicate 0.1 to 0.9 quantiles when $n\\geq 10$.  The ink:information ratio for this plot is far better than a dynamite plot.',scap='Dot plot with superimposed box plots'}
 #| label: fig-descript-tplot
 require(ggplot2)
 stats <- function(x) {
@@ -585,7 +592,7 @@ ggplot(FEV, aes(x=sex, y=fev)) +
 ```
 Use a violin plot to show the distribution density estimate (and its
 mirror image) instead of a box plot.
-```{r vplot,w=6,h=2.5,cap='Jittered raw data and violin plots with median indicated by blue +'}
+```{r w=6,h=2.5,cap='Jittered raw data and violin plots with median indicated by blue +'}
 #| label: fig-descript-vplot
 ggplot(FEV, aes(x=sex, y=fev)) +
   geom_violin(width=.6, col='lightblue') +
@@ -612,29 +619,58 @@ Other examples: descriptions of BBR course participants: [hbiostat.org/bbr/regis
 
 
 
-### Graphs for Describing Statistical Model Fits
-Several types of graphics are useful.  These are all implemented in
+### Graphs for Describing Statistical Model Fits {#sec-descript-models}
+
+Several types of graphics are useful.  All but the first are implemented in
 the `R` `rms` package @rrms.
 
-* <b>Partial effect plots</b>: Show the effect on $Y$ of varying one predictor at a time, holding the other predictors to medians or modes, and include confidence bands.  This is the best approach for showing shapes of effects of continuous predictors.
-* <b>Effect charts</b>: Show the difference in means, odds ratio, hazard ratio, fold change, etc., varying each predictor and holding others to medians or modes^[It does not matter what the other variables are set to if they do not interact with the variable being varied.].  For continuous variables that do not operate linearly, this kind of display is not very satisfactory because of its strong dependence on the settings over which the predictor is set.  By default inter-quartile-range effects are used.
-* <b>Nomograms</b>: Shows the entire model if the number of interactions is limited.  Nomograms show strengths and shapes of relationships, are very effective for continuous predictors, and allow computation of predicted values (although without confidence limits).
-Here are examples using NHANES data to predict glycohemoglobin from
-age, sex, race/ethnicity, and BMI.<br>
-**Note**: ordinary regression is not an adequate fit for glycohemoglobin;
+* **Single-axis nomograms**: Used to transform values (akin to using a slide rule to compute square roots) or to get predicted values when the model contains a single predictor
+* **Partial effect plots**: Show the effect on $Y$ of varying one predictor at a time, holding the other predictors to medians or modes, and include confidence bands.  This is the best approach for showing shapes of effects of continuous predictors.
+* **Effect charts**: Show the difference in means, odds ratio, hazard ratio, fold change, etc., varying each predictor and holding others to medians or modes^[It does not matter what the other variables are set to if they do not interact with the variable being varied.].  For continuous variables that do not operate linearly, this kind of display is not very satisfactory because of its strong dependence on the settings over which the predictor is set.  By default inter-quartile-range effects are used.
+* **Nomograms**: Shows the entire model if the number of interactions is limited.  Nomograms show strengths and shapes of relationships, are very effective for continuous predictors, and allow computation of predicted values (although without confidence limits).
+
+For an example of a single-axis nomogram, consider a binary logistic
+model of a single continuous predictor variable `X` from which we
+obtain the predicted probability of the event of
+interest. [The intercept $\alpha$ and slope $\beta$ were computed to match a published
+  model.  These would ordinarily be computed from `coef(f)` where
+  `f` is the fit object.]{.aside}
+
+```{r}
+#| label: fig-descript-oneaxis
+#| fig-cap: "Single-axis nomogram"
+#| fig-height: 1.25
+#| fig-width: 6
+par(mar=c(3,.5,1,.5))
+beta  <- (qlogis(.999)-qlogis(.001))/177
+alpha <- qlogis(.001)-23*beta
+plot.new()
+par(usr=c(-10,230, -.04, 1.04))
+par(mgp=c(1.5,.5,0))
+axis(1, at=seq(0,220,by=20))
+axis(1, at=seq(0,220,by=5), tcl=-.25, labels=FALSE)
+title(xlab='X')
+p <- c(.001,.01,.05,seq(.1,.9,by=.1),.95,.99,.999)
+s <- (qlogis(p)-alpha) / beta
+axis(1, at=s, label=as.character(p), col.ticks=gray(.7),
+     tcl=.5, mgp=c(-3,-1.7,0))
+p <- c(seq(.01,.2,by=.01), seq(.8,99,by=.01))
+s <- (qlogis(p)-alpha) / beta
+axis(1, at=s, labels=FALSE, col.ticks=gray(.7), tcl=.25)
+title(xlab='Estimated Risk', mgp=c(-3,-1.7,0))
+```
+
+Here are examples of graphical presentations of a fitted multivariable model using NHANES data to predict glycohemoglobin from
+age, sex, race/ethnicity, and BMI.[Ordinary regression is not an adequate fit for glycohemoglobin;
 an excellent fit comes from ordinal regression.  BMI is not an
-adequate summary of body size.  The following
-ordinary regression model in the $-1.75$ power of glycohemoglobin
+adequate summary of body size.  An ordinary regression model in the $-1.75$ power of glycohemoglobin
 resulted in approximately normal residuals and is used for
 illustration.  The transformation is subtracted from a constant just
 so that positive regression coefficients indicate that increasing a
 predictor increases glycohemoglobin.  The inverse transformation
-raises predicted values to
-the $\frac{-1}{1.75}$ power after accounting for the subtraction, and
+raises predicted values to the $\frac{-1}{1.75}$ power after accounting for the subtraction, and
 is used to estimate the median glycohemoglobin on
-the original scale^[If residuals have a normal distribution after transforming the dependent variable, the estimated mean and median transformed values are the same.  Inverse transforming the estimates provides an estimate of the median on the original scale (but not the mean).].  Restricted cubic spline
-functions with 4 default
-knots are used to allow age and BMI to act smoothly but nonlinearly.
+the original scale.  If residuals have a normal distribution after transforming the dependent variable, the estimated mean and median transformed values are the same.  Inverse transforming the estimates provides an estimate of the median on the original scale (but not the mean).]{.aside}.  Restricted cubic spline functions with 4 default knots are used to allow age and BMI to act smoothly but nonlinearly.
 Partial effects plots are in @fig-descript-rmsa
 
 ```{r results='asis'}
@@ -650,7 +686,7 @@ print(anova(f), dec.ss=3, dec.ms=3)
 cat('</small>\n')
 ```
 
-```{r rmsa,results='asis',w=8,h=5,cap='Partial effects in NHANES HbA$_{1c}$ model'}
+```{r w=8,h=5,cap='Partial effects in NHANES HbA$_{1c}$ model'}
 #| label: fig-descript-rmsa
 # Show partial effects of all variables in the model, on the original scale
 ggplot(Predict(f, fun=ginverse),
@@ -661,17 +697,20 @@ An effect chart is in @fig-descript-rmsb and a nomogram is
 in @fig-descript-rmsc.  See
 [stats.stackexchange.com/questions/155430/clarifications-regarding-reading-a-nomogram](http://stats.stackexchange.com/questions/155430/clarifications-regarding-reading-a-nomogram)
 for excellent examples showing how to read such nomograms.
-```{r rmsb,w=7,h=4,cap='Partial effects chart on the transformed scale.  For age and BMI, effects are inter-quartile-range effects.  0.9, 0.95, and 0.99 confidence limits are shown.',scap='Partial effects chart for transformed glycohemoglobin'}
+
+```{r w=7,h=4,cap='Partial effects chart on the transformed scale.  For age and BMI, effects are inter-quartile-range effects.  0.9, 0.95, and 0.99 confidence limits are shown.',scap='Partial effects chart for transformed glycohemoglobin'}
 #| label: fig-descript-rmsb
 plot(summary(f))
 ```
-```{r rmsc,w=7,h=5.5,cap='Nomogram for predicting median HbA$_{1c}$.  To use the nomogram, use the top \`Points` scale to convert each predictor value to a common scale.  Add the points and read this number on the \`Total Points` scale, then read down to the median.',scap='Nomogram for predicting median HbA$_{1c}$'}
+
+```{r w=7,h=5.5,cap='Nomogram for predicting median HbA$_{1c}$.  To use the nomogram, use the top \`Points` scale to convert each predictor value to a common scale.  Add the points and read this number on the \`Total Points` scale, then read down to the median.',scap='Nomogram for predicting median HbA$_{1c}$'}
 #| label: fig-descript-rmsc
 plot(nomogram(f, fun=ginverse, funlabel='Median HbA1c'))
 ```
 
 
 #### Graphing Effect of Two Continuous Variables on $Y$
+
 The following examples show the estimated combined effects of two
 continuous predictors on outcome.  The two models included interaction
 terms, the second example using penalized maximum likelihood
@@ -730,14 +769,14 @@ What to display in a table for different types of response variables:
 * Add denominators when feasible
 * Confidence intervals: in a comparative study, show confidence intervals for differences, not confidence intervals for individual group summaries
 
-```{r summarym,results='asis'}
+```{r summarym}
 getHdata(stressEcho)
 d <- stressEcho
 require(data.table)
 setDT(d)
 d[, hxofMI := factor(hxofMI, 0 : 1, c('No history of MI', 'History of MI'))]
 s <- summaryM(bhr + basebp + basedp + pkhr + maxhr + gender~ hxofMI, data=d)
-html(s, exclude1=TRUE, npct='both', digits=3, middle.bold=TRUE)
+print(s, exclude1=TRUE, npct='both', digits=3, middle.bold=TRUE)
 ```
 
 See also [hbiostat.org/talks/rmedicine19.html\#18](https://hbiostat.org/talks/rmedicine19.html#18).

@@ -11,7 +11,7 @@ I --> K[New Knowledge] & Dec[Decisions]
 
 # Preface {.unnumbered}
 
-The book is aimed at exposing biomedical researchers to modern biostatistical methods and statistical graphics, highlighting those methods that make fewer assumptions, including nonparametric statistics and robust statistical measures. In addition to covering traditional estimation and inferential techniques, the course contrasts those with the Bayesian approach, and also includes several components that have been increasingly important in the past few years, such as challenges of high-dimensional data analysis, modeling for observational treatment comparisons, analysis of differential treatment effect (heterogeneity of treatment effect), statistical methods for biomarker research, medical diagnostic research, and methods for reproducible research.  A glossary of statistical terms for non-statisticians is [here](http://hbiostat.org/doc/glossary.pdf).[[BBR course](https://hbiostat.org/bbrc)]{.aside} [`R Workflow`](https://hbiostat.org/rflow) is a useful companion to this book, especially for those needing to manipulate data in preparation for analysis and for those interested in embedding statistical analyses in state-of-the-art reproducible reports.
+The book is aimed at exposing biomedical researchers to modern biostatistical methods and statistical graphics, highlighting those methods that make fewer assumptions, including nonparametric statistics and robust statistical measures. In addition to covering traditional estimation and inferential techniques, the course contrasts those with the Bayesian approach, and also includes several components that have been increasingly important in the past few years, such as challenges of high-dimensional data analysis, modeling for observational treatment comparisons, analysis of differential treatment effect (heterogeneity of treatment effect), statistical methods for biomarker research, medical diagnostic research, and methods for reproducible research.  A glossary of statistical terms for non-statisticians is [here](http://hbiostat.org/glossary).[[BBR course](https://hbiostat.org/bbrc)]{.aside} [`R Workflow`](https://hbiostat.org/rflow) is a useful companion to this book, especially for those needing to manipulate data in preparation for analysis and for those interested in embedding statistical analyses in state-of-the-art reproducible reports.
 
 ```{r include=FALSE}
 require(Hmisc)
@@ -54,7 +54,7 @@ that further discusses the topic.
 * YouTube channel [`BBRcourse`](http://bit.ly/yt-bbr) for these notes
 * [Discussion board about the overall course](http://datamethods.org/t/bbr-video-course)
 * Go directly to a YouTube video for BBR Session `n` by going to `bit.ly/yt-bbrn`
-* [Study questions](https://hbiostat.org/bbr/qstudy.html)
+* [Glossary of statistical terms](https://hbiostat.org/glossary)
 * [Datamethods discussion board](http://datamethods.org)
 * [Statistical papers written for clinical researchers](https://hbiostat.org/bib)
 * [Statistical Thinking blog](https://fharrell.com)
@@ -70,7 +70,12 @@ This material grew largely out of teaching clinical scholars and in Master of Sc
 
 | Date | Sections | Changes | Thanks To |
 |:-----|:---------|:--------|:----------|
-| 2022-08-02 | [-@sec-dx]     | Quote about weaknesses in sens and spec; link to CrossValidated discussion | |
-| 2022-08-31 | [-@sec-corr-n] | New material on sample size vs. P(correct sign on r) | |
+| 2023-02-19 | [-@sec-prob]  | Added link to resources for learning probability |
+| 2022-12-29 | [-@sec-descript-models]| Added single-axis nomogram example |
+| 2022-12-28 |                        | Started to add old study questions to end of selected chapters |
+| 2022-12-03 | [-@sec-change-ex]      | New section with real example of misleading change score |
+| 2022-11-27 | [-@sec-change-current] | New section on importance of current status vs. baseline status and irrelevance of change for patients |
+| 2022-08-02 | [-@sec-dx]             | Quote about weaknesses in sens and spec; link to CrossValidated discussion | |
+| 2022-08-31 | [-@sec-corr-n]         | New material on sample size vs. P(correct sign on r) | |
 
 :::

@@ -12,6 +12,8 @@ getRs('qbookfun.r')
 
 `r mrg(ddisc(21), sound("alpha-1"))`
 
+`r quoteit("Do you want the probability of a positive result **when** there is nothing?  Or the probability that a positive result **turns out to be** nothing?")`
+
 `r quoteit("Type I error rate is not a rate and is not the probability of an error.  It is the probability of making an assertion of an effect when any such assertion is by definition wrong.")`
 
 `r quoteit("<b>Fisher's glaring error</b><br>A man who 'rejects' a hypothesis provisionally, as a matter of habitual practice, when the significance is at the 1 percent level or higher will certainly be mistaken in not more than 1 percent of such decisions.  For when the hypothesis is correct he will be mistaken in just 1 percent of these cases, and when it is incorrect he will never be mistaken in rejection.", "RA Fisher <em>Statistical Methods and Scientific Inference</em>, 1956, 41-2.<br><b>Fisher failed to recognize</b> that 'of such decisions' is not conditional on H<sub>0</sub> and he confuses P(H<sub>0</sub> | p < 0.01), with P(p < 0.01 | H<sub>0</sub>)")`
@@ -27,7 +29,7 @@ There is much confusion about "controlling type I error" and "spending α".  One
 
 Neither of these is correct, as will be explained below.  It is also explained that Bayesian posterior probabilities provide exactly the probability that a result will turn out to be false--the probability that is sought by decision makers.
 
-Technical details, more examples, and references concerning what is covered in this chapter may be found [here](https://hbiostat.org/proj/covid19/statdesign.html), [here](https://hbiostat.org/doc/bayes/course.html#measures-of-evidence), and [here](https://hbiostat.org/doc/bayes/whybayes.pdf).
+Technical details, more examples, and references concerning what is covered in this chapter may be found [here](https://hbiostat.org/proj/covid19/statdesign.html), [here](https://hbiostat.org/bayes/bet/evidence.html), and [here](https://hbiostat.org/doc/bayes/whybayes.pdf).
 
 ## Background
 

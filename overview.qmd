@@ -65,20 +65,12 @@ See @sec-htest-branches
   noise is signal
 * Strive for optimal quantification of evidence about effects
 * Give decision makers the inputs (_other_ than the utility
-  function\footnote{The utility function is also called the loss or
-    cost function.  It specifies, for example, the damage done by
-    making various decisions such as treating patients who don't have
-    the disease or failing to treat those who do.  The optimum Bayes
-    decision is the one that minimizes expected loss.  This decision
-    conditions on full information and uses for example predicted risk
-    rather than whether or not the predicted risk is high.}) that
-  optimize decisions
+  function^[The utility function is also called the loss or cost function.  It specifies, for example, the damage done by making various decisions such as treating patients who don't have the disease or failing to treat those who do.  The optimum Bayes decision is the one that minimizes expected loss.  This decision conditions on full information and uses for example predicted risk rather than whether or not the predicted risk is high.]) that optimize decisions
     + Not directly actionable: probabilities that condition on the
      future to predict the past/present, i.e, those conditioning on
      the unknown
      
-       - sensitivity and specificity ($P(\textrm{test result} |
-       \textrm{disease status})$)<br>
+       - sensitivity and specificity ($\Pr(\text{test result} | \text{disease status})$)<br>
        Sensitivity irrelevant once it is known that the test is +
        - $p$-values (condition on effect being zero)
 * Present information in ways that are intuitive, maximize
@@ -368,11 +360,8 @@ One-number summaries of non-trivial raw data result in loss of power, and surpri
   (precision or power)
 * Errors are not reduced by categorization unless that's the only
    way to get a subject to answer the question (e.g.,
- income\footnote{But note how the Census Bureau tries to maximize the
- information collected.  They first ask for income in
- dollars.  Subjects refusing to answer are asked to choose from among
- 10 or 20 categories.  Those not checking a category are asked to
- choose from fewer categories.})
+ income^[But note how the Census Bureau tries to maximize the information collected.  They first ask for income in dollars.  Subjects refusing to answer are asked to choose from among 10 or 20 categories.  Those not checking a category are asked to
+ choose from fewer categories.])
 
 ## Choose $Y$ to Maximize Statistical Information, Power, and Interpretability {#sec-overview-ychoice}
 
@@ -454,7 +443,7 @@ effective sample size.
   $Y = \alpha + \beta_{1}\times T + \beta_{2} \times Y_{0}$ <br>
   Easy to also allow nonlinear function of $Y_{0}$<br>
   Also works well for ordinal $Y$ using a semiparametric model
-* See @sec-changegen and @sec-ancova
+* See @sec-change-gen and @sec-ancova
 
 
 ## Preprocessing {#sec-overview-preprocessing}
@@ -519,7 +508,7 @@ See also @sec-descript-change
        movie("https://youtu.be/GC-l345c1FY"),
        movie("https://youtu.be/cwADSMeiIoE"))`
 
-* _Probability_ traditionally taken as long-run relative frequency
+* _Probability_ traditionally taken as long-run relative frequency [[Definition](https://hbiostat.org/glossary#prob)]{.aside}
 * Example: batting average of a baseball player (long-term proportion of at-bat opportunities resulting in a hit)
 * **Not so fast**: The batting average
     + depends on pitcher faced
@@ -658,3 +647,5 @@ have happened, i.e., what data might have been observed were $H_{0}$
 true) whereas the current Bayesian posterior probability
 merely overrides any posterior probabilities computed at earlier data
 looks, because they condition on current cumulative data.
+
+Resources for learning about probability are [here](https://discourse.datamethods.org/t/textbook-or-resource-on-probability-with-solutions-to-exercises) in addition to the video links appearing earlier.

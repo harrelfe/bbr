@@ -1,6 +1,6 @@
 ```{r setup, include=FALSE}
 require(Hmisc)
-getRs('reptools.r')
+require(qreport)
 hookaddcap()   # make knitr call a function at the end of each chunk
                # to try to automatically add to list of figure
 options(prType='html')
@@ -398,7 +398,7 @@ getRs('demoLeastSquares.r', put='source')   # if not using RStudio
 
 ```{r both-type-cls}
 #| label: fig-reg-both-type-cls
-#| fig-cap: 'Pointwise 0.95 confidence intervals for $\\hat{y}$ (wider bands) and $\\hat{E}(y|x)$ (narrower bands).'
+#| fig-cap: 'Pointwise 0.95 confidence intervals for $\hat{y}$ (wider bands) and $\hat{E}(y|x)$ (narrower bands).'
 #| fig-scap: 'Two types of confidence bands'
 require(rms)
 x1 <- c( 1,  3,  5,  6,  7,  9,  11)
@@ -662,7 +662,7 @@ Notes about distributions:   `r ipacue()`
   subject) instead of through physics, physiology, or anatomy
 * Also allows definitions to change as the population accommodates
 * Example: assume BMI is normal with mean 28 and SD 2  `r ipacue()`
-* Figure \@ref(fig:reg-bmi) upper left panel shows this distribution
+* @fig-reg-bmi upper left panel shows this distribution
 * Upper right: percentile of BMI vs. raw BMI
 * Lower left: supposed relationship between BMI and disease risk
 * Lower right: resulting relationship between BMI percentile and risk
@@ -735,7 +735,7 @@ is to properly model the predictor.   `r ipacue()`
   model in the quintile numbers
     + assumes are bizarre shape of relationship between $X$ and $Y$,
     even if not noticing the discontinuities
-* Figure \@ref(fig:reg-bmiq) depicts quantile numbers vs. mean BMI
+* @fig-reg-bmiq depicts quantile numbers vs. mean BMI
   within each quintile.  Outer quintiles:
     + have extremely skewed BMI distributions
     + are too heterogeneous to yield adequate BMI adjustment
@@ -750,9 +750,9 @@ sees smoothly-acting continuous variables such as BMI broken into discontinuous 
 assumes a discontinuous effect on outcome that has an exceedingly
 unusual shape when interpreted on the original BMI scale.
 
-Taking the BMI distribution in Figure \@ref(fig:reg-bmi) consider what
+Taking the BMI distribution in @fig-reg-bmi consider what
 this implies.  We draw a random sample of size 500 from
-the BMI distribution.  Figure \@ref(fig:reg-bmiq) shows the
+the BMI distribution.  @fig-reg-bmiq shows the
 discontinuous relationship between BMI and quintile interval.  The
 location of the mean BMI within BMI quintile is a circle on each
 horizontal line.  One can see the asymmetry of the BMI distribution
@@ -896,7 +896,7 @@ r2stata(dubois)
 d <- d[-7, ]
 ```
 Fit a multiple regression model in the logs of all 3 variables  `r ipacue()` 
-```{r dreg,results='asis'}
+```{r dreg}
 dd <- datadist(d); options(datadist='dd')
 f <- ols(log10(bsa) ~ log10(weight) + log10(height), data=d)
 f
@@ -912,6 +912,7 @@ plot(fitted(f), log10(d$bsa), xlab=expression(hat(Y)),
 
 Get 3 types of plots to show fitted model `r ipacue()` 
 ```{r dreg3,h=3.5,w=7.5}
+require(lattice)  # provides contourplot, wireframe, ...
 p <- Predict(f, weight=seq(5, 100, length=50),
              height=seq(70, 190, length=50), fun=function(z) 10 ^ z)
 p1 <- bplot(p)
@@ -1066,7 +1067,7 @@ Verifying some of the assumptions:   `r ipacue()`
 #| label: fig-reg-mult-reg-assume-twovar
 #| fig-width: 5.5
 #| fig-height: 5
-#| fig-cap: 'Data satisfying all the assumptions of simple multiple linear regression in two predictors.  Note equal spread of points around the population regression lines for the $x_{2}=1$ and $x_{2}=0$ groups (upper and lower lines, respectively) and the equal spread across $x_1$.  The $x_{2}=1$ group has a new intercept, $\alpha+\beta_2$, as the $x_2$ effect is $\beta_2$.  On the $y$ axis you can clearly see the difference between the two true population regression lines is $\\beta_{2} = 3$.'
+#| fig-cap: 'Data satisfying all the assumptions of simple multiple linear regression in two predictors.  Note equal spread of points around the population regression lines for the $x_{2}=1$ and $x_{2}=0$ groups (upper and lower lines, respectively) and the equal spread across $x_1$.  The $x_{2}=1$ group has a new intercept, $\alpha+\beta_2$, as the $x_2$ effect is $\beta_2$.  On the $y$ axis you can clearly see the difference between the two true population regression lines is $\beta_{2} = 3$.'
 #| fig-scap: 'Assumptions for two predictors'
 # Generate 25 observations for each group, with true beta1=.2, true beta2=3
 d <- expand.grid(x1=1:25, x2=c(0, 1))
@@ -1190,8 +1191,7 @@ r &=& \frac{L{xy}}{\sqrt{L_{xx}L_{yy}}} \\
 * For multiple regression in general we use $R^2$ to denote the  `r ipacue()`
   fraction of variation in $y$ explained jointly by all the $x$'s
   (variation in $y$ explained by the whole model)
-* $R^{2} = \frac{SSR}{SST} = 1 - \frac{SSE}{SST} = 1 $ minus
-  fraction of unexplained variation
+* $R^{2} = \frac{SSR}{SST} = 1 - \frac{SSE}{SST} = 1 -$ fraction of unexplained variation
 * $R^{2}$ is called the <em>coefficient of determination</em>
 * $R^2$ is between 0 and 1
     + 0 when $\hat{y}_{i} = \bar{y}$ for all $i$; $SSE=SST$
@@ -1238,7 +1238,7 @@ E(y|exposure)  &=& \alpha + \beta_{1}x_{1} +  \beta_{2}x_{2} \\
   for controls
 * <b>$\beta_{2} - \beta_{1}$</b>: mean for previously exposed minus mean
   for currently exposed
-```{r olslead,results='asis'}
+```{r olslead}
 #| label: fig-reg-olslead
 #| fig-cap: "Mean `maxfwt` by information-losing lead exposure groups"
 #| fig-height: 1.75
@@ -1248,10 +1248,7 @@ dd <- datadist(lead); options(datadist='dd')
 f <- ols(maxfwt ~ group, data=lead)
 f
 ggplot(Predict(f))
-```
-
-```{r olslead2}
-options(prType='plain'); summary(f); options(prType='html')
+summary(f)
 ```
 
 * In general requires $k-1$ dummies to describe $k$ categories   `r ipacue()` 
@@ -1287,15 +1284,11 @@ options(prType='plain'); summary(f); options(prType='html')
   age
 * If treatment has only two categories, the partial $t$-test is an
   easier way to get the age-adjusted treatment test
-```{r leadgrage,w=6.5,h=3.5,results='asis'}
+```{r leadgrage,w=6.5,h=3.5}
 fa <- ols(maxfwt ~ age + group, data=lead)
 fa
 ggplot(Predict(fa, age, group))
-```
-```{r <leadgrage2}
-options(prType='plain'); summary(fa); options(prType='html')
-```
-```{r leadgrage3,results='asis'}
+summary(fa)
 anova(fa)
 anova(f)    # reduced model (without age)
 ```
@@ -1443,7 +1436,7 @@ E(y|age, sex=m) &=& \alpha + \beta_{1}age + \beta_{2} + \beta_{3}age \\
 ```{r mult-reg-assume-twovar-ia}
 #| fig-width: 5.5
 #| fig-height: 5
-#| fig-cap: 'Data exhibiting linearity in age but with interaction of age and sex.  The $x_{2}=1$ group has a new intercept, $\\alpha+\\beta_2$ and its own slope $\\beta_{1} + \\beta_{3}$.'
+#| fig-cap: 'Data exhibiting linearity in age but with interaction of age and sex.  The $x_{2}=1$ group has a new intercept, $\alpha+\beta_2$ and its own slope $\beta_{1} + \beta_{3}$.'
 #| fig-scap: 'Two predictors with interaction'
 # Generate 25 observations for each group, with true beta1=.05, true beta2=3
 d <- expand.grid(x1=1:25, x2=c(0, 1))
@@ -1682,11 +1675,57 @@ Use external validation if   `r ipacue()`
   strong internal validation
 
 
-### Other Resources
+## Other Resources
 `r ipacue()`
 
 * [Prediction Research Manual](http://www.cecilejanssens.org/wp-content/uploads/2018/01/PredictionManual2.0.pdf) by Cecile Janssens and Forike Martens
 * Steyerberg paper on the waste by data splitting: @ste18vala.
+
+## Study Questions
+
+**Section 10.1**
+
+1. What are some problems with matching as an adjustment strategy?
+
+**Section 10.2-10.3**
+
+1. Do we need the $t$-test, Wilcoxon test, and log-rank test?
+1. Why is a statistical model required for estimating the effect of going from a systolic blood pressure of 120mmHg to one of 140mmHg?
+
+**Section 10.4**
+
+1. For a continuous response variable Y why are we often interested in estimating the long-term average and not an individual subject response?
+1. What is an indication for a strong predictive model, thinking about SSR?
+1. Why does the standard error for a predicted individual Y value almost never approach zero?
+1. If you knew that the relationship between x and y is linear, what would be the best distribution of x for estimating the linear regression equation and for hypothesis testing?
+1. If you did not know anything about the shape of the x-y relationship and wanted to model this smooth relationship, what would be the best study design?
+
+**Section 10.5**
+
+1. What are the central problems in percentiling variables?
+
+**Section 10.6**
+
+1. What essentially means the same whether discussing single-variable vs. multivariable regression?
+1. Are model and hypothesis test d.f. most related to numerator d.f. or denominator d.f.?
+1. Does rejecting the global test of no association imply that all the predictors are associated with Y?
+1. What are two principal ways we test whether one or more predictors are associated with Y after adjusting for other variables?
+
+**Section 10.7**
+
+1. A linear model with a single binary predictor is equivalent to what?
+2. Why is added more variables and doing ANCOVA better than this?
+
+**Section 10.10**
+
+1. A researcher wants to analyze the effect of race (4 levels) and sex on Y and wants to allow for race x sex interaction.  How many model d.f. are there?
+1. Why is heterogeneity of treatment effect difficult to demonstrate?
+
+**Section 10.11**
+
+1. Under what condition is it simple to understand what external validation is validating?
+1. When is external validation a good idea?
+
 
 ```{r echo=FALSE}
 saveCap('10')

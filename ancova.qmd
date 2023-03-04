@@ -1,6 +1,6 @@
 ```{r setup, include=FALSE}
 require(Hmisc)
-getRs('reptools.r')
+require(qreport)
 hookaddcap()   # make knitr call a function at the end of each chunk
                # to try to automatically add to list of figure
 options(prType='html')
@@ -124,9 +124,9 @@ treatment in "Table 1."
 
 * Model for probability of event must be nonlinear in predictors unless risk range is tiny
 * Useful summary of relative treatment effect is the odds ratio (OR)
-* Use of binary logistic model for covariable adjustment will result in an {\bf increase} in the S.E. of the treatment effect (log odds ratio) (@rob91som)
+* Use of binary logistic model for covariable adjustment will result in an **increase** in the S.E. of the treatment effect (log odds ratio) (@rob91som)
 * But even with perfect balance, adjusted OR $\neq$ unadjusted OR
-* Adjusted OR will be greater than unadjusted OR
+* Adjusted OR will be farther than 1.0 than unadjusted OR
 
 
 #### Example from GUSTO--I {#sec-ancova-gusto}
@@ -372,7 +372,7 @@ Another way to state the HTE estimation strategy is as follows. `r ipacue()`
 
 Consider simulated two-treatment clinical trial data to illustrate the "always adjust for all main effects but consider interactions one at a time" approach to analyzing and displaying evidence for differential treatment effec.  After that we will illustrate a simultaneous interaction analysis.  Simulate time-to-event data from an exponential distribution, and fit Cox proportional hazards models to estimate the interaction between age and treatment and between sex and treatment.  The true age effect is simulated as linear in the log hazard and the treatment effect on the log relative hazard scale is proportional to how far above 60 years is a patient's age, with no treatment benefit before age 60.  This is a non-simple interaction that could be exactly modeled with a linear spline function, but assume that the analyst does not know the true form of the interaction so she allows for a more general smooth form using a restricted cubic spline function.  The data are simulated so that there is no sex interaction.
 
-```{r htesim,results='asis'}
+```{r htesim}
 require(rms)
 options(prType='html')   # for cph print, anova
 set.seed(1)
@@ -417,7 +417,7 @@ ggplot(k, aes(x=age, y=exp(Contrast))) +
 
 Re-fit the model allowing for a sex interaction (but not an age interaction) and display the results.
 
-```{r hteplot2,results='asis'}
+```{r hteplot2}
 g <- cph(S ~ sex * treat + rcs(age, 4))
 g
 anova(g)
@@ -442,7 +442,7 @@ ggplot(k, aes(y=exp(Contrast), x=sex)) + geom_point() +
 The above analysis signified a treatment effect for both sex groups (both confidence limits exclude a hazard ratio of 1.0), whereas this should only be the case when age exceeds 60.  No sex $\times$ treatment interaction was indicated.
 Re-do the previous analysis adjusting for an age $\times$ treatment interaction while estimating the sex $\times$ treatment interaction.  For this purpose we must specify an age value when estimating the treatment effects by sex.  Here we set age to 50 years.  Were age and sex correlated, the joint analysis would have been harder to interpret.
 
-```{r htejointm,results='asis'}
+```{r htejointm}
 h <- cph(S ~ treat * (rcs(age, 4) + sex))
 anova(h)
 ```
@@ -610,7 +610,7 @@ text(med, 2, 'Median', srt=45, adj=0)
 * Overall mortality difference of 0.011 dominated by high--risk patients
 `r ipacue()`
 
-```{r gusto-nom,results='asis'}
+```{r gusto-nom}
 load('gusto.rda')
 require(rms)
 dd <- datadist(gusto); options(datadist='dd')
@@ -835,6 +835,26 @@ and
 supplement to it by Ben Andrew.
 
 [This article](http://www.appliedclinicaltrialsonline.com/well-adjusted-statistician-analysis-covariance-explained) by Stephen Senn is also very helpful.
+
+## Study Questions
+
+**Introduction**
+
+1. What is the fundamental estimand in a paralell-group randomized clinical trial?  How does this relate to a crossover study and to a study of identical twins randomized in pairs?
+
+**Section 13.1**
+
+1. Why does adjustment for important predictors improve power and precision in ordinary linear regression?
+
+**Sections 13.2-13.3**
+
+1. Why does adjustment for predictors improve power in nonlinear models such as logistic and Cox models?
+
+**Section 13.6**
+
+1. Why is an increase in the absolute risk reduction due to a treatment for higher risk patients when compared to lower risk patients not an example of heterogeneity of treatment effect?
+1. What is a good basis for quantifying heterogeneity of treatment effect (HTE)?
+1. What steps are needed so that apparent HTE is not misleading?
 
 
 ```{r echo=FALSE}

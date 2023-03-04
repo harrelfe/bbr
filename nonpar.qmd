@@ -1,6 +1,6 @@
 ```{r setup, include=FALSE}
 require(Hmisc)
-getRs('reptools.r')
+require(qreport)
 hookaddcap()   # make knitr call a function at the end of each chunk
                # to try to automatically add to list of figure
 options(prType='html')
@@ -491,7 +491,7 @@ in medians but rather the median of all differences.
 * Take 4 samples from normal distributions with the same variances but different means
 * Also show how to compare two of the samples without re-ranking the data as inconsistent Wilcoxon tests would do
 
-```{r orm4,cacne=FALSE,results='asis'}
+```{r orm4}
 set.seed(1)
 group <- rep(c('A','B','C','D'), 100)
 y <- rnorm(400, 100, 15) + 10*(group == 'B') + 20*(group=='C') + 30*(group=='D')
@@ -500,9 +500,6 @@ options(prType='html')
 dd <- datadist(group, y); options(datadist='dd')
 f <- orm(y ~ group)
 f    # use LR chi-square test as replacement for Kruskal-Wallis
-```
-
-```{r orm4b}
 # Derive R function to use all intercepts and betas to compute predicted means
 M <- Mean(f)
 Predict(f, group, fun=M)
@@ -524,7 +521,7 @@ print(k, fun=exp)
 
 <small>
 
-```{r po,results='asis',cache=FALSE}
+```{r po}
 require(rms)
 options(prType='html')
 dd <- datadist(calpro, endo); options(datadist='dd')
