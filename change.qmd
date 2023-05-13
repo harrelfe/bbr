@@ -271,11 +271,11 @@ The ANOVA table shows very little evidence for a treatment $\times$ baseline int
 ```{r}
 #| label: fig-change-hamdorm
 #| fig-cap: "Estimated mean Hamilton-D score at 8w using the proportional odds model, allowing for nonlinear and interaction effects.  The fitted spline function does more smoothing than the earlier _loess_ estimates."
-p <- Predict(f, Dbase, treatr, fun=Mean(f), conf.int=FALSE)
+p <- Predict(f, Dbase, treatr, fun=Mean(f))
 ggplot(p)
 ```
 
-Use the PO model to estimate the difference in means.
+Use the PO model to estimate the difference in means. [Confidence intervals for differences in means from semiparametric models are not provided by the `rms` package.  You can use the `rmsb` package in conjuction with the `rms` `contrast` function to get exact Bayesian uncertainty intervals for such differences.]{.aside}
 
 ```{r}
 #| label: fig-change-hamdorm2
@@ -285,6 +285,8 @@ w <- data.frame(Dbase      = p$Dbase[p$treatr=='Active'],
                              p$yhat[p$treatr=='Placebo'])
 ggplot(w, aes(x=Dbase, y=Difference)) + geom_line()
 ```
+
+`r quoteit('When baseline severity was used as the only covariate, improvement with drug and placebo increased with greater baseline severity ... The advantage of drug over placebo increased with baseline severity by 0.09 points (95% confidence interval 0.06 to 0.12) for every one point increase in severity. The estimated difference between drug and placebo at a baseline severity of 16 points (5th centile) was 1.1 points, increasing to 2.5 points at a baseline severity of 29.6 points (95th centile).', '[Stone et al](https://www.bmj.com/content/378/bmj-2021-067606)')`
 
 ::: {.callout-note collapse="true"}
 

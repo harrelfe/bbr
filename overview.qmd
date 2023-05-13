@@ -112,7 +112,7 @@ See
 for more benefits of biostatistics.
 
 
-### Statistical Scientific Method
+### Statistical Scientific Method {#sec-overview-scimeth}
 
 * Statistics is not a bag of tools and math formulas but an
   evidence-based way of thinking
@@ -179,6 +179,8 @@ Con[Conclusion] --> C1[Synthesis<br>plain language, effective<br>presentation gr
 **Recommended Reading for Clinical Study Design**
 
 @hul13des
+
+[Design, Analyze, Communicate](https://dac-trials.tghn.org) - a major resource that includes open source clinical trial simulation tools and an approach to avoiding futile clinical trials
 
 
 #### Pointers for Observational Study Design

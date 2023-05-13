@@ -231,7 +231,7 @@ require(Hmisc)
 getHdata(esopH)
 esopH$diff <- with(esopH, orophar - conv)
 ggplot(esopH, aes(x=(conv + orophar)/2, y=diff)) +
-  stat_binhex(aes(alpha=..count.., color=Hmisc::cut2(..count.., g=20)),
+  stat_binhex(aes(fill=Hmisc::cut2(..count.., g=20)),
               bins=80) +
   stat_smooth() +
   geom_hline(yintercept = mean(esopH$diff, na.rm=TRUE) +
@@ -239,7 +239,7 @@ ggplot(esopH, aes(x=(conv + orophar)/2, y=diff)) +
    linetype=c(2,1,2), color='brown') +
   xlab('Average of Conventional and Oropharyngeal pH') +
   ylab('Oropharyngeal Minus Conventional pH') +
-  guides(alpha=FALSE, fill=FALSE, color=guide_legend(title='Frequency'))
+  guides(fill=guide_legend(title='Frequency'))
 ```
 
 

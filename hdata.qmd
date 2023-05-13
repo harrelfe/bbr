@@ -21,6 +21,7 @@ High-dimensional data are of at least three major types:
 * Data collected on hundreds of thousands or millions of subjects with a diverse array of variables
 * Time series of biologic signals collected every few milliseconds
 * Extremely large data arrays where almost all the variables are of one type (the main topic here)
+
 The last data class includes such areas as
 
 * functional imaging
@@ -105,6 +106,8 @@ variables on the basis of small $P$-values, many of the selected
 variables were selected because their effects were overestimated, then
 regression to the mean sets in.
 
+Concentrating on false discovery probabilities and ignoring false non-discovery probabilities is a mistake.  Confidence in selecting "winners" and "losers" should come for example from narrow confidence intervals for ranks of feature importance as discussed below.
+
 
 ### Forward Stepwise Variable Selection
 Forward stepwise variable selection that does an initial
@@ -138,7 +141,7 @@ This approach uses multivariable regression models along with penalized maximum 
 
 
 ### Random Forest
-This is an approach that solves some of the incredible instability and low predictive power of individual regression trees.  The basic idea of random forest is that one fits a regression tree using recursive partitioning (CART) on multiple random samples of **candidate features**.  Multiple trees are combined.  The result is no longer a tree; it is an uninterpretable black box.  But in a way it automatically incorporates shrinkage and is often competitive with other methods in predictive ability.
+This is an approach that solves some of the incredible instability and low predictive power of individual regression trees.  The basic idea of random forest is that one fits a regression tree using recursive partitioning (CART) on multiple random samples of **candidate features**.  Multiple trees are combined.  The result is no longer a tree; it is an uninterpretable black box.  But in a way it automatically incorporates shrinkage and is often competitive with other methods in predictive discriminantion.  **However** random forests typically have unacceptable absolute predictive accuracy as reflected by calibration curves that are far from the line of identity, due to overfitting.
 
 There is evidence that minimal-assumption methods such as random
 forests are "data hungry", requiring as many as 200 events per
@@ -172,7 +175,8 @@ and an adequate sample size that leads to reliable results can be
 computed.  One can also easily change the dimensionality of the features.
 
 
-### Simulation To Understand Needed Sample Sizes
+### Simulation To Understand Needed Sample Sizes {#sec-hdata-simor}
+
 One of the most common association measures used in genomic studies is
 the odds ratio.  As shown in @sec-prop-rem and
 @fig-prop-mmeor , the odds
@@ -227,10 +231,11 @@ sim <- function(y, prev, or) {
   g <- function(x) ifelse(x >= 1, x, 1 / x)
   r1 <- rank(sor)[which.max(or) ] / p
   r2 <- rank(or) [which.max(sor)] / p
+  h <- function(u, lab) { u <- factor(u); levels(u) <- paste0(lab, ':', levels(u)); u}
   data.frame(prev, or, nx=nxy0 / n0, obsprev0=(nxy0 + nxy1) / n,
              obsprev=nxy1 / (nxy0 + nxy1), obsor=sor, n=n,
-             N       =paste('n', n, sep=':'),
-             Features=paste('Features', p, sep=':'),
+             N       =h(n, 'n'),
+             Features=h(p, 'Features'),
              mmoe    =quantile(g(sor / or), 0.90, na.rm=TRUE),
              obsranktrue=r1, truerankobs=r2,
              rho=cor(sor, or, method='spearman', use='pair'))
@@ -252,22 +257,26 @@ for(n in c(50, 100, 250, 500, 1000, 2000)) {
     }
   }
 }
+with(U, tapply(obsprev, Yprev, mean, na.rm=TRUE))
 ```
 
-In the plots below red lines show the line of identity.
+In the plots below gray lines show the line of identity.
 
 ```{r simor-plot,w=7,h=7}
 require(ggplot2)
 pl <- function(yprev) {
   br <- c(.01, .1, .5, 1, 2.5, 5, 25, 100)
-  ggplot(subset(U, Yprev=yprev),
-         aes(x=or, y=obsor)) + geom_point() + facet_grid(Features ~ N) +
+  ggplot(subset(U, Yprev==paste0('Prevalence of Outcome:', yprev)),
+         aes(x=or, y=obsor)) +
+         stat_binhex(aes(fill=cut2(..count.., g=25)), bins=40) +
+         facet_grid(Features ~ N) +
          ggtitle(paste('Prevalence of Outcome', yprev, sep=':')) +
          xlab('True ORs') + ylab('Estimated ORs') +
          scale_x_log10(breaks=br) + scale_y_log10(breaks=br) +
+         guides(fill=guide_legend(title='Frequency')) +
          theme(axis.text.x = element_text(size = rel(0.8), angle=-45,
                                     hjust=0, vjust=1)) +
-         geom_abline(col='red')
+         geom_abline(col='gray')
 }
 pl(0.1)
 ```

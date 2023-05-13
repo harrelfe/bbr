@@ -122,7 +122,6 @@ the true population mean is to the left of the lower limit is 0.025,
 and the fraction to the right of the upper limit to also be 0.025.[For more about `runifChanged` go [here](http://hbiostat.org/rflow/caching.html).  The way `runifChanged` is used below, the results are stored in a file whose name is the name of the `Quarto/knitr` chunk followed by `.clt`.]{.aside}
 
 ```{r clt}
-getRs('hashCheck.r')    # defines runifChanged
 n    <- 50000
 nsim <- 5000            # number of simulations
 mul <- 0; sdl <- 1.65   # on log scale
@@ -141,13 +140,12 @@ g <- function() {
   }
 	count / nsim  # non-coverage prob. in left and right tails
 }
-f <- runifChanged(g, n, nsim, mul, sdl, seed, z)
-as.vector(f)
+f <- runifChanged(g, n, nsim, mul, sdl, seed, z)  # runifChanged in Hmisc
+as.vector(f)   # should be 0.025 0.025 if CLT is accurate
 ```
 
 See
-[stats.stackexchange.com/questions/204585](https://stats.stackexchange.com/questions/204585)
-for more information and discussion.
+[stats.stackexchange.com/questions/204585](https://stats.stackexchange.com/questions/204585) and [here](https://stats.stackexchange.com/questions/608740) for more information and discussion.
 
 
 ## Hypotheses
@@ -823,7 +821,7 @@ sum(dbinom(c(0, 1, 2, 8, 9, 10), 10, 0.5))
 ```
 * Confidence interval for $p$
     + [Wilson's method](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval) without continuity correction is recommended
-    + for 8 of 10 heads here is the Wilson interval in addition to the exact binomial and normal approximation.  The Wilson interval is the most accurate of the three.
+    + for 8 of 10 heads here is the Wilson interval in addition to the exact binomial and normal approximation.  The Wilson interval is the most accurate of the three [@and23wal]
 
 ```{r wilson}
 binconf(8, 10, method='all')
@@ -1199,7 +1197,7 @@ $\delta = \Delta\sqrt{\frac{7.68}{21.02}} = 0.604\Delta$.
     + $\mu_0$ = mean log RER for placebo
     + $\mu_1$ = mean log RER for caffeine
     + Fold-change effect: $\exp(\mu_1 - \mu_0)$
-    + Estimate $ \mu_1 - \mu_0$
+    + Estimate $\mu_{1} - \mu_{0}$
     + $H_0: \mu_0 = \mu_1$
     + $H_1: \mu_0 \neq \mu_1$
 * Note: a good statistician will take such ratios with a grain of salt; need to verify that the meaning of the ratio is independent of O$_{2}$
@@ -1705,6 +1703,7 @@ Consider a frequentist study with four efficacy endpoints and corresponding $P$-
 
 ### Collected Data
 Here are the data for the 10 subjects.  This is the `R` built-in dataset `sleep`.
+
 | Subject | Drug 1 | Drug 2 | Diff (2-1) |
 |-----|-----|-----|-----|
 | 1 |  0.7| 1.9|1.2 |

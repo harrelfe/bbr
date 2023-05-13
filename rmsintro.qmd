@@ -163,10 +163,18 @@ lead <- upData(lead,
 ```
 
 `r ipacue()`
-```{r leaddesc}
+```{r leadcontents}
 contents(lead)
-describe(lead)
 ```
+
+::: {.column-page}
+```{r leaddesc}
+# load jQuery javascript dependencies for interactive sparklines
+sparkline::sparkline(0)
+print(describe(lead), 'continuous')
+```
+:::
+
 `r ipacue()`
 ```{r datadistfit}
 dd <- datadist(lead); options(datadist='dd')

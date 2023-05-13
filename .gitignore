@@ -16,3 +16,7 @@ insert.txt
 harrelfe.bib
 apa*.csl
 /.quarto/
+.Rproj.user
+bbr.Rproj
+*.rmarkdown
+site_libs/

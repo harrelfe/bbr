@@ -957,7 +957,7 @@ Other ways to express the d.f. for a hypothesis are:  `r ipacue()`
 * The number of opportunities you give associations to be present (relationships with $Y$ to be non-flat)
 * The number of restrictions you place on parameters to make the null hypothesis of no association (flat relationships) hold
 
-See also [hbiostat.org/doc/glossary.pdf](http://hbiostat.org/doc/glossary.pdf).
+See also [hbiostat.org/glossary](https://hbiostat.org/glossary).
 
 
 ### Hypothesis Testing 

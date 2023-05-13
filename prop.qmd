@@ -594,8 +594,9 @@ Now do Bayesian logistic regression analysis.
 
 ```{r bayesprop0}
 require(brms)
-# Tell brms/Stan to use all available CPU cores less 1
-options(mc.cores=parallel::detectCores() - 1)
+# Tell brms/Stan to use all available CPU cores less 1 and to use
+# cmdstan instead of rstan
+options(mc.cores=parallel::detectCores() - 1, brms.backend='cmdstanr')
 ```
 
 ```{r bayesprop}
@@ -673,7 +674,7 @@ p <- c(prior(normal(-2.944, 1.216), class='Intercept'),
        prior(normal(0, 0.136),      class='b', coef='random'))
 
 f2 <- brm(death ~ priority + random, data=d, prior=p, family='bernoulli',
-          seed=121, refresh=FALSE)
+          seed=121)
 f2
 ```
 

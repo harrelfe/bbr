@@ -58,7 +58,7 @@ that further discusses the topic.
 * [Datamethods discussion board](http://datamethods.org)
 * [Statistical papers written for clinical researchers](https://hbiostat.org/bib)
 * [Statistical Thinking blog](https://fharrell.com)
-* [Statistical Thinking News](https://paper.li/stn)
+* [Statistical Thinking News](https://hbiostat.org/news)
 
 ## Acknowledgement
 
@@ -70,6 +70,11 @@ This material grew largely out of teaching clinical scholars and in Master of Sc
 
 | Date | Sections | Changes | Thanks To |
 |:-----|:---------|:--------|:----------|
+| 2023-04-27 | [-@sec-nonpar-ecdf]      | New section on sample size for ECDF |
+| 2023-04-05 | [-@sec-change-ex]        | Added confidence bands |
+| 2023-03-30 | [-@sec-hdata-simor]      | Fixed bug in simulation graphics |
+| 2023-03-29 | [-@sec-overview-scimeth] | New link to clinical trial design resource |
+| 2023-03-13 | [-@sec-repro] | New subsection on the decline effect |
 | 2023-02-19 | [-@sec-prob]  | Added link to resources for learning probability |
 | 2022-12-29 | [-@sec-descript-models]| Added single-axis nomogram example |
 | 2022-12-28 |                        | Started to add old study questions to end of selected chapters |

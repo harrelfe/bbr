@@ -94,6 +94,13 @@ Note: The article misinterpreted $P$-values
 
 Begley CG, Ellis LM: Raise standards for preclinical cancer research.<br>_Nature_ 483:531-533; 2012
 
+#### The Decline Effect
+
+Moln Syed [discusses](https://getsyeducated.substack.com/p/pnas-is-not-a-good-journal) [this paper](https://www.frontiersin.org/articles/10.3389/fnhum.2013.00291/full) by Björn Brembs, Katherine Button and Marcus Munafò where they present the graph of the "design effect" found below.
+
+<img src="decline.png" width="90%">
+
+The decreasing effect size over time is indicative of lax publishing standards for new findings, followed by more rigorous research finding less impressive effects.
 
 #### Natural History of New Fields
 

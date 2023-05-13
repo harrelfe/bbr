@@ -344,16 +344,16 @@ ggplot(esopH, aes(x=conv, y=orophar)) + geom_point(pch='.') +
 With large sample sizes there are many collisions of data points and
 hexagonal binning is an effective substitute for the raw
 data scatterplot.  The number of points represented by one hexagonal
-symbol is stratified into 20 groups of approximately equal numbers of
+symbol is stratified into 15 groups of approximately equal numbers of
 points. 
 
 ```{r w=5.5,h=4.5,cap='Hexagonal binning replacing scatterplot for large $n$'}
 #| label: fig-descript-phhex
 ggplot(esopH, aes(x=conv, y=orophar)) +
-  stat_binhex(aes(alpha=..count.., color=Hmisc::cut2(..count.., g=20)),
-              bins=80) +
+  stat_binhex(aes(fill=Hmisc::cut2(..count.., g=15)),
+              bins=40) +
   xlab(xl) + ylab(yl) +
-  guides(alpha=FALSE, fill=FALSE, color=guide_legend(title='Frequency'))
+  guides(fill=guide_legend(title='Frequency'))
 ```
 
 Use the `Hmisc` `ggfreqScatter` function to bin the

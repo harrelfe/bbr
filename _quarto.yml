@@ -47,7 +47,7 @@ book:
   page-footer:
     background: light
     left:
-      - text: "Copyright 2022, Frank E Harrell Jr"
+      - text: "Copyright 2023, Frank E Harrell Jr"
     right:
       - text: "License"
         href: https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -58,6 +58,7 @@ book:
 format:
   html:
     theme: journal
+    number-sections: true
     number-depth: 3
     reference-location: margin
     fig-cap-location: margin
