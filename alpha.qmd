@@ -3,7 +3,11 @@ require(Hmisc)
 getRs('qbookfun.r')
 ```
 
+`r quoteit("Asking one to compute type I assertion probability α for a Bayesian design is like asking a poker player winning $10M/year to justify his ranking by how often he places bets in games he didn't win.")`
+
 `r quoteit('Discounting a result because of long-run operating characteristics (controlling α) is analogous to one making a $10 bet and offering to pay $8 when his team lost, saying "My team might have won".')`
+
+`r quoteit('The probability of being wrong in asserting an effect depends on the amount of evidence for the effect, just just on whether the amount of evidence exceeds some threshold.')`
 
 # Controlling α vs. Probability of a Decision Error {#sec-alpha}
 **How Often Do We Assert an Effect vs. How Often Are We Wrong About an Effect**

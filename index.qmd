@@ -70,6 +70,10 @@ This material grew largely out of teaching clinical scholars and in Master of Sc
 
 | Date | Sections | Changes | Thanks To |
 |:-----|:---------|:--------|:----------|
+| 2023-07-28 | [-@sec-nonpar-pairmodel]  | New section on using models for paired data |
+| 2023-07-26 | [-@sec-nonpar-2way]       | Added example of ordinal model for 2-way ANOVA |
+| 2023-06-22 | [-@sec-ancova]            | Added big picture |
+| 2023-06-16 | [-@sec-ancova-p]         | Added more to section on how many covariates to add |
 | 2023-04-27 | [-@sec-nonpar-ecdf]      | New section on sample size for ECDF |
 | 2023-04-05 | [-@sec-change-ex]        | Added confidence bands |
 | 2023-03-30 | [-@sec-hdata-simor]      | Fixed bug in simulation graphics |

@@ -1,5 +1,6 @@
 project:
   type: book
+  output-dir: /home/harrelfe/web/bbr
 
 book:
   title: "Biostatistics for Biomedical Research"
@@ -11,7 +12,7 @@ book:
   site-url: https://hbiostat.org/bbr
   url: https://hbiostat.org/bbr
 
-  google-analytics: "G-P47K0XF3SM"
+  google-analytics: "G-FN79JJ28KR"
 
   twitter-card:
     creator: "f2harrell"
@@ -67,6 +68,7 @@ format:
     code-block-bg: "#f1f3f5"
     code-block-border-left: "#31BAE9"
     css: h.css
+    code-annotations: hover
 
 bibliography: harrelfe.bib
 csl: apa-annotated-bibliography.csl

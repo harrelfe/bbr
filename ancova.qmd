@@ -16,6 +16,19 @@ getRs('qbookfun.r')
 `r mrg(ddisc(22))`
 <br>
 
+**Big Picture**
+
+* ANCOVA aimed at bringing clarity to contrasts by recognizing within-treatment patient outcome heterogeneity
+* Adjustment for baseline imbalance is very secondary and fails to recognize that counter-balancing factors can be found if you keep looking
+* In linear models, covariate adjustment $\uparrow$ power
+* In nonlinear models, adjustment prevents $\downarrow$ power due to pt heterogeneity
+* Classical $2\times 2$ table (e.g. treatment vs. short-term mortality) assumes no within-treatment heterogeneity (e.g., all patients in treatment 1 have probability of death $P_1$)
+* Think of cov. adjustment as approximating a design where pt heterogeneity is controlled to the extreme: paired design using identical twins
+* **Common criticism**: you left out an important predictor
+* **Easy answer**: the unadjusted analysis you proposed left out everything
+* A misspecified cov. adjustment performs uniformly better than an unadjusted analysis; poor fit > no fit
+
+
 **Introduction**
 
 `r mrg(sound("anc-0"))`
@@ -276,13 +289,40 @@ having heterogeneity in their expected outcomes.  See
 `r ipacue()`
 
 
-## How Many Covariables to Use?
+## How Many Covariables to Use? {#sec-ancova-p}
 `r mrg(disc("ancova-plan"))`
 
 * Try to adjust for the bulk of the variation in outcome (@hau98sho,@tuk93tig)
 * @neu98est: "to improve the efficiency of estimated covariate effects of interest, analysts of randomized clinical trial data should adjust for covariates that are strongly associated with the outcome"  `r ipacue()`
 * @raa00how have more guidance for choosing covariables and provide a formula for linear model that shows how the value of adding a covariable depends on the sample size
+* Recall that if $R^2$ is an accurate estimate of the large-sample $R^2 \rightarrow$ relative efficiency of unadjusted to adjusted treatment comparison = $1 - R^2$
+* For linear models, adding $q$ d.f. for covariates ($q$ covariates if all act linearly) reduces effective same size by $q$
+* **But** small increases in $R^2$ more than make up for this in increased efficiency
+* Adding pure noise can reduce efficiency
+* How much increase in $R^2$ is needed to increase efficient?
+* These metrics are approximately equivalent:
+   + increase likelihood ratio $\chi^2$ statistic by $> q$ (its expected value under the null for added covariates, i.e., covariates add more than chance in explaining outcome variation)
+   + increase $R^{2}_\text{adj}$
+   + decrease $\hat{\sigma}^{2}$
+* For the last metric: $R^{2} = \frac{SSR}{SST} = 1 - \frac{SSE}{SST}$ where $SST$ is the total sum of squares, $SSR$ is the sum of squares due to regression, and $SSE$ is the sum of squared errors (residuals)
+* $\hat{\sigma}^{2} = \frac{SSE}{n - p - 1} = \frac{SST (1 - R_{1}^{2})}{n - p -1}$ for the smaller model with $p$ regression parameters excluding the intercept
+* Using $1 - R^{2}_\text{adj} = (1 - R^{2}) \frac{n-1}{n - p - 1}$ we find the ratio of the larger model $\hat{\sigma}^2$ to the small model's is $\frac{1 - R^{2}_\text{adj2}}{1 - R^{2}_\text{adj1}}$ so the residual variance estimate $\downarrow$ if $R^{2}_\text{adj} \uparrow$
+* Example: $R^{2}_{1} = 0.3, p = 5, n=150$; increase $R^{2}$ to breakeven $R^2$ of $1 - \frac{143}{144} \times 0.7 = 0.30486$ without sacrificing efficiency by adding $q=1$ covariate
 
+```{r}
+ir2 <- function(r21, r22, n, p, q) {
+  r2a <- function(r2, n, p) 1 - (1 - r2) * (n - 1) / (n - p - 1)
+  cat(' Increase in LR chi-square:', round(-n * log(1 - r22) + n * log(1 - r21), 2), '\n',
+      'Adjusted R^2:', round(c(r2a(r21, n, p), r2a(r22, n, p + q)), 3), '\n')
+}
+ir2(0.3, 0.30486, 150, 5, 1)
+```
+
+* Effect when doubling the sample size:
+
+```{r}
+ir2(0.3, 0.30486, 300, 5, 1)
+```
 
 ## Differential and Absolute Treatment Effects {#sec-ancova-txeffects}
 
@@ -735,7 +775,7 @@ contrast(fit, list(treat='b', site=sites),
         @edw99mod: Pre--specify family of models that will be used, along with the strategy for selecting the particular model. <br>
         Masked model derivation does not bias treatment effect.
 * CPMP guidance [@cpmp04poi]
-    + ``Stratification may be used to ensure balance of treatments across covariates; it may also be used for administrative reasons.  The factors that are the basis of stratification should normally be included as covariates in the primary model.
+    + ``Stratification may be used to ensure balance of treatments across covariates; it may also be used for administrative reasons.  The factors that are the basis of stratification should normally be included as covariates in the primary model.  Even if continuous variables were categorized for the purpose of stratified randomization, the continuous form of the variables should be included in the model [@her23eff]
     + Variables known a priori to be strongly, or at least moderately, associated with the primary outcome and/or variables for which there is a strong clinical rationale for such an association should also be considered as covariates in the primary analysis.  The variables selected on this basis should be pre-specified in the protocol or the statistical analysis plan.
     + Baseline imbalance observed post hoc should not be considered an appropriate reason for including a variable as a covariate in the primary analysis.
     + Variables measured after randomization and so potentially affected by the treatment should not normally be included as covariates in the primary analysis.

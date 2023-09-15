@@ -624,6 +624,218 @@ Ecdf(~ bili, group=spiders, data=pbc, fun=qnorm)
 * Curves are primarily parallel (variances are equal; probit ordinal regression or normal scores rank test would work)
 * **But** they are not straight lines as required by $t$-test normality assumption
 
+## Two-Way ANOVA Ordinal Regression Example {#sec-nonpar-2way}
+
+* Problem and data posted to [stats.stackexchange.com/questions/622230](https://stats.stackexchange.com/questions/622230)
+* Two binary factors: sex and surface (for dorsal/ventral)
+* Response variable: y
+* There is significant uncertainty in how to transform y for a parametric analysis
+* Ordinal models provide the same regression coefficients, standard errors, and confidence intervals regardless of how y is transformed (as long as the transformation is monotonic, e.g., log, square root, etc.)
+* Quantiles are also unaffected by any choice of transformation
+* Estimates means do depend on the transformation used
+* Ordinal models are also robust to "outliers"
+
+```{r}
+d <- csv.get(textConnection('
+id	sex	surface	y
+1	female	UN	1255
+2	female	UN	542
+3	female	UN	818
+1	female	UN	274
+2	female	UN	261
+3	female	UN	314
+1	female	UP	552
+2	female	UP	548
+3	female	UP	721
+1	female	UP	431
+2	female	UP	354
+3	female	UP	738
+4	male	UN	901
+5	male	UN	619
+6	male	UN	861
+7	male	UN	713
+8	male	UN	717
+4	male	UN	275
+5	male	UN	300
+6	male	UN	244
+7	male	UN	281
+8	male	UN	231
+4	male	UP	532
+5	male	UP	451
+6	male	UP	482
+7	male	UP	374
+8	male	UP	424
+4	male	UP	193
+5	male	UP	118
+6	male	UP	207
+7	male	UP	208
+8	male	UP	252
+'), sep='\t')  #<1>
+setDT(d)       #<2>
+```
+1. `\t` is the tab character
+2. turn the `data.frame` into a `data.table`
+
+* Tentatively choose the proportional odds (PO) model
+* Check its assumptions (note this is difficult with small $N$)
+* Stratify by both factors so there are 4 groups
+* Check the logit link (PO assumption) by taking the logit of the stratified empirical cumulative distribution function (CDF) estimates
+   + Can't take logit of 1.0 so for those values substitute 0.99
+* PO assumption $\equiv$ parallelism of logit-transformed cumulative distributions
+* PO assumption is analogous to equal variance assumption in ANOVA
+* Unlike ANOVA there is no assumption about the shape of any one group's CDF
+
+```{r}
+#| label: fig-nonpar-2way-checkpo
+#| fig-cap: "logit ECDF plots for checking the PO assumption (parallelism) in the 2-factor problem"
+#| fig-height: 4.75
+#| fig-width: 5.75
+v <- d[, ecdfSteps(y, extend=FALSE), by=.(sex, surface)] #<1>
+ggplot(v, aes(x, qlogis(pmin(y, 0.99)), color=sex, linetype=surface)) +
+  geom_step() + xlab('y') + ylab('logit ECDF')
+```
+1. `ecdfSteps` is in the `Hmisc` package; it computes coordinates of empirical cumulative distribution functions; `data.table` uses `by=` for stratification
+
+* Parallelism is hard to check with $N=32$ stratified into 4 groups, but no blatant violations are obvious
+* Fit a proportional odds model without interaction, as the sample size does not allow one to adequately estimate the interaction effect
+* Use likelihood ratio $\chi^2$ statistics, which are more accurate than the usual Wald statistics
+
+```{r}
+dd <- datadist(d); options(datadist='dd')    #<1>
+f <- orm(y ~ sex + surface, data=d, x=TRUE, y=TRUE)  #<2>
+print(f, intercepts=TRUE) #<3>
+anova(f, test='LR')
+```
+1. Save data distribution summaries
+2. `orm` is the `rms` package's function for analyzing continuous responses as ordinal.  It also works for discrete Y but the `rms` `lrm` function is sometimes better for that.  `x=TRUE, y=TRUE` is for getting likelihood ratio $\chi^2$ tests.
+3. The default is not to print the intercepts if there are more than 10 of them
+
+* Note that the intercepts encode the (logits of) one minus the empirical distribution function for the reference group (female UN) [This is why no distribution is assumed for any one covariate setting.]{.aside}
+* One adjusted $R^2$ is duplicated because the actual sample size (32) equals the effective sample size due to there being no ties in y
+* There is a small amount of evidence ($p=0.097$) that either of the two factors is associated with `y`
+* There is very little evidence for an association with surface
+* There is a small amount of evidence for a sex "effect"
+* The low $R_\text{adj}^{2}$ of 0.08 implies that the model is of limited use for estimation / prediction
+* Estimate means and medians for all 4 combinations of factors, using the model and empirically
+
+```{r}
+M <- Mean(f)  #<1>
+qu <- Quantile(f)  #<2>
+med <- function(lp) qu(0.5, lp)  #<3>
+g <- function(x) list(Mean=mean(x), Median=median(x))
+cat('Sample estimates\n')
+d[, g(y), by=.(sex, surface)]
+cat('\nModel estimates of means (yhat)\n')
+Predict(f, surface, sex=.q(female, male), fun=M) #<4>
+cat('\nModel estimates of medians (yhat)\n')
+Predict(f, surface, sex=.q(female, male), fun=med)
+```
+1. Derives an R function that translates from logit scale to mean
+2. Likewise for quantiles
+3. Particular case of quantiles: median
+4. `fun=...` causes predicted log odds to be transformed by the named function; `.q` is an R `Hmisc` package function that quotes strings for you
+
+* Note that empirical stratified sample estimates of means and medians do not assume PO and do not assume the absence of an interaction, but they have low precision due to dividing the sample size by 4
+* Model estimates assume no interaction and effectively divide the sample size by 3
+
+## Regression Analysis of Paired Data {#sec-nonpar-pairmodel}
+
+Just as a [binary logistic model may be used to do the McNemar test](https://stats.stackexchange.com/questions/560142) for paired binary data, [regression can be used](https://medium.com/@marco_laube/the-paired-t-test-and-linear-mixed-models-185a084d7813) for testing for effects in paired ordinal or continuous data.  Regression is more general:
+
+* Can adjust for covariates
+* Can have more than 2 (pre, post) periods, e.g., handles a multi-period crossover study
+
+* Paired $t$-test is equivalent to
+   + linear regression blocking on subject (subjects are fixed effects)
+   + mixed effects linear model with random intercepts for subjects
+* Rank difference test is similar to
+   + PO model blocking on subject (but there problems with having too many parameters)
+   + mixed effects PO model
+
+Let's illustrate this by re-analyzing paired data analyzed previously.
+
+```{r}
+w <- t.test(drug1, drug2, paired=TRUE)
+w
+w$stderr   # fetch standard error of mean difference
+y    <- c(drug1, drug2)
+drug <- rep(c('A', 'B'), each=length(drug1))
+id   <- factor(rep(1 : length(drug1), 2))
+d    <- data.frame(drug, y, id)
+dd   <- datadist(d); options(datadist='dd')
+ols(y ~ drug + id)
+```
+
+* Ignore overall $\chi^2$ test
+* $\hat{\beta}$ equals the difference computed by the paired $t$-test
+* S.E. is also identical
+* Now run random intercepts model
+
+```{r}
+require(nlme)
+summary(lme(y ~ drug, random = ~ 1 | id, data=d))
+```
+
+* Try a regular regression model where intra-person correlation is adjusted for using the cluster sandwich covariance estimator
+
+```{r}
+f <- ols(y ~ drug, x=TRUE, y=TRUE)  #<1>
+robcov(f, id)
+```
+1. `x=TRUE, y=TRUE` needed for `robcov`, which is in the `rms` package
+
+* Standard error is a bit too small
+* P-value is too small because the sandwich estimator leads to a $z$-statistic and we should probably be using a $t$-statistic with the usual d.f.
+
+* Now compare rank difference test with PO model
+
+```{r}
+f <- orm(y ~ drug + id, x=TRUE, y=TRUE)
+anova(f, test='LR')
+```
+
+* $\chi^2$ for treatment (drug) is a bit larger than expected
+* Try mixed PO model with normal random effects for subjects
+* This did not converge and resulted in unrealistically large test statistic
+
+```{r}
+require(ordinal)
+f <- clmm2(factor(y) ~ drug, random = id, data=d, link='logistic', Hess=TRUE)
+summary(f)
+```
+
+* A Bayesian mixed effects PO model did not have any trouble
+* Mimic a p-value by dividing the posterior mean log odds ratio by the posterior standard deviation of this $\beta$
+* Also get Bayesian posterior probability of an effect, which is more actionable than a p-value
+
+```{r}
+require(rmsb)
+options(mc.cores = parallel::detectCores() - 1)   # use max # CPUs
+f <- blrm(y ~ drug + cluster(id), data=d, backend='cmdstan')
+f
+draws <- f$draws[, 'drug=B']
+beta <- mean(draws)
+se   <- sd(draws)
+z    <- beta / se
+p    <- 2 * (1 - pnorm(abs(z)))
+P    <- mean(draws > 0)
+round(c(beta=beta, se=se, z=z, p=p, 'Pr(beta > 0)'=P), 3)
+```
+
+* Compare the p=0.007 with the rank difference tests's p=0.009
+* Note that $\beta$ is on the log-odds scale and cannot be compared to a difference in means
+* Semiparametric models can be used to estimate means, quantiles, etc. (@sec-nonpar-2way)
+
+* Try an ordinary PO model with a cluster sandwich covariance estimator
+
+```{r}
+f <- orm(y ~ drug, x=TRUE, y=TRUE)
+robcov(f, id)
+```
+
+* The result is reasonable
+* [Simulations show](https://fharrell.com/post/pair) that the cluster sandwich estimator of the standard error of the estimated effect has excellent operating characteristics
+
 
 ## Power and Sample Size
 

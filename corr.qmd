@@ -618,7 +618,7 @@ r <- ABM[, {
 * Smaller windows $\rightarrow$ noisier estimates of $Y$ but avoid bias
 * Smooth the moving estimates using _loess_ or super smoother when finished
 * To handle skewed $X$ it's best to form windows on the basis of sample size rather than on absolute $X$
-* General `R` function `movStats` in [Github](https://github.com/harrelfe/rscripts/blob/master/movStats.r), accessed with the `Hmisc` package `getRs` function
+* General `R` function `movStats` in the `Hmisc` package
 * Default algorithm:
    + sort the data by $X$
    + get a target grid of $X$ values for which to estimate $Y$ separately
@@ -630,7 +630,6 @@ r <- ABM[, {
 #| label: fig-corr-glratiom
 #| fig-cap: 'Moving quartiles and mean (blue line) to relate CSF:blood glucose ratio to total CSF polymorph count in patients with either bacterial or viral meningitis.  Black line is the moving median.  The band depicts outer quartiles.'
 #| fig-scap: 'Moving statistics for glucose ratio'
-getRs('movStats.r')
 u <- movStats(glratio ~ tpolys, data=ABM, pr='margin')
 ggplot(u, aes(x=tpolys, y=`Moving Median`)) + geom_line() +
 	geom_ribbon(aes(ymin=`Moving Q1`, ymax=`Moving Q3`), alpha=0.2) +
@@ -641,7 +640,7 @@ ggplot(u, aes(x=tpolys, y=`Moving Median`)) + geom_line() +
 
 * Age example
 
-```{r}
+```{r results='asis'}
 #| label: fig-corr-age-abmm
 #| fig-cap: 'Moving proportions relating age to the probability of bacterial meningitis given a patient has bacterial or viral meningitis, with a spike histogram and an extended box plot showing the age distribution.  Moving proportions before smoothing are also shown.  To the right of the extended box plot is a dot for the 0.99 quantile of age'
 #| fig-scap: "Moving proportions"
@@ -659,7 +658,7 @@ addggLayers(g, ABM, value='age', type='ebp', pos='top')
 * For each moving window compute the Kaplan-Meier 6m and 12m survival estimates
 * Subtract cumulative survival from 1.0 to get cumulative incidence
 
-```{r}
+```{r results='asis'}
 #| label: fig-corr-movsurv
 #| fig-cap: "Moving 6m and 12m mortality as a function of age using VA lung cancer dataset"
 #| fig-scap: "Moving 6m and 12m mortality estimates"

@@ -180,6 +180,10 @@ Con[Conclusion] --> C1[Synthesis<br>plain language, effective<br>presentation gr
 
 @hul13des
 
+**Recommended Reading for Pilot and Feasibility Studies**
+
+@ter22gui
+
 [Design, Analyze, Communicate](https://dac-trials.tghn.org) - a major resource that includes open source clinical trial simulation tools and an approach to avoiding futile clinical trials
 
 
@@ -191,7 +195,7 @@ Con[Conclusion] --> C1[Synthesis<br>plain language, effective<br>presentation gr
 * Determine which measurements are required for answering the
   question while accounting for alternative explanations.  Do this
   **before** examining existing datasets so as to not engage in
-  rationalization bias.
+  rationalization bias (data availability bias).
 * Collect these measurements or verify that an already existing
   dataset contains all of them
 * Make sure that the measurements are not missing too often and
@@ -201,6 +205,7 @@ Con[Conclusion] --> C1[Synthesis<br>plain language, effective<br>presentation gr
   pathways.  For example don't use outcome/response/late-developing
   medical complications as if they were independent variables.
 
+Paul Dorian wrote an excellent [summary](https://sensiblemed.substack.com/p/a-brilliant-comment-makes-the-study) of the pitfalls of observational treatment comparisons.
 
 ## Types of Data Analysis and Inference {#sec-overview-datatypes}
 
