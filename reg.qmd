@@ -1679,7 +1679,7 @@ Use external validation if   `r ipacue()`
 `r ipacue()`
 
 * [Prediction Research Manual](http://www.cecilejanssens.org/wp-content/uploads/2018/01/PredictionManual2.0.pdf) by Cecile Janssens and Forike Martens
-* Steyerberg paper on the waste by data splitting: @ste18vala.
+* Steyerberg paper on the waste by data splitting: @ste18val.
 
 ## Study Questions
 

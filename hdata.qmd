@@ -489,6 +489,96 @@ of ranks of "losers" extend well into the ranks of "winners", the
 uncertainty associated with our ability to rule out "losers" for
 further investigation will be noted.
 
+### Sample Size to Estimate a Correlation Matrix {#sec-hdata-rmatrix}
+
+An abstraction of many of the tasks involved in both unsupervised learning (observation clustering, variable clustering, latent trait analysis, principal components, etc.) and supervised learning (statistical regression models or machine learning to predict outcomes) is the estimation of a correlation matrix involving potential predictors and outcomes.  Even with linear regression where one is interested in estimating $p$ regression coefficients $\beta$ plus an intercept, one must deal with collinearities in order to estimate $\beta$ well.  This involves inverting the matrix of all sums of squares and cross-products of the predictors, so again it is akin to estimating a large correlation matrix.
+
+@sec-corr-n showed how to estimate the sample size needed to estimate a single linear or Spearman correlation coefficient $r$ to within a given margin of error.  A simple summary of what is in that section is that $n=300$ is required to estimate $r$ to within a margin of error of $\pm 0.1$ with 0.95 confidence.  Consider now the estimation of an entire correlation matrix involving $p$ continuous variables, which gives rise to $\frac{p(p-1)}{2}$ distinct $r$ values to estimate.
+
+True correlation coefficients close to zero are the most difficult to estimate (have the lowest precision of the estimated $r$s), so consider the situation in which all $p$ variables are uncorrelated.  Every $r$ value should be zero, but random chance leads to very erroneously large coefficient estimates for small $n$.  Quantify the estimation error for an entire matrix by considering the maximum absolute $r$ over the $\frac{p(p-1)}{2}$ pairs of variables.  Simulate data from normal distributions for given $n$ and $p$, drawing 250 random samples for each $n, p$ combination.  Compute the mean of the maximum absolute correlation coefficients over the 250 simulations.  The results are shown below.  [See [this](https://hbiostat.org/rflow/sim.html#fig-sim-corr) for the simulation code.]{.aside}
+
+```{r}
+#| label: fig-hdata-corr
+#| fig-cap: Average over 250 simulations of $\frac{p(p-1)}{2}$ maximum absolute correlation coefficients for various sample sizes $n$ and number of variables $p$
+#| fig-scap: Average of maximum absolute correlation coefficients
+w <- readRDS('rflow-simcorr.rds')
+ggplot(w, aes(x=n, y=r, col=factor(p))) + geom_line() +
+       ylim(0, 0.4) +
+       guides(color=guide_legend(title='p')) +
+       ylab('Mean Maximum |r|')
+```
+
+The bottom curve is for $p=10$ variables, i.e., for estimating all 45 $r$s among them.  The minimum acceptable sample size $n$ may be taken as about $n=700$ as this leads to a maximum correlation estimation error of 0.1.  The error is cut in half for $n=2000$.  The top curve, for $p=500$ variables, leads to selection of $n=2000$ as a minimum sample size for sufficiently accurate estimation of the entire correlation matrix, with $n=4000$ improving precision further by about $\frac{1}{4}$.  For most studies, $p=500$ may be thought of as the largest unstructured (e.g., not informed by biological pathways) problem that can be reliably studied.  For a sample size of $n=500$ it may be unreliable to study more than 10 variables in free-form.
+
+### One-at-a-Time Bootstrap Feature Selection {#sec-hdata-oaat}
+
+When there is a large number of candidate features it is computationally difficult to fit penalized models containing all features simultaneously.  We may resort to assessing the predictive value of each feature on its own, adjusted for a fixed set of covariates.  Bootstrapping this process to get confidence intervals on importance ranks of all candidate features is easy.  In the following example we simulate a binary response variable that is partially predicted by age, and we include each of 400 binary features in a model with age.  The features are assumed to have log odds ratios following a Gaussian distribution with mean zero and standard deviation 0.25.  The importance measure we'll use is the gold standard model likelihood ratio $\chi^2$ statistic with 2 d.f.  It does not matter that this statistic counts the age effect, as we will be comparing all the 2 d.f. statistics with different features in the model but with age always present.
+
+First simulate the data, with a sample size of 500.  Put the features into a $500\times 400$ matrix.  The simulated data use a model with all effects included simultaneously even though we won't analyze the data this way. Features are assumed to be independent and to have prevalence 0.5.
+
+```{r}
+require(rms)
+n <- 500   # number of subjects
+p <- 400   # number of candidate features
+B <- 300   # number of bootstrap repetitions
+set.seed(9)
+age   <- rnorm(n, 50, 8)  # Gaussian distribution for age
+betas <- rnorm(p, 0, 0.15)
+X     <- matrix(rbinom(n * p, 1, 0.5), nrow=n)
+xb    <- 0.07 * (age - 50) + (X - 0.5) %*% betas
+y     <- rbinom(n, 1, plogis(xb))
+# Function to compute ranks of 2 d.f. LR chi-square over p features
+r <- function(s = 1 : n, pl=FALSE) {
+  chisq <- numeric(p)
+  for(j in 1 : p) {
+    d <- data.frame(age, y, x=X[,j])[s, ]
+    f <- lrm(y ~ age + x, data=d)
+    chisq[j] <- f$stats['Model L.R.']
+  }
+  if(pl) hist(chisq, nclass=30, xlab='2 d.f. Chi-squares', main='')
+  rank(chisq)
+}
+# Using the original sample, plot the chi-square ranks against true betas
+orig.ranks <- r(pl=TRUE)
+plot(betas, orig.ranks, xlab=expression(beta), ylab='Rank')
+```
+
+The last plot is a sign of how difficult it is to select winners from among 400 competing features when the sample size is not huge.  There is no apparent relationship between model strength and true feature regression coefficients.
+
+Now bootstrap the process 300 times to get bootstrap nonparametric percentile confidence intervals for ranks.
+
+```{r bootoaat}
+set.seed(11)
+g <- function() {
+  R <- matrix(NA, nrow=B, ncol=p)
+  for(i in 1 : B) R[i, ] <- r(sample(n, replace=TRUE))
+  R
+}
+R <- runifChanged(g)  # run time 6m
+```
+
+Compute 400 0.95 confidence intervals for ranks.
+
+```{r}
+ci <- apply(R, 2, quantile, c(0.025, 0.975))
+winner <- which.max(orig.ranks)
+```
+
+Plotting these 400 confidence intervals fully reveals the difficulty of the task.  But for our purposes it suffices to show the confidence interval for the apparent winning feature, which is feature number `r winner`.  Let's first compute the age-adjusted $\chi^2$ for this feature. 
+
+```{r}
+x <- X[, winner]
+f <- lrm(y ~ age + x, x=TRUE, y=TRUE)
+anova(f, test='LR')
+```
+
+The p-value for this feature would not survive a Bonferroni adjustment for 400 comparisons.  The bootstrap confidence interval for the importance rank of the feature is 
+```{r}
+ci[, winner]
+```
+
+The winner was replicated as the winner in at least 2.5% of the bootstrap resamples, but the lower confidence interval shows that the data are consistent with the winner almost being in the lower half of the 400 features' importance.
+
 ```{r echo=FALSE}
 saveCap('20')
 ```

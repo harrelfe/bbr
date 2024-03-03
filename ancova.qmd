@@ -880,7 +880,7 @@ supplement to it by Ben Andrew.
 
 **Introduction**
 
-1. What is the fundamental estimand in a paralell-group randomized clinical trial?  How does this relate to a crossover study and to a study of identical twins randomized in pairs?
+1. What is the fundamental estimand in a parallel-group randomized clinical trial?  How does this relate to a crossover study and to a study of identical twins randomized in pairs?
 
 **Section 13.1**
 

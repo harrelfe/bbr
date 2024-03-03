@@ -597,6 +597,7 @@ require(brms)
 # Tell brms/Stan to use all available CPU cores less 1 and to use
 # cmdstan instead of rstan
 options(mc.cores=parallel::detectCores() - 1, brms.backend='cmdstanr')
+cmdstanr::set_cmdstan_path('/usr/local/bin/cmdstan-2.34.1')
 ```
 
 ```{r bayesprop}

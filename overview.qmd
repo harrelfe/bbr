@@ -45,6 +45,7 @@ To optimize its value, biostatistics needs to be fully integrated into
 biomedical research and we must recognize that experimental design and
 execution (e.g., randomization and masking) are all important.
 
+See [I’m not a real statistician, and you can be one too](https://statsepi.substack.com/p/im-not-a-real-statistician-and-you) by Darren Dahly for an exellent article about learning biostatistics.
 
 ### Branches of Statistics
 
@@ -178,7 +179,10 @@ Con[Conclusion] --> C1[Synthesis<br>plain language, effective<br>presentation gr
 
 **Recommended Reading for Clinical Study Design**
 
-@hul13des
+* @hul13des
+* [The Effect: An Introduction to Research Design and Causality](https://theeffectbook.net) by Nick Huntington-Klein
+* [Marion Campbell's tweetorial](https://x.com/MarionKCampbell/status/1744261662423601286?s=20)
+* [Toader et al](https://trialsjournal.biomedcentral.com/articles/10.1186/s13063-024-07926-z) paper on using healthcare systems data for outcomes in clinical trials
 
 **Recommended Reading for Pilot and Feasibility Studies**
 
@@ -194,8 +198,7 @@ Con[Conclusion] --> C1[Synthesis<br>plain language, effective<br>presentation gr
 * Carefully define subject inclusion/exclusion criteria
 * Determine which measurements are required for answering the
   question while accounting for alternative explanations.  Do this
-  **before** examining existing datasets so as to not engage in
-  rationalization bias (data availability bias).
+  **before** examining existing datasets so as to not rationalize data inadequacies (data availability bias).
 * Collect these measurements or verify that an already existing
   dataset contains all of them
 * Make sure that the measurements are not missing too often and

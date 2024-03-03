@@ -70,6 +70,9 @@ This material grew largely out of teaching clinical scholars and in Master of Sc
 
 | Date | Sections | Changes | Thanks To |
 |:-----|:---------|:--------|:----------|
+| 2023-11-10 | [-@sec-nonpar-pairmodel] | Fixed mixed effects ordinal model for paired rank test by using quadrature |
+| 2023-09-22 | [-@sec-hdata-oaat]        | New section on bootstrapping importantance ranks using one-at-a-time feature modeling |
+| 2023-09-16 | [-@sec-hdata-rmatrix]     | New section on estimation of correlation matrices |
 | 2023-07-28 | [-@sec-nonpar-pairmodel]  | New section on using models for paired data |
 | 2023-07-26 | [-@sec-nonpar-2way]       | Added example of ordinal model for 2-way ANOVA |
 | 2023-06-22 | [-@sec-ancova]            | Added big picture |

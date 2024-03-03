@@ -463,6 +463,8 @@ require(rmsb)
 # Use cmdstan instead of rstan to get more current methods and
 # better performance
 options(mc.cores = parallel::detectCores() - 1, rmsb.backend='cmdstan')
+cmdstanr::set_cmdstan_path('/usr/local/bin/cmdstan-2.34.1')
+
 b <- blrm(fbf ~ race * rcs(dose, 5) + cluster(id), data=d)
 b
 stanDxplot(b)

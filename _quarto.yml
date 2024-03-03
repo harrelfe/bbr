@@ -1,6 +1,6 @@
 project:
   type: book
-  output-dir: /home/harrelfe/web/bbr
+  output-dir: /Users/harrelfe/web/bbr
 
 book:
   title: "Biostatistics for Biomedical Research"
@@ -48,7 +48,7 @@ book:
   page-footer:
     background: light
     left:
-      - text: "Copyright 2023, Frank E Harrell Jr"
+      - text: "Copyright 2024, Frank E Harrell Jr"
     right:
       - text: "License"
         href: https://www.gnu.org/licenses/gpl-3.0.en.html

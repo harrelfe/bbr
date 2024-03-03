@@ -804,6 +804,15 @@ f <- clmm2(factor(y) ~ drug, random = id, data=d, link='logistic', Hess=TRUE)
 summary(f)
 ```
 
+`clmm2` uses a Laplace approximation for numerical integration.  Let's try using 7-point quadrature integration instead.
+
+```{r}
+f <- clmm2(factor(y) ~ drug, random = id, data=d, link='logistic', Hess=TRUE,
+           nAGQ=7)
+summary(f)
+```
+
+* This frequentist mixed model fit seems to be fine
 * A Bayesian mixed effects PO model did not have any trouble
 * Mimic a p-value by dividing the posterior mean log odds ratio by the posterior standard deviation of this $\beta$
 * Also get Bayesian posterior probability of an effect, which is more actionable than a p-value
@@ -811,6 +820,8 @@ summary(f)
 ```{r}
 require(rmsb)
 options(mc.cores = parallel::detectCores() - 1)   # use max # CPUs
+cmdstanr::set_cmdstan_path('/usr/local/bin/cmdstan-2.34.1')
+
 f <- blrm(y ~ drug + cluster(id), data=d, backend='cmdstan')
 f
 draws <- f$draws[, 'drug=B']

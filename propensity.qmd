@@ -18,6 +18,7 @@ sometimes help, though many published ones provide information that is
 worse than having no information at all due to missing confounder
 variables or poor statistical practice.
 
+The following is written for static treatment assignments, i.e., treatment is assigned at time zero and doesn't change.  For an extremely useful and succint summary of issues surrounding observational treatment comparisons, for both dynamic and static treatments, see [Robert Long's post](https://stats.stackexchange.com/a/630446/4253) and [Toader et al](https://trialsjournal.biomedcentral.com/articles/10.1186/s13063-024-07926-z)
 
 ## Challenges
 
