@@ -70,6 +70,8 @@ This material grew largely out of teaching clinical scholars and in Master of Sc
 
 | Date | Sections | Changes | Thanks To |
 |:-----|:---------|:--------|:----------|
+| 2024-04-16 | [-@sec-change-kccq]      | New subsection on KCCQ ceiling effect problem |
+| 2024-04-16 | [-@sec-change-opmod]     | New subsection on optimal model to replace change score |
 | 2023-11-10 | [-@sec-nonpar-pairmodel] | Fixed mixed effects ordinal model for paired rank test by using quadrature |
 | 2023-09-22 | [-@sec-hdata-oaat]        | New section on bootstrapping importantance ranks using one-at-a-time feature modeling |
 | 2023-09-16 | [-@sec-hdata-rmatrix]     | New section on estimation of correlation matrices |

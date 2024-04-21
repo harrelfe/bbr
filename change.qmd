@@ -192,6 +192,21 @@ Regarding 7. above, often the baseline is not as relevant as thought and the slo
 
 @bla11com have an excellent [article](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3286439) about how misleading change from baseline is for clinical trials.  [This](http://www.fharrell.com/post/errmed#change) blog article has several examples of problematic change score analyses in the clinical trials literature.
 
+#### Nearly Optimal Statistical Model {#sec-change-opmod}
+
+* Suppose $Y$ = 0-20 (worst - best) with many ties at 20 (ceiling effect)
+* Baseline value $y_0$
+* $Y - y_{0}$ and linear model residuals will have striped patterns
+* Change score fails to give credit to a patient who starts at $y_0$=19 or 20 and doesn't worsen
+* $y_{0} = Y = 20 \rightarrow$ great outcome
+* Semiparametric ordinal model allows for floor and ceiling effects and arbitrary $Y$ distribution
+* Allow flexibility in shape of effect of $y_0$ on $Y$
+* Proportional odds model starts with treatment odds ratio which is [convertible to a Wilcoxon statistic concordance probability](https://fharrell.com/post/powilcoxon)
+* Model can also estimate
+   + $\Pr(Y \geq y | y_{0}, \text{treatment})$
+   + mean and quantiles of $Y$ as a function of $y_0$ and treatment
+   + mean and quantiles of $Y - y_{0}$ as a function of $y_{0}$
+
 The following `R` code exemplifies how to do a powerful, robust
 analysis with a likely-to-fit model, without computing change from baseline.  This analysis
 addresses the fundamental treatment question posed at the top of this
@@ -236,7 +251,7 @@ vs. ANCOVA vs. ignoring baseline completely, as a function of the
 
 ### Example of a Misleading Change Score {#sec-change-ex}
 
-As discussed above, for a change from baseline to be meaningful, the relationship between baseline and follow-up measurements must be linear with a slope of 1.0.  Otherwise the amount of change will be baseline-dependent.  Consider a real example taken from a randomized clinical trial of an anti-depressive medication. [The data from the actual trial were perturbed for confidentiality reasons.  The amount of perturbation makes the original data not identifiable but preserves the relationships among variables.]{.aside}  The [Hamilton-D depression scale](https://en.wikipedia.org/wiki/Hamilton_Rating_Scale_for_Depression) was assessed at baseline and 8 weeks after randomization in this two-arm parallel-group randomized trial.  The dataset `hamdp` is available from [hbiostat.org/data](https://hbiostat.org/data) by using the R `Hmisc` package `getHdata` function.
+As discussed above, for a change from baseline to be meaningful, the relationship between baseline and follow-up measurements must be linear with a slope of 1.0.[This is despite the fact that adjusting for baseline can rescue a **linear** model.  Researchers are routinely quoting out-of-context mean change scores that are very hard to interpret when linearity and a slope of 1.0 do not hold.]{.aside}  Otherwise the amount of change will be baseline-dependent.  Consider a real example taken from a randomized clinical trial of an anti-depressive medication. [The data from the actual trial were perturbed for confidentiality reasons.  The amount of perturbation makes the original data not identifiable but preserves the relationships among variables.]{.aside}  The [Hamilton-D depression scale](https://en.wikipedia.org/wiki/Hamilton_Rating_Scale_for_Depression) was assessed at baseline and 8 weeks after randomization in this two-arm parallel-group randomized trial.  The dataset `hamdp` is available from [hbiostat.org/data](https://hbiostat.org/data) by using the R `Hmisc` package `getHdata` function.
 
 Start with plotting the raw data and adding nonparametric smoothers.
 
@@ -304,6 +319,31 @@ ggplot(Predict(f, Dbase, treatr, conf.int=FALSE))
 ```
 
 :::
+
+### KCCQ Ceiling Effect {#sec-change-kccq}
+
+Consider data from Vanderbilt University Medical Center cardiologist Brian Lindman from his Doris Duke funded TAVR cohort.   The data contain KCCQ (Kansas City Quality of Life) scores obtained in patients with severe aortic stenosis prior to transcatheter aortic valve implantation (baseline) and 1 year after the procedure. The KCCQ is a heart failure specific health status measurement based on responses to 12 questions.
+
+```{r}
+#| fig-width: 5.5
+#| fig-height: 4
+k <- read.csv('kccq.csv')
+ggplot(k, aes(kccq0, kccq1, color=tx)) + geom_point() +
+  xlab('Baseline KCCQ') + ylab('KCCQ at 1y')
+```
+
+The problem that KCCQ creates for change scores is due to a ceiling effect around the best value of 100.  There is less room to move when the baseline values are > 80.  Change scores do not give credit to a patient who begins high and does not deteriorate.  And change scores can cause major violations of assumptions needed for standard linear models, as shown in the non-constant variance and non-normality below.
+
+```{r}
+#| fig-height: 3
+#| fig-width: 7
+par(mgp = c(1.5, 0.5, 0), mar = c(2.5, 2.5, 2, 1) + 0.1, tck = -0.02,
+    cex.axis = 0.8, bty = "l", mfrow=c(1,2))
+f <- lm(kccq1 ~ kccq0 + tx, data=k, na.action=na.exclude)
+with(k, plot(fitted(f), resid(f)))
+qqnorm(resid(f), main='')
+qqline(resid(f))
+```
 
 ### Special Problems Caused By Non-Monotonic Relationship With Ultimate Outcome {#sec-change-anova}
 
