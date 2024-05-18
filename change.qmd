@@ -345,6 +345,8 @@ qqnorm(resid(f), main='')
 qqline(resid(f))
 ```
 
+See [this](https://fharrell.com/post/pop) for another KCCQ example where the slope of post vs. pre is far from 1.0, and an example using the cardiac biomarker BNP where post vs. pre is far from linear.
+
 ### Special Problems Caused By Non-Monotonic Relationship With Ultimate Outcome {#sec-change-anova}
 
 Besides the strong assumptions made about how variables are

@@ -482,7 +482,6 @@ in medians but rather the median of all differences.
 * E.g., to test for any differences among four groups A B C D form 3 indicator variables for B C D and let A be the reference cell that corresponds to the $\alpha$ intercepts
     + model is logit$P(Y \geq y | \mathrm{group}) = \alpha_y + \beta_1 [B] + \beta_2 [C] + \beta_3 [D]$
 * Use the likelihood ratio $\chi^2$ test from this model to test the global null hypothesis A=B=C=D with 3 d.f.
-* Solves the transitivity problem mentioned earlier
 * Can obtain consistent pairwise comparisons by forming odds ratios for any comparison
     + e.g. C:A comparison will use $\exp(\hat{\beta_{2}})$
     + C:B comparison OR: $\exp(\hat{\beta_{2}} - \hat{\beta_{1}})$
@@ -878,7 +877,7 @@ cat('3/pi: ', 3 / pi, '\n')
 ```
 
 
-### Tailoring Power Calculations to the Wilcoxon Test
+### Tailoring Power Calculations to the Wilcoxon Test {#sec-nonpar-popower}
 
 * Whitehead @whi93sam derived simple formulas related to the proportional odds model score test
 * Formulas assume that a frequency-tabulated distribution estimate is available for the combined groups
@@ -886,6 +885,7 @@ cat('3/pi: ', 3 / pi, '\n')
 * See example below for conversion of ORs to differences in means or medians
     + OR=1 $\rightarrow$ distributions are the same, so differences in means/medians are zero
 * See `R` `Hmisc` package `popower` and `posamsize` functions
+* See [this](https://fharrell.com/post/pop) for more detailed examples of power and sample size calculation sfor the PO model
 
 
 ### Discrete $Y$
@@ -1088,6 +1088,7 @@ for(delta in c(0, 0.3)) {
     + can incorporate shrinkage/penalization/skepticism and still have exact inference
     + automatically obtain exact distributions and credible intervals for derived quantities^[One merely takes each posterior sample for the $\alpha$s and $\beta$s and computes the quantity of interest, thereby automatically generating posterior samples for the derived quantity for which quantiles can compute credible intervals, etc.], e.g. mean, quantiles, differences in means and quantiles, differences in exceedance probs, $P(Y=y | X)$
     + can relax PO assumption without huge instabilities that result from using polytomous logistic models; prior distributions can favor PO while allowing non-PO
+* See [this](https://hbiostat.org/bayes/bet/design#sec-design-popower) for simulating Bayesian power of a PO model comparison
 
 ## Sample Size Requirement for Characterizing Entire Distributions {#sec-nonpar-ecdf}
 

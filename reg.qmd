@@ -597,12 +597,10 @@ Hypothesis tests with $p>1$:   `r ipacue()`
 		fit the sub--model omitting $x_{1},\ldots,x_{q}$ to obtain
 		$SSE_{reduced}$ or $R^{2}_{reduced}$.  Then compute the
 		partial $F$ statistic
-		\[
-		F = \frac{(SSE_{reduced} - SSE_{full})/q}{SSE_{full}/(n-p-1)}
-		= \frac{(R^{2}_{full} - R^{2}_{reduced})/q}{(1 -
-		R^{2}_{full})/(n-p-1)} \sim F_{q,n-p-1}
-		\]
-		Note that $SSE_{reduced} - SSE_{full} = SSR_{full} - SSR_{reduced}$.
+		
+$F = \frac{(SSE_{reduced} - SSE_{full})/q}{SSE_{full}/(n-p-1)}	= \frac{(R^{2}_{full} - R^{2}_{reduced})/q}{(1 - R^{2}_{full})/(n-p-1)} \sim F_{q,n-p-1}$
+
+Note that $SSE_{reduced} - SSE_{full} = SSR_{full} - SSR_{reduced}$ .
 
 Notes about distributions:   `r ipacue()`
 
@@ -610,7 +608,7 @@ Notes about distributions:   `r ipacue()`
 * If $F \sim F_{m,n}, \quad m \times F \dot{\sim} \chi^{2}_{m}$ for large $n$
 * If $F \sim F_{1,n}, \quad \sqrt{F} \sim t_{n}$
 * If $t \sim t_{n}, \quad t^{2} \sim F_{1,n}$
-* If $z \sim $ normal, $\quad z^{2} \sim \chi^{2}_{1}$
+* If $z \sim \mathrm{normal}, \quad z^{2} \sim \chi^{2}_{1}$
 * $y \sim D$ means $y$ is distributed as the distribution $D$
 * $y \dot{\sim} D$ means that $y$ is approximately distributed
 		as $D$ for large $n$

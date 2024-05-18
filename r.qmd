@@ -67,17 +67,16 @@ Three of the best ways to learn how to analyze data in `R` quickly are
 1. Use example `R` scripts as analysis templates
 1. Use `RStudio` ([rstudio.org](https://www.rstudio.com)) to run `R`
 On the first approach, the `R` `Hmisc` package's `getHdata`
-function finds datasets on the Vanderbilt Biostatistics `DataSets`
-wiki, downloads them, and `load()`s them in your `R` session.
+function finds datasets in <https://hbiostat.org/data>, downloads them, and `load()`s them in your `R` session.
 These notes use only datasets available via this mechanism.  These
 datasets are fully annotated with variable labels and units of
 measurements for many of the continuous variables.
-Concerning analysis scripts, Vanderbilt Biostatistics has collected
-template analysis scripts on
+Concerning analysis scripts, some complete analysis script tamplates have been collected
+on
 [github.com/harrelfe/rscripts](https://github.com/harrelfe/rscripts)\footnote{`github` has
   outstanding version control and issue reporting/tracking.  It
   greatly facilitates the contribution of new scripts by users, which
-  are most welcomed.  Contact <tt>f.harrell@vanderbilt</tt> if you
+  are most welcomed.  Contact <tt>fh@fharrell.com</tt> if you
   have scripts to contribute or suggestions for existing scripts.} and
 the `R` `Hmisc` package has a function `getRs` to download these
 scripts and to automatically populate an
@@ -100,7 +99,7 @@ scripts, you need to do the following:
   must have OS X Maverick or later.
 1. Install `R` from [www.r-project.org](https://www.r-project.org/) or upgrade your
   installation of `R` to the latest version.
-1. Install `Quarto` from [quarto.org](https://quarto.org/docs/get-started)
+1. Install `Quarto` from [quarto.org](https://quarto.org/docs/get-started) if you don't want to use the version of `Quarto` that is provided automatically with `RStudio`
 1. Install `RStudio` from [rstudio.org](https://www.rstudio.com/) or update your
   `RStudio` to the latest version.
 <!-- 1. Run `RStudio` and get it to install the packages that allow

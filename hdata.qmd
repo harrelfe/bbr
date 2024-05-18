@@ -334,7 +334,7 @@ true population parameter values.  The bootstrap can take into account
 many sources of uncertainty.  We use the bootstrap to estimate the
 bias in the apparent highest and apparent lowest odds ratios---the two
 "winners".  The sample size of the simulated data is 600 subjects
-and there are 300 candidate features.
+and there are 300 candidate features. [See [this](https://bsky.app/profile/braadland.bsky.social/post/3kr2syggkys2u) for an excellent real data example of bootstrap confidence intervals for importance ranks.]{.aside}
 
 The bootstrap is based on sampling with replacement from the rows of the entire
 data matrix $(X, Y)$.  In order to sample from the rows we need to generate raw
