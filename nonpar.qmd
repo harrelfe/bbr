@@ -1078,7 +1078,8 @@ for(delta in c(0, 0.3)) {
 
 * PO model and other cumulative probability semiparametric ordinal regression models are readily extended to a Bayesian framework
 * Need special care in selecting priors for the intercepts for the continuous $Y$ case
-* Nathan James of Vanderbilt University has an implementation using Stan available at<br> [github.com/ntjames/bayes_cpm](https://github.com/ntjames/bayes_cpm)
+* `blrm` function in the [R `rmsb` package](https://hbiostat.org/r/rmsb) is devoted to the PO and partial PO model
+* Nathan James has an implementation using Stan available at<br> [github.com/ntjames/bayes_cpm](https://github.com/ntjames/bayes_cpm)
 * See also the `R` `brms` package: [bit.ly/brms-ordinal](http://bit.ly/brms-ordinal) and this discussion:<br> [github.com/paul-buerkner/brms/issues/762](http://github.com/paul-buerkner/brms/issues/762)
 * Bayesian version of the Wilcoxon test is the posterior probability that $\beta_1 > 0$ in the PO model
 * Advantages of Bayes for PO models:
