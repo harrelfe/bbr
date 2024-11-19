@@ -21,6 +21,10 @@ getRs('qbookfun.r')
 `r quoteit("Type I error rate is not a rate and is not the probability of an error.  It is the probability of making an assertion of an effect when any such assertion is by definition wrong.")`
 
 `r quoteit("<b>Fisher's glaring error</b><br>A man who 'rejects' a hypothesis provisionally, as a matter of habitual practice, when the significance is at the 1 percent level or higher will certainly be mistaken in not more than 1 percent of such decisions.  For when the hypothesis is correct he will be mistaken in just 1 percent of these cases, and when it is incorrect he will never be mistaken in rejection.", "RA Fisher <em>Statistical Methods and Scientific Inference</em>, 1956, 41-2.<br><b>Fisher failed to recognize</b> that 'of such decisions' is not conditional on H<sub>0</sub> and he confuses P(H<sub>0</sub> | p < 0.01), with P(p < 0.01 | H<sub>0</sub>)")`
+<br>
+
+<img src="raf.png" width="100%">
+<br>
 
 `r quoteit("Optimum α from Bayesian decision analysis: 0.24 for terminal illness with no existing therapies; 0.01 for less deadly diseases","Isakov <em>et al</em>, <em>J Econometrics</em> 2019, 117-136")`
 

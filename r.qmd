@@ -196,7 +196,8 @@ because there are so many ways to accomplish these tasks in `R`.
 Getting good variable names, variable labels, and value labels, can
 also be tedious but is highly worth the time investment.  See `R Workflow` for detailed information about importing various types of files, and recoding and manipulating data after importing them.
 
-Read [biostat.app.vumc.org/DataTransmissionProcedures](http://biostat.app.vumc.org/DataTransmissionProcedures) for best practices for constructing spreadsheets so they can be reliably imported.
+<!-- Read [biostat.app.vumc.org/DataTransmissionProcedures](http://biostat.app.vumc.org/DataTransmissionProcedures) for best practices for constructing spreadsheets so they can be reliably imported.
+-->
 
 Sometimes the dataset to read into `R` is very small and can be defined within the report.  Here is an example.
 

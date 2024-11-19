@@ -62,5 +62,58 @@ called the inner product:
 
 * [tutorial.math.lamar.edu/pdf/Algebra_Cheat_Sheet.pdf](http://tutorial.math.lamar.edu/pdf/Algebra_Cheat_Sheet.pdf)
 * [www.khanacademy.org/math/algebra](https://www.khanacademy.org/math/algebra)
-* [biostat.app.vumc.org/PrereqAlgebra](http://biostat.app.vumc.org/PrereqAlgebra)
 * [www.purplemath.com/modules/index.htm](http://www.purplemath.com/modules/index.htm)
+
+## Algebra Prequisites
+
+Students should have a good command of college algebra. Specifically, you
+should have mastered variables, functions, grouped expressions,
+algebraic fractions, polynomials, exponents, logarithms, and uses of
+the mathematical constant $e$. If you need to review algebra, there
+are many good study books and web sites. One good book is [Forgotten Algebra](http://www.amazon.com/Forgotten-Algebra-Barbara-Lee-Bleau/dp/0764120085/ref=pd_bbs_sr_1?ie=UTF8&s=books&qid=1201146512&sr=8-1), Second Edition by Barbara Bleau (Barrons Educational Series, Hauppauge, New York, 1994). You may skip the following Units in this book:
+
+| *Topic* | *Unit<br>Numbers* |
+|---------|-------------------|
+|Division of polynomials|17|
+|Factoring polynomials  |18|
+|Solving second degree equations-quadratic formula|22|
+|Solving third-degree and higher equations|23|
+|Solving systems of equations|26-27|
+|Solving inequalities-second-degree|29|
+|Right triangles|31|
+
+The topics to study, and corresponding unit numbers in Bleau's book (second edition, may need to be updated for the third edition),
+are as follows.
+
+| *Topic* | *Unit<br>Numbers* |
+|---------|-------------------|
+|Signed Numbers|1|
+|Grouping Symbols and Simplifying Expressions|2|
+|Solving First-Degree Equations|3|
+|Removing Multiple Grouping Symbols; Solving 1st-Degree Eq.|4|
+|Fraction Equations|5|
+|Literal Equations|6|
+|Applied Problems|7|
+|Positive Integral Exponents|8|
+|Negative Exponents|9|
+|Division of Powers|10|
+|Addition and Subtraction of Fractions|11|
+|Multiplication and Division of Fractions|12|
+|Fractional Exponents|13|
+|Simplifying Expressions with Fractional Exponents|14|
+|Additional Practice with Exponents|15|
+|Multiplication of Monomials and Polynomials|16|
+|Factoring Special Binomials|19-20|
+|Factoring to Solve 2nd Degree Equations|21|
+|Graphing Linear Equations in Two Variables|24|
+|Graphing Quadratic Equations in Two Variables|25|
+|Solving First-Degree Inequalities|28|
+|Logarithms|30|
+
+Note that in statistics one most often uses logarithms to the base
+$e$ =2.71828..., and $\log x$ with no base indicated often means log to
+the base $e$.
+
+A more comprehensive but much more expensive book we also recommend is
+_Intermediate Algebra_ by Alan Tussy and R. David Gustafson, Pacific
+Grove CA, Brooks/Cole, 1999.

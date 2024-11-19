@@ -108,10 +108,77 @@ See @sec-htest-branches
 * Finding alternate explanations for observed phenomena
 * Foster reproducible research
 
-See
-[biostat.app.vumc.org/BenefitsBasicSci](http://biostat.app.vumc.org/BenefitsBasicSci)
-for more benefits of biostatistics.
+### Benefits of Biostatistics to Basic Science
 
+#### Examples Where Biostatistical Expertise Changes The Results
+   
+* Inappropriate experimental design wasted animals or answered the wrong question
+* Assuming linearity of effects caused in a loss of power or precision
+* Improper transformation of a response variable (e.g., using percent change) caused results to be uninterpretable
+* Apparent interaction between factors (effect modification; synergy) was due to inappropriate transformations of main effects
+* Apparent effect of an interaction of two genes was explained by the main effects of three omitted genes
+* Failure to fully adjust for confounders gave rise to misleading associations with the variable of interest
+* Having no yield from an experiment was predictable beforehand from statistical principles
+* An aggressive analysis of a large number of candidate genes, proteins, or voxels, failing to build a "grain of salt" into the statistical approach, resulted in non-reproducible findings or overstated effects/associations
+* Dichotomizing a continuous measurement resulted in unexplained heterogeneity of response and tremendous loss of power, effectively resulting in discarding 2/3 of the experiment's subjects
+* Use of out-of-date statistical methods resulted in low predictive accuracy and large unexplained variation
+* Removal of "outliers" biased the final results
+* Treating measurements below the limit of detection as if they were actual measurements in the analysis caused results to be arbitrary
+* Misinterpreting "P > 0.05" as demonstrating the absence of an effect
+
+#### Example Questions Biostatistics Can Answer
+
+* What does percent change really assume?
+* Why did taking logarithms get rid of high outliers but create low outliers?
+* What is the optimum transformation of my variables?
+* What statistical method can validly deal with values below the detection limit?
+* Do I need more mice or more serial measurements per mouse?
+* What's the best way to analyze multiple measurements per mouse?
+
+#### Experimental Design
+
+* Identifying sources of bias: biostatistics can assist in identifying sources of bias that may make results of experiments difficult to interpret, such as
+* litter effects: correlations of responses of animals from the same litter may reduce the effective sample size of the experiment
+* order effects: results may change over time due to subtle animal selection biases, experimenter fatigue, or refinements in measurement techniques
+* experimental condition effects: laboratory conditions (e.g., temperature) that are not constant over the duration of a long experiment may need to be accounted for in the design (through randomization) or in the analysis
+* optimizing measurements: sometimes optimizing measurements (e.g., changing pattern recognition criteria or image analysis parameters) may result in techniques that are too tailored to the current experiment
+* Selecting an experimental design: taking into account the goals and limitations of the experiment to select an optimum design such as a parallel group concurrent control design vs. pre-post vs. crossover design; factorial designs to simultaneously study two or more experimental manipulations; randomized block designs to account for different background experimental conditions; choosing between more animals or more serial measurements per animal.  Accounting for  carryover effects in crossover designs.
+* Estimating required sample size: computing an adequate sample size based on the experimental design chosen and the inherent between-animal variability of measurements.  Sample size can be chosen to achieve a given sensitivity to detect an effect (power) or to achieve a given precision ("margin of error") of final effect estimates.  Choosing an adequate sample size will make the experiment informative.
+* Justifying a given sample size: when budgetary contraints alone dictate the sample size, one can compute the power or precision that is likely to result from the experiment.  If the estimated precision is too low, the experimenter may decide to save resources for another time.
+* Making optimum use of animals or human specimens: choosing an experimental design that results in sacrificing the minimum number of animals or acquiring the least amount of human blood or biopsies; setting up a factorial design to get two or more experiments out of one group of animals; determining whether control animals from an older experiment can be used for a new experiment or developing a statistical adjustment that may allow such recycling of old data.
+* Developing sequential designs: allowing the ultimate sample size to be a main quantity to be estimated as the study unfolds.  Results can be updated as more animals are studied, especially when prior data for estimating an adequate sample size are unavailable.  In some cases, experiments may be terminated earlier than planned when results are definitive or further experimentation is deemed futile.
+* Taking number of variables into account: safeguarding against analyzing a large number of variables from a small number of animals.
+
+#### Data Analysis
+
+* Choosing robust methods: avoid making difficult-to-test assumptions; using methods that do not assume the raw data to be normally distributed; using methods that are not greatly effected by "outliers" so that one is not tempted to remove such observations from the analysis.  Account for censored or truncated data such as measurements below the lower limit of detectability of an assay.
+* Using powerful methods: using analytic methods that get the most out of the data
+* Computing proper P-values and confidence limits: these should take the experimental design into account and use the most accurate probability distributions
+* Proper analysis of serial data: when each animal is measurement multiple times, the responses are correlated.  This correlation pattern must be taken into account to achieve accurate P-values and confidence intervals.  Ordinary techniques such as two-way analysis of variance are not appropriate in this situation.  In the last five years there has been an explosion of statistical techniques for analyzing serial data. 
+* Analysis of gene expression data: this requires specialized techniques that often involve special multivariate dimensionality reduction and visualization techniques; attention to various components of error is needed. 
+* Dose-response characterizations: estimating entire dose-response curves when possible, to avoid multiple comparison problems that result from running a separate statistical test at each dose.
+* Time-response characterizations: use flexible curve-fitting techniques while preserving statistical properties, to estimate an entire time-response profile when each animal is measured serially.  As with dose-response analysis this avoids inflation of type I error that results when differences in experimental groups are tested separately at each time point.
+* Statistical modeling: development of response models that account for multiple variables simultaneously (e.g., dose, time, laboratory conditions, multivariate regulation of cytokines, polymorphisms related to drug response); analysis of covariance taking important sources of animal heterogeneity into account to gain precision and power compared to ordinary unadjusted analyses such as ANOVA.  Statistical models can also account for uncontrolled confounding.
+
+#### Reporting and Graphics
+
+* Statistical sections: writing statistical sections for peer-reviewed articles, to describe the experimental design and how the data were analyzed.
+* Statistical reports: writing statistical reports and composing tables of summary statistics for investigators
+* Statistical graphics: use many of the state-of-the-art graphical techniques for reporting experimental data that are described in _The Elements of Graphing Data_ by Bill Cleveland, as well as using other high-information high-readability statistical graphics.  Translate tables into more easily read graphics.
+
+#### Data Management, Archiving, and Reproducible Analysis
+
+* Data management: the biostatistics core can develop computerized data collection instruments with quality control checking; primary data can be quickly converted to analytic files for use by statistical packages.  Gene chip data will be managed using relational database software that can efficiently handle very large databases.
+* Data archiving and cataloging: upon request we can archive experimental data in perpetuity in formats that will be accessible even when software changes; data can be cataloged so as to be easily found in the future.  This allows control data from previous studies to be searched.  Gene chip data will be archived in an efficient storage format.
+* Data security: access to unpublished data can be made secure.
+* Program archiving: the biostatistics core conducts all statistical analyses by developing programs or scripts that can easily be re-run in the future (e.g., on similar new data or on corrected data).  These scripts document exactly how analyses were done and allow analyses to be reproducible.  These scripts are archived and cataloged.
+
+See Hackam DG, Redelmeier DA. [Translation of research evidence from animals to humans](http://jama.ama-assn.org/cgi/reprint/296/14/1731),  JAMA 296:1731-1732; 2006 for a review of basic science literature that documents systemic methodologic shortcomings. In a personal communication on 20Oct06 the authors reported that they found a few more biostatistical problems that could not make it into the JAMA article (for space constraints).
+
+* none of the articles contained a sample size calculation
+* none of the articles identified a primary outcome measure
+* none of the articles mentioned whether they tested assumptions or did distributional testing (though a few used non-parametric tests)
+* most articles had more than 30 endpoints (but few adjusted for multiplicity, as noted in the article) 
 
 ### Statistical Scientific Method {#sec-overview-scimeth}
 

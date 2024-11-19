@@ -144,10 +144,8 @@ with(subset(d, subject == 1), mad(y, observer, subject))
 with(d, mad(y, observer, subject))
 ```
 Zhouwen Liu in the Vanderbilt Department of Biostatistics has
-developed much more general purpose software for this in `R`.  Its web
-pages are
-[biostat.app.vumc.org/AnalysisOfObserverVariability](http://biostat.app.vumc.org/AnalysisOfObserverVariability)
-and [github.com/harrelfe/rscripts](https://github.com/harrelfe/rscripts).
+developed much more general purpose software for this in `R`.  
+See [github.com/harrelfe/rscripts](https://github.com/harrelfe/rscripts).
 The following example loads the source code and runs the above
 example.  The `R` functions implement bootstrap nonparametric
 percentile confidence limits for mean absolute discrepency measures.

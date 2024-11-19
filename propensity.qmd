@@ -5,7 +5,40 @@ getRs('qbookfun.r')
 `r apacue <- 0`
 
 
-# Modeling for Observational Treatment Comparisons {#sub-ps}
+# Modeling for Observational Treatment Comparisons {#sec-os}
+
+**Overview**
+
+* Challenges of observational treatment studies
+   + no blinding
+   + often difficult to define time zero
+   + confounding by indication
+   + no unique way to adjust for measured confounders
+   + unmeasured confounders
+* Covariate adjustment
+   + powerful
+   + must use penalization or Bayesian shrinkage priors if # covariates large with respect to effective sample size (ESS) for $Y$
+* Propensity scores (PS)
+   + PS = estimated exposure tendency given baseline covariates
+   + a data reduction procedure useful when ESS for exposure $>>$ ESS for $Y$
+   + is a _outcome heterogeneity-ignoring confounder funnel_ that reduces a large set of confounders to 1 variable
+   + assumes confounders are measured
+   + $\rightarrow$ not a _causal inference_ tool per se
+   + inefficient if weight or match on PS
+   + most matching algorithms discard valuable observations or are dataset order-dependent
+   + lulls analysts into ignoring outcome heterogeneity
+   + $\rightarrow$ underestimates exposure effect in nonlinear models
+   + grossly inflated $\sigma$ in linear models when $R^2$ not tiny
+   + hides interactions with exposure
+   + need to take uncertainties in PS coefficients into account in analysis
+* Best practice
+   + use penalization with full covariate adjustment, or use PS
+   + model PS: exposure ~ additive model in all potential confounders $C$
+      - spline all continuous $C$ if ESS in exposure allows
+      - no need to check for balance in $C$ conditional on PS
+   + model $Y$ ~ spline(logit(PS)) + $X$ + exposure
+      - $X$ = pre-specified strong prognostic factors
+---
 
 
 `r mrg(ddisc(18), sound("ps-1"))`
@@ -172,6 +205,7 @@ Most users of propensity score matching do not even entertain the
 notion that the treatment effect may interact with propensity to
 treat, must less entertain the thought of individual patient
 characteristics interacting with treatment.
+* Need to take PS estimation uncertainty into account when matching or weighting
 
 
 ## Recommended Statistical Analysis Plan
@@ -186,12 +220,19 @@ characteristics interacting with treatment.
   adjustment instead of propensity score adjustment.  For example, if
   the outcome is binary and you have more than 5 events per covariate,
   full covariate adjustment probably works OK.
+1. If the number of potential confounders is large, consider penalized estimation or Bayesian shrinkage priors
 1. Model the probability of receiving treatment using a flexible
   statistical model that makes minimal assumptions (e.g., rich
   additive model that assumes smooth predictor effects).  If there are
   more than two treatments, you will need as many propensity scores as
-  there are treatments, less one, and all of the logic propensity
+  there are treatments, less one, and all of the logit propensity
   scores will need to be adjusted for in what follows.
+1. What is balanced depends on how confounders are modeled
+   - linear: means are equal
+   - quadratic: means and variances are equal
+   - cubic: means, variances, skewness are equal
+   - spline with enough knots: balances entire distribution
+1. With flexible modeling, no need to check for balance in confounders conditional on PS
 1. Examine the distribution of estimated propensity score
   separately for the treatment groups.
 1. If there is a non-overlap region of the two distributions, and
@@ -200,7 +241,7 @@ characteristics interacting with treatment.
   partitioning can be used to predict membership in the non-overlap
   region from baseline characteristics so that the research findings
   with regard to applicability/generalizability can be better
-  understood.
+  understood.  Logistic regression will work even better.
 1. Overlap must be judged on absolute sample sizes, not proportions.
 1. Use covariate adjustment for propensity score for subjects in
   the overlap region.  Expand logit propensity using a restricted
@@ -305,4 +346,7 @@ a nice chapter on causal inference and matching from @gel06dat
 
 Gary King has expressed a number of reservations about PS
 matching; see<br> [gking.harvard.edu/files/gking/files/psnot.pdf](https://gking.harvard.edu/files/gking/files/psnot.pdf).
+
+[Assumptions in the use of propensity scores](https://stats.stackexchange.com/questions/656403) including a discussion of whether propensity analysis is "causal".
+
 
