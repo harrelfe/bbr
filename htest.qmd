@@ -691,7 +691,7 @@ ggplot(z, aes(x=n, y=y, color=v)) + geom_line() +
 * Sample size to achieve $\alpha=0.05$, power $=0.9$ is approximately
 $$n = 10.51 [\frac{\sigma}{\mu-\mu_{0}}]^{2}$$
 * Some power calculators are [here](https://statpages.info#Power)
-* [PS program](http://biostat.app.vumc.org/PowerSampleSize) by Dupont and Plummer 
+* [PS program](https://cqsclinical.app.vumc.org/ps) by Dupont and Plummer (see also [G\*Power](https://www.psychologie.hhu.de/arbeitsgruppen/allgemeine-psychologie-und-arbeitspsychologie/gpower))
 * Example: The mean forced expiratory volume (FEV) in a population of asthmatics is 2.5 liters per second and the population standard deviation is assumed to be 1.  Determine the number of subjects needed if a new drug is expected to increase FEV to 3.0 liters per second ($\alpha = .05, \beta = 0.1$)
 
 \begin{array}{c}
