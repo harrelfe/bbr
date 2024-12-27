@@ -27,6 +27,7 @@ int --> msd["Mean, SD<br>Gini's mean Δ"]
 ```
 
 **Relationships Between Y and Continuous X**
+
 ```{mermaid}
 flowchart LR
 mpy[Mean or Proportion<br>of Y vs. X] --> nps[Nonparametric<br>Smoother]
@@ -63,6 +64,7 @@ characterized by the following.
 
 
 ### Continuous Distributions
+
 ```{r w=6,h=3,cap='Example probability density (a) and cumulative probability distribution (b) for a positively skewed random variable (skewed to the right)',scap='Density and cumulative distribution functions'}
 #| label: fig-descript-pdfcdf
 x <- seq(-3, 35, length=150)
@@ -125,9 +127,11 @@ y <- c(.1, .13, .18, .19, 0, 0, .14, .12, .08, .06)
 plot(x, y, xlab=xl, ylab='', type='n')
 segments(x, 0, x, y)
 ```
+
 The `getHdata` function in the `Hmisc` package @Hmisc
 finds, downloads, and `load()`s datasets from
 [hbiostat.org/data](https://hbiostat.org/data).
+
 ```{r cap='Distribution of serum creatinine where the patient requiring dialysis is taken to have the worst renal function.  The variable is mostly continuous but is best analyzed as ordinal so that no assumption is made about how to score dialysis except for being worse than all non-dialysis patients. Data taken from NHANES where no patients were actually dialyzed.',scap='Continuous distribution with clumping at the end'}
 #| label: fig-descript-ordc
 #| fig-width: 5
@@ -258,6 +262,7 @@ from time zero.  When the sample size is not huge, spaghetti plots are
 most effective for graphing longitudinal data because all points from
 the same subject over time are connected.  An
 example @davis-repmeas pp. 161-163 is below.
+
 ```{r w=7,h=5,cap='Spaghetti plot showing all the raw data on the response variable for each subject, stratified by dose and study site (1--9).  Importantly, week 0 (baseline) measurements are included.',scap='Spaghetti plot'}
 #| label: fig-descript-spaghetti
 require(Hmisc)   # also loads ggplot2
@@ -267,6 +272,7 @@ ggplot(cdystonia, aes(x=week, y=twstrs, color=factor(id))) +
        facet_grid(treat ~ site) +
        guides(color=FALSE)
 ```
+
 Graphing the raw data is usually essential.
 
 
@@ -515,6 +521,7 @@ addggLayers(g, d, value='age', type='spike', pos='bottom')
 
 * Dot charts with optional error bars (for confidence limits) can display any summary statistic (proportion, mean, median, mean difference, etc.)
 * It is not well known that the confidence interval for a difference in two means cannot be derived from individual confidence limits.^[In addition, it is not necessary for two confidence intervals to be separated for the difference in means to be significantly different from zero.] <br> Show individual confidence limits as well as actual CLs for the difference.
+
 ```{r cap='Means and nonparametric bootstrap 0.95 confidence limits for HbA$_{\\mathrm 1c}$ for males and females, and confidence limits for males - females.  Lower and upper $x$-axis scales have same spacings but different centers.  Confidence intervals for differences are generally wider than those for the individual constituent variables.',scap='Showing group means and differences'}
 #| label: fig-descript-cldif
 #| fig-height: 3
@@ -555,6 +562,7 @@ abline(h=c(2 + 3.5)/2, col=gray(.85))
 * Replace with
     + Dot plot (smaller sample sizes)
     + Box plot (larger sample size)
+
 ```{r w=5,h=3,cap='Bar plot with error bars---"dynamite plot"'}
 #| label: fig-descript-dynamite
 getHdata(FEV); set.seed(13)
@@ -567,12 +575,14 @@ ggplot(s, aes(x=smoke, y=fev, fill=sex)) +
                   width=.1,
                   position=position_dodge(.9))
 ```
+
 See [biostat.app.vumc.org/DynamitePlots](http://biostat.app.vumc.org/DynamitePlots) for a list of
 the many problems caused by dynamite plots, plus some solutions.
 
 Instead of the limited information shown in the bar chart, show the
 raw data along with box plots.  Modify default box plots to replace
 whiskers with the interval between 0.1 and 0.9 quantiles.
+
 ```{r w=6,h=2,cap='Jittered raw data and box plots.  Middle vertical lines indicate medians and diamonds indicate means. Horizontal lines indicate 0.1 to 0.9 quantiles when $n\\geq 10$.  The ink:information ratio for this plot is far better than a dynamite plot.',scap='Dot plot with superimposed box plots'}
 #| label: fig-descript-tplot
 require(ggplot2)
@@ -590,8 +600,10 @@ ggplot(FEV, aes(x=sex, y=fev)) +
   facet_grid(~ smoke) +
   xlab('') + ylab(expression(FEV[1])) + coord_flip()
 ```
+
 Use a violin plot to show the distribution density estimate (and its
 mirror image) instead of a box plot.
+
 ```{r w=6,h=2.5,cap='Jittered raw data and violin plots with median indicated by blue +'}
 #| label: fig-descript-vplot
 ggplot(FEV, aes(x=sex, y=fev)) +
@@ -672,6 +684,7 @@ raises predicted values to the $\frac{-1}{1.75}$ power after accounting for the 
 is used to estimate the median glycohemoglobin on
 the original scale.  If residuals have a normal distribution after transforming the dependent variable, the estimated mean and median transformed values are the same.  Inverse transforming the estimates provides an estimate of the median on the original scale (but not the mean).]{.aside}.  Restricted cubic spline functions with 4 default knots are used to allow age and BMI to act smoothly but nonlinearly.
 Partial effects plots are in @fig-descript-rmsa
+
 
 ```{r results='asis'}
 require(rms)
@@ -768,6 +781,7 @@ What to display in a table for different types of response variables:
 * Show number of missing values
 * Add denominators when feasible
 * Confidence intervals: in a comparative study, show confidence intervals for differences, not confidence intervals for individual group summaries
+
 
 ```{r summarym}
 getHdata(stressEcho)

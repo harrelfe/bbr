@@ -319,6 +319,7 @@ ggplot(U, aes(x=n, y=rho)) + geom_point() +
   ylab(expression(paste('Spearman ', rho, ' Rank Correlation Between ',
                         OR, ' and ', hat(OR), ' Across Features')))
 ```
+
 One may desire a correlation with the truth of say 0.8 and can solve
 for the needed sample size.
 
@@ -573,6 +574,7 @@ anova(f, test='LR')
 ```
 
 The p-value for this feature would not survive a Bonferroni adjustment for 400 comparisons.  The bootstrap confidence interval for the importance rank of the feature is 
+
 ```{r}
 ci[, winner]
 ```

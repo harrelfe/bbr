@@ -119,6 +119,7 @@ scripts, you need to do the following:
 Here are some examples of how `getRs` is used once you
 load the `Hmisc` package using a menu or by typing
 `require(Hmisc)` or `library(Hmisc)` in the console.
+
 ```{r getRsex,eval=FALSE}
 require(Hmisc)      # do this once per session (or library(Hmisc))
 options(url.method='libcurl')    # sometimes needed if using Windows
@@ -132,6 +133,7 @@ categories <- getRs(cats=TRUE)  # store results in a list for later viewing
 getRs(cats='reg')   # list all scripts in a major category containing 'reg'
 getRs('importREDCap.r', put='source')   # source() to define a function
 ```
+
 You can also point your browser to
 [github.com/harrelfe/rscripts/blob/master/contents.md](https://github.com/harrelfe/rscripts/blob/master/contents.md) to
 see the available scripts and categories, and to be able to click on
@@ -248,6 +250,7 @@ age,sys bp,sex,junk,state
 37,141,male,4,2
 </pre>
 Now import and modify the file.
+
 ```{r impcsv2}
 require(Hmisc)
 d <- csv.get('test.csv')
@@ -285,6 +288,7 @@ and other values.  `R Workflow` has many other approaches for the initial data l
 ## Operating on Data Frames
 One of the most common operations is subsetting.  In the following
 example we subset on males older than 26.
+
 ```{r subset,eval=FALSE}
 young.males <- subset(d, sex == 'male' & age > 26)
 # If you want to exclude rows that are missing on sex or age:

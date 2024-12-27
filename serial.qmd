@@ -236,6 +236,7 @@ ggplot(a, aes(x=tarea, y=area, color=race)) + geom_point() +
   xlab('Area by Trapezoidal Rule / 400') +
   ylab('Area by Spline Fit / 400')
 ```
+
 When a subject's dose (or time) span includes the minimum and maximum values
 over all subjects, one can use the trapezoidal rule to estimate the area under
 the response curve empirically.  When interior points are missing, linear
@@ -265,9 +266,11 @@ ggplot(a, aes(x=race, y=area)) +
 A minimal-assumption approach to testing for differences in
 isoproterenol dose-response between races is to apply the Wilcoxon
 test to the normalized AUCs (mean response functions).
+
 ```{r wil}
 wilcox.test(area ~ race, data=a, conf.int=TRUE)
 ```
+
 There is strong evidence that the mean response is greater for whites.
 
 
@@ -285,6 +288,7 @@ predicting race from a 3-predictor model---one containing the intercept, the nex
 These coefficients were estimated
 using ordinary least squares in separately predicting each subject's relationship
 between dose and forearm blood flow.
+
 ```{r coefs}
 h <- d[, j=g(dose, fbf, what='coef'), by = list(id, race)]
 h
@@ -298,11 +302,13 @@ slopes, or shapes of the dose-response curves.  The $c$-index of 0.957
 indicates nearly perfect ability to separate the races on the basis of three
 curve characteristics (although the sample size is small).  We can use
 the bootstrap to get an overfitting-corrected index.
+
 ```{r boot}
 set.seed(2)
 v <- validate(f, B=1000)
 v
 ```
+
 The overfitting-corrected $c$-index is $c = \frac{D_{xy} + 1}{2}$ = `r round((v['Dxy','index.corrected'] + 1) / 2, 2)`.
 
 
@@ -361,14 +367,17 @@ a <- Gls(fbf ~ race * rcs(dose, c(20,60,150)), data=d,
          correlation=corCAR1(form = ~ dose | id))
 plot(fitted(a), resid(a))
 ```
+
 The variance of the residuals is clearly increasing with increasing
 dose.  Try log transforming both `fbf` and dose.  The log
 transformation requires a very arbitrary adjustment to dose to handle zeros.
+
 ```{r glsb}
 a <- Gls(log(fbf) ~ race * rcs(log(dose + 1), log(c(20,60,150)+1)), data=d,
          correlation=corCAR1(form = ~ dose | id))
 anova(a)
 ```
+
 There is little evidence for a nonlinear dose effect on the log scale, 
 `r mrg(sound("serial-6"))`
 implying that the underlying model is exponential on the original $X$
@@ -387,6 +396,7 @@ AIC(a);AIC(b)
 b
 anova(b)
 ```
+
 Lower AIC is better, so it is clear that time-based correlation
 structure is far superior to dose-based.  We will used the second
 model for the remainder of the analysis.  But first we check some of
@@ -401,6 +411,7 @@ p1 <- ggplot(w, aes(x=fitted, y=residual)) + geom_point()
 p2 <- ggplot(w, aes(sample=residual)) + stat_qq()
 gridExtra::grid.arrange(p1, p2, ncol=2)
 ```
+
 `r ipacue()`
 The test for dose $\times$ race interaction in the above ANOVA summary of Wald statistics shows strong evidence for difference in curve
 characteristics across races.  This test agrees in magnitude
@@ -431,6 +442,7 @@ ps <- rbind(Pointwise=p, Simultaneous=s)
 ggplot(ps, ylab=expression(paste('Median Forearm Blood Flow,  ',
                           scriptstyle(ml/min/dl))))
 ```
+
 Finally we estimate the white:black fold change (ratio of medians) as
 a function of dose with simultaneous confidence bands. `r ipacue()`
 
@@ -445,6 +457,7 @@ ggplot(k, aes(x=dose, y=exp(Contrast))) + geom_line() +
   geom_hline(yintercept=1, col='red', size=.2) +
   ylab('White:Black Ratio of Median FBF')
 ```
+
 By comparing the simultaneous confidence binds to the red horizontal
 line, one can draw the inference that the dose-response for blacks is
 everywhere different than that for whites when the dose exceeds zero.
@@ -463,7 +476,7 @@ require(rmsb)
 # Use cmdstan instead of rstan to get more current methods and
 # better performance
 options(mc.cores = parallel::detectCores() - 1, rmsb.backend='cmdstan')
-cmdstanr::set_cmdstan_path('/usr/local/bin/cmdstan-2.34.1')
+cmdstanr::set_cmdstan_path(cmdstan.loc)
 
 b <- blrm(fbf ~ race * rcs(dose, 5) + cluster(id), data=d)
 b
