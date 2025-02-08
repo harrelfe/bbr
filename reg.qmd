@@ -22,6 +22,8 @@ Regression models are used for
   variable by adjusting for other variables that partially explain the outcome
   variable $Y$ (even in a randomized experiment with perfect covariate balance)
 * confounder adjustment---getting adjusted estimates of effects
+* optimum adjustment for old variables when doing high-dimensional selection of new features
+* modeling high-dimensional features with shrinkage/penalization/regularization to minimize overfitting
 * checking that existing summary scores (e.g., BMI) adequately
   summarize their component variables
     + fit a model with log height and log weight and see if ratio of
@@ -346,6 +348,12 @@ getRs('demoLeastSquares.r', put='source')   # if not using RStudio
   summarized by $F = \frac{MSR}{MSE}$
 * Has $F$ distribution with $p$ and $n-p-1$ d.f.
 * Large values $\rightarrow |\beta|$ large
+
+
+* SST: how much subjects differ from each other -- proportional to sample variance of Y
+* SSR: how much predictions for different subjects differ from each other (variation in Y explained by X)
+* SSE: how much variation in Y cannot be explained by the model = sum of squared errors = total variation minus explained variation = SST - SSR
+* Null model (only intercept): SSR = 0, SSE = SST
 
 
 ### Estimating $\sigma$, S.E. of $\hat{\beta}$; $t$-test
@@ -757,6 +765,7 @@ horizontal line.  One can see the asymmetry of the BMI distribution
 in the outer quintiles, and that the meaning of inner quantiles is
 fundamentally different than the meaning of the outer ones because of
 the narrow range of BMI for inner quantile groups.
+
 ```{r bmiq}
 #| label: fig-reg-bmiq
 #| fig-cap: 'What are quintile numbers modeling?'
@@ -893,7 +902,9 @@ r2stata(dubois)
 # Exclude subject measured using adhesive plaster method
 d <- d[-7, ]
 ```
+
 Fit a multiple regression model in the logs of all 3 variables  `r ipacue()` 
+
 ```{r dreg}
 dd <- datadist(d); options(datadist='dd')
 f <- ols(log10(bsa) ~ log10(weight) + log10(height), data=d)
@@ -903,12 +914,14 @@ DuBois \& DuBois derived the equation log(bsa) = 1.8564 + 0.426
 log(weight) + 0.725 log(height)
 
 Plot predicted vs. observed
+
 ```{r dreg2}
 plot(fitted(f), log10(d$bsa), xlab=expression(hat(Y)),
      ylab=expression(log[10](BSA))); abline(a=0, b=1, col=gray(.85))
 ```
 
 Get 3 types of plots to show fitted model `r ipacue()` 
+
 ```{r dreg3,h=3.5,w=7.5}
 require(lattice)  # provides contourplot, wireframe, ...
 p <- Predict(f, weight=seq(5, 100, length=50),
@@ -917,9 +930,11 @@ p1 <- bplot(p)
 p2 <- bplot(p, lfun=contourplot, cuts=20)
 arrGrob(p1, p2, ncol=2)
 ```
+
 ```{r dreg4,h=5,w=5}
 bplot(p, lfun=wireframe, zlab='BSA')
 ```
+
 Note: this plot would be a plane if all 3 variables were plotted on
 the scale fitted in the regression ($\log_{10}$).
 
@@ -1061,6 +1076,7 @@ Verifying some of the assumptions:   `r ipacue()`
         slope of $y$ vs. $x_{2}$ holding $x_{1}$ constant, which is
         just the difference in means for $x_{2}=1$ vs. $x_{2}=0$ as
         $\Delta x_{2}=1$ in this simple case.
+
 ```{r mult-reg-assume-twovar}
 #| label: fig-reg-mult-reg-assume-twovar
 #| fig-width: 5.5
@@ -1077,6 +1093,7 @@ abline(a=3, b=.2)
 text(13, 1.3, expression(y==alpha + beta[1]*x[1]),           srt=24, cex=1.3)
 text(13, 7.1, expression(y==alpha + beta[1]*x[1] + beta[2]), srt=24, cex=1.3)
 ```
+
 1. In a residual plot ($d = y - \hat{y}$ vs. $\hat{y}$) there are no
         systematic patterns (no trend in central tendency, no change
         in spread of points with $\hat{y}$).  The same is true if one
@@ -1236,6 +1253,7 @@ E(y|exposure)  &=& \alpha + \beta_{1}x_{1} +  \beta_{2}x_{2} \\
   for controls
 * <b>$\beta_{2} - \beta_{1}$</b>: mean for previously exposed minus mean
   for currently exposed
+
 ```{r olslead}
 #| label: fig-reg-olslead
 #| fig-cap: "Mean `maxfwt` by information-losing lead exposure groups"
@@ -1282,6 +1300,7 @@ summary(f)
   age
 * If treatment has only two categories, the partial $t$-test is an
   easier way to get the age-adjusted treatment test
+
 ```{r leadgrage,w=6.5,h=3.5}
 fa <- ols(maxfwt ~ age + group, data=lead)
 fa
@@ -1290,7 +1309,8 @@ summary(fa)
 anova(fa)
 anova(f)    # reduced model (without age)
 ```
-Subtract SSR or SSE from these two models to get the treatment effect with 2 d.f.
+
+Subtract SSR or SSE from these two models to get the age effect with 1 d.f.
 
 
 ### Continuous Analysis of Lead Exposure

@@ -110,11 +110,14 @@ arrGrob(p1, p2, ncol=2)
 t.test(btg ~ status, data=d)
 t.test(log(btg) ~ status, data=d)
 ```
+
 * Could also use a non-parametric test (Wilcoxon rank sum)
+
 ```{r diabetesw}
 wilcox.test(btg ~ status, data=d)
 wilcox.test(log(btg) ~ status, data=d)
 ```
+
 * Note that non-parametric test is the same for the log-transformed outcomes
 
 
