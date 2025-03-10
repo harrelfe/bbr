@@ -819,7 +819,7 @@ summary(f)
 ```{r}
 require(rmsb)
 options(mc.cores = parallel::detectCores() - 1)   # use max # CPUs
-cmdstanr::set_cmdstan_path('/usr/local/bin/cmdstan-2.34.1')
+cmdstanr::set_cmdstan_path(cmdstan.loc)
 
 f <- blrm(y ~ drug + cluster(id), data=d, backend='cmdstan')
 f
