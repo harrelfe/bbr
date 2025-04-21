@@ -765,7 +765,7 @@ contrast(fit, list(treat='b', site=sites),
 * Another interesting test: combined effects of treatment and site $\times$ treatment interaction; tests whether treatment was effective at _any_ site.
 
 
-## Statistical Plan for Randomized Trials
+## Statistical Plan for Randomized Trials {#sec-ancova-sap}
 `r mrg(disc("ancova-plan"))`
 
 * [FDA draft guidance](https://hbiostat.org/bib) - advocates for many
@@ -814,6 +814,20 @@ contrast(fit, list(treat='b', site=sites),
 <!-- * Use the bootstrap to validate the model using all patients--->
 * Some guidance for handling missing baseline data in RCTs is in @whi05adj
 
+### Bayesian SAP {#sec-ancova-bsap}
+
+* Choose a data model that is concordant with the data generating process
+   + use semiparametric models to avoid distribution assumptions
+* Ensure that the analysis uses all meaningful information in the raw outcome data
+* Specify priors restricting "main" effects of covariates
+   + priors on interquartile-range (Q3 - Q1) covariate effects
+* Specify more skeptical priors restricting nonlinear covariate effects
+   + priors on difference in average slopes over intervals (Q3 - Q2 vs Q2 - Q1)
+* Specify skeptical priors on Tx $\times$ covariate interactions
+   + extremely skeptical with regard to nonlinear Tx interactions
+* Posterior probabilities of overall Tx effect or covariate-specific Tx effects need **no** adjustment for sequential testing
+
+See [this](https://hbiostat.org/rmsc/genreg#a-general-model-specification-approach) for how to specify priors on contrasts.
 
 ### Sites vs. Covariables
 `r mrg(disc("ancova-sites"))`
