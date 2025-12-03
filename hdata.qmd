@@ -48,7 +48,7 @@ method of analyzing fMRI data by voxels was shown to find brain
 activation regions even in the dead brain (see
 [prefrontal.org/files/posters/Bennett-Salmon-2009.pdf](http://prefrontal.org/files/posters/Bennett-Salmon-2009.pdf)).
 
-<img src="deadsalmon.png" width="80%">
+<img src="images/deadsalmon.png" width="80%">
 
 _Wired_, 2009-09-18.
 

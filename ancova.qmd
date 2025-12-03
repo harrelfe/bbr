@@ -367,7 +367,7 @@ subgroup analysis.
 
 ```{r coxcabg, echo=FALSE, out.width="100%", fig.cap="A display of an interaction between treatment, extent of disease, and calendar year of start of treatment (@cal89)"}
 #| label: fig-ancova-coxcabg
-knitr::include_graphics('cox-cabg-hazard-ratio.png')
+knitr::include_graphics('images/cox-cabg-hazard-ratio.png')
 ```
 
 #### Strategy for Analyzing Differential Treatment Effect

@@ -1,6 +1,6 @@
 project:
   type: book
-  output-dir: /Users/harrelfe/web/bbr
+  post-render: syncdir _book/ /Users/harrelfe/i/web/bbr
 
 book:
   title: "Biostatistics for Biomedical Research"
@@ -48,7 +48,7 @@ book:
   page-footer:
     background: light
     left:
-      - text: "Copyright 2024, Frank E Harrell Jr"
+      - text: "Copyright 2025, Frank E Harrell Jr"
     right:
       - text: "License"
         href: https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -70,8 +70,8 @@ format:
     css: h.css
     code-annotations: hover
 
-bibliography: harrelfe.bib
-csl: apa-annotated-bibliography.csl
+bibliography: /Users/harrelfe/web/bib/harrelfe.bib
+csl: /Users/harrelfe/web/bib/apa-annotated-bibliography.csl
 
 comments:
   hypothesis:

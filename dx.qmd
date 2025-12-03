@@ -220,20 +220,20 @@ Note: Proportional odds model extends to ordinal disease severity $Y$.
 #| label: fig-dx-cad-nomo
 #| fig-cap: "A nomogram for estimating the likelihood of significant coronary artery disease (CAD) in women.  ECG = electrocardiographic; MI = myocardial infarction. @pry83.  Reprinted from American Journal of Medicine, Vol. 75, D.B. Pryor _et al_, \"Estimating the likelihood of significant coronary artery disease,\" p. 778, Copyright 1983, with permission from Excerpta Medica, Inc."
 #| fig-scap: "Nomogram for estimating P(significant coronary disease)"
-knitr::include_graphics('cad-nomo.png')
+knitr::include_graphics('images/cad-nomo.png')
 ```
 
 ```{r out.width="600px"}
 #| label: fig-dx-abm-nomo
 #| fig-cap: "Nomogram for estimating probability of bacterial (ABM) versus viral (AVM) meningitis.  Step 1, place ruler on reading lines for patient's age and month of presentation and mark intersection with line A; step 2, place ruler on values for glucose ratio and total polymorphonuclear leukocyte (PMN) count in cerebrospinal fluid and mark intersection with line B; step 3, use ruler to join marks on lines A and B, then read off the probability of ABM versus AVM.  From @spa89"
 #| fig-scap: "Nomogram for estimating probability of meningitis"
-knitr::include_graphics('abm-nomo.png')
+knitr::include_graphics('images/abm-nomo.png')
 ```
 
 ```{r out.width="600px"}
 #| label: fig-dx-bra91usinomogram
 #| fig-cap: "Proportional odds ordinal logistic model for ordinal diagnostic classes from @bra91usi"
-knitr::include_graphics('bra91usiNomogram.png')
+knitr::include_graphics('images/bra91usiNomogram.png')
 ```
 
 
@@ -270,12 +270,12 @@ See @fig-ancova-or-diff for a graphical depiction of the relationship between od
 #| label: fig-dx-hla09crifig3
 #| fig-cap: "Pre vs. post-test probability.  This may be summarized with quantile regression to estimate 0.1 and 0.9 quantiles of **post** as a function of **pre**.  From @hla09cri"
 #| fig-scap: "Pre vs. post-test probability"
-knitr::include_graphics('hla09criFig3.png')
+knitr::include_graphics('images/hla09criFig3.png')
 ```
 
 Assessments assume that risk estimates are well calibrated, using, for example a high-resolution continuous calibration curve.
 
-<img src="ordinal-calibrate-1.png" width="70%">
+<img src="images/ordinal-calibrate-1.png" width="70%">
 
 Out-of-sample assessment: compute pre$(X)$ and post$(X,T)$ for
 any $X$ and $T$ of interest

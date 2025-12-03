@@ -20,3 +20,5 @@ apa*.csl
 bbr.Rproj
 *.rmarkdown
 site_libs/
+
+**/*.quarto_ipynb

@@ -295,12 +295,12 @@ Paul Dorian wrote an excellent [summary](https://sensiblemed.substack.com/p/a-br
 
 @lee15wha created a nice data analysis flowchart.
 
-<img src="lee15wha.png" width="80%">
+<img src="images/lee15wha.png" width="80%">
 
 They also have a succinct summary of common statistical mistakes
 originating from a failure to match the question with the analysis.
 
-<img src="lee15wha2.png" width="80%">
+<img src="images/lee15wha2.png" width="80%">
 
 
 ## Types of Measurements by Their Role in the Study  {#sec-overview-measurement}

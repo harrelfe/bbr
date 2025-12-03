@@ -1,4 +1,4 @@
-<img src="logo.png" width=70%>
+<img src="images/logo.png" width=70%>
 
 ```{mermaid}
 %%| column: screen-inset-right
@@ -28,9 +28,9 @@ Analysis of Biological Data, Second Edition_ by MC Whitlock and D
 Schluter, Greenwood Village CO, Roberts and Company, 2015.
 * Right blue symbols starting with RMS designate section numbers in _Regression
 Modeling Strategies, 2nd ed._ by FE Harrell, Springer, 2015.
-* <img src="movie.png" width="15px"> in the right margin is a
+* <img src="images/movie.png" width="15px"> in the right margin is a
   hyperlink to a YouTube video related to the subject.
-* <img src="discourse.png" width="15px"> is a hyperlink to the
+* <img src="images/discourse.png" width="15px"> is a hyperlink to the
   discussion topic in `datamethods.org` devoted to the specific
   `YouTube` video session.  You can go directly to the discussion
   about session `n` by going to `bit.ly/datamethods-bbrn`.  Some of

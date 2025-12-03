@@ -250,7 +250,7 @@ vs. ANCOVA vs. ignoring baseline completely, as a function of the
 (assumed linear) correlation between baseline and outcome.  
 `r mrg(sound("change-11"))`
 
-<img src="sennChange.jpg" width="70%">
+<img src="images/sennChange.jpg" width="70%">
 
 ### Example of a Misleading Change Score {#sec-change-ex}
 
@@ -369,10 +369,10 @@ and mortality in critically ill ICU patients.
 ```{r w=5,h=3.75,cap='Estimated risk of hospital death as a function of day 3 serum creatinine and sex for 7772 critically ill ICU patients having day 1 serum creatinine $< 2$ and surviving to the start of day 3 in the ICU',scap='Hospital death as a function of creatinine'}
 #| label: fig-change-suppcr
 require(rms)
-load('~/Analyses/SUPPORT/combined.sav')
+load('~/i/Analyses/SUPPORT/combined.sav')
 combined <- subset(combined,
   select=c(id, death, d.time, hospdead, dzgroup, age, raceh, sex))
-load('~/Analyses/SUPPORT/combphys.sav')
+load('~/i/Analyses/SUPPORT/combphys.sav')
 combphys <- subset(combphys, !is.na(crea1+crea3),
                    select=c(id,crea1,crea3,crea7,crea14,crea25,alb3,
                      meanbp3,pafi3,wblc3))
@@ -422,7 +422,7 @@ The authors did a simple analysis that is neglected by most authors: Use both th
 
 The near irrelevance of baseline state is shown in Figure 3 of @cho17eff reproduced below.  The hue represents the degree of satisfaction.  Differences in hues are almost undetectable when moving from left to right across baseline ODI levels.  Moving from bottom to top across levels of 12m ODI, differences in satisfaction are apparent.
 
-<img src="cho17effFig3.png" width="100%">
+<img src="images/cho17effFig3.png" width="100%">
 
 Analyses such as this support the use of absolute current status as endpoints in clinical trials and as basis for modeling outcomes.  This is completely consistent with using ANCOVA as described in @sec-change-rct where one answers the most relevant question: Do patients on different treatments end up differently if they started the same?  ANCOVA allows for regression to the mean and even allows the baseline status to be irrelevant.
 

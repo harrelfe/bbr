@@ -313,7 +313,7 @@ ggplot(d, aes(x=Freq, y=agec)) + geom_point() +
 #| fig-cap: "Dot chart for categorical demographic variables, stratified by treatment and region"
 #| fig-width: 6
 #| fig-height: 5
-knitr::include_graphics('desc-proportions-txreg.png')
+knitr::include_graphics('images/desc-proportions-txreg.png')
 ```
 
 ```{r,echo=FALSE}
@@ -321,7 +321,7 @@ knitr::include_graphics('desc-proportions-txreg.png')
 #| fig-cap: "Dot chart showing proportion of subjects having adverse events by treatment, sorted by risk difference, produced by the `R` `greport` package.  See `test.Rnw` [here](https://hbiostat.org/R/greport)"
 #| fig-width: 5.5
 #| fig-height: 7
-knitr::include_graphics('aevents.png')
+knitr::include_graphics('images/aevents.png')
 ```
 
 * Avoid chartjunk such as dummy dimensions in bar charts, rotated pie charts, use of solid areas when a line suffices
@@ -441,7 +441,7 @@ fairly continuous. [Even better are spike histograms, when not also showing long
 #| label: fig-descript-cchem
 #| fig-cap: One-half violin plots for longitudinal data, stratified by treatment.  Density estimates for groups with insufficient sample sizes are faded.  Density plots are back-to-back for treatment A and B.  Points are treatment medians.  When the black vertical line does not touch the two medians, the medians are significantly different at the $\alpha=0.05$ level.  Graphic was produced by the `R` `greport` package.
 #| fig-width: 8
-knitr::include_graphics('cchem-byx-cont-a.png')
+knitr::include_graphics('images/cchem-byx-cont-a.png')
 ```
 
 
@@ -732,14 +732,14 @@ estimation with a tensor spline in diastolic $\times$ systolic blood pressure.
 ```{r,echo=FALSE}
 #| label: fig-descript-image-sepsis
 #| fig-cap: "Estimated median survival time for critically ill adults"
-knitr::include_graphics('image.sepsis.png')
+knitr::include_graphics('images/image.sepsis.png')
 ```
 
 ```{r,echo=FALSE}
 #| label: fig-descript-image-stroke
 #| fig-scap: "Probability of hemorrhagic stroke vs. blood pressures"
 #| fig-cap: "Logistic regression estimate of probability of a hemorrhagic stroke for patients in the GUSTO-I trial given $t$-PA, using a tensor spline of two restricted cubic splines and penalization (shrinkage).  Dark (cold color) regions are low risk, and bright (hot) regions are higher risk."
-knitr::include_graphics('image.stroke.png')
+knitr::include_graphics('images/image.stroke.png')
 ```
 
 @fig-descript-image-stroke is particularly interesting

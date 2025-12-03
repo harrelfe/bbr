@@ -113,7 +113,7 @@ scripts, you need to do the following:
 1. Configure `RStudio` `Tools ... Global Options` to match
   the images below
 
-<img src="rstudioOptions.png" width="50%"><img src="rstudioSweave.png" width="50%">
+<img src="images/rstudioOptions.png" width="50%"><img src="rstudioSweave.png" width="50%">
 -->
 
 Here are some examples of how `getRs` is used once you

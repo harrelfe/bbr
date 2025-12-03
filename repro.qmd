@@ -98,7 +98,7 @@ Begley CG, Ellis LM: Raise standards for preclinical cancer research.<br>_Nature
 
 Moln Syed [discusses](https://getsyeducated.substack.com/p/pnas-is-not-a-good-journal) [this paper](https://www.frontiersin.org/articles/10.3389/fnhum.2013.00291/full) by Björn Brembs, Katherine Button and Marcus Munafò where they present the graph of the "design effect" found below.
 
-<img src="decline.png" width="90%">
+<img src="images/decline.png" width="90%">
 
 The decreasing effect size over time is indicative of lax publishing standards for new findings, followed by more rigorous research finding less impressive effects.
 
@@ -106,12 +106,12 @@ The decreasing effect size over time is indicative of lax publishing standards f
 
 `r quoteit('Each new field has a rapid exponential growth of its literature over 5-8 years ("new field phase"), followed by an "established field" phase when growth rates are more modest, and then an "over-maturity" phase, where the rates of growth are similar to the growth of the scientific literature at large or even smaller.  There is a parallel in the spread of an infectious epidemic that emerges rapidly and gets established when a large number of scientists (and articles) are infected with these concepts.  Then momentum decreases, although many scientists remain infected and continue to work on this field.  New omics infections continuously arise in the scientific community.', '@ion10exp')`
 
-<img src="nytimes.png" width="100%"> `r mrg(sound("rr-6"))`
+<img src="images/nytimes.png" width="100%"> `r mrg(sound("rr-6"))`
 
 
 ## System Forces
 
-<img src="sysqual.png" width="90%">
+<img src="images/sysqual.png" width="90%">
 
 
 ## Strong Inference
@@ -121,7 +121,7 @@ The decreasing effect size over time is indicative of lax publishing standards f
 `r quoteit("Cognitive biases are hitting the accelerator of science: the process spotting potentially important scientific relationships.  Countering those biases comes down to strengthening the 'brake': the ability to slow down, be sceptical of findings and eliminate false positives and dead ends.", "@nuz15how")`
 <br>
 
-<img src="pla64str.png" width="90%">
+<img src="images/pla64str.png" width="90%">
 
 @pla64str
 
@@ -207,7 +207,7 @@ See [www.ctan.org/tex-archive/help/LitProg-FAQ](http://www.ctan.org/tex-archive/
 
 A Bad Alternative to `knitr`
 
-<img src="excel.png" width="70%">
+<img src="images/excel.png" width="70%">
 
 ### `knitr` Approach
 

@@ -97,6 +97,10 @@ exactly the right amount of caution:
 
 ### Central Limit Theorem
 
+`r quoteit('The CLT is frequently misunderstood by practitioners when they use a limit theorem on their finite data to compute falsely symmetric confidence intervals.  Asymmetric data must lead to asymmetric confidence intervals, otherwise confidence coverage will be inaccurate in at least one of the two tails.  When the SD is unknown and must be estimated from the data, practitioners assume that the SD is a good measure of dispersion (it isn\'t, for asymmetric or heavy-tailed distributions) and the CLT assumes the mean and SD are uncorrelated (they aren\'t, for asymmetric distributions).  An example where things go terribly wrong is when you should have taken logs but didn\'t.')`
+
+The essence of the CLT is
+
 * Assume observations are independent with the same distribution and have finite variance
 * Assume that the sample size $n$ can increase without bound
 * Limiting distribution of the sample mean is normal

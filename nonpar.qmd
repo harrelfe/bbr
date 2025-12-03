@@ -578,6 +578,32 @@ tapply(calpro, endo, median)
 ```
 * Note: confidence intervals for these derived quantities are approximate
 
+* Compute estimated median for every subject
+* As a measure of predictive strength compute the mean absolute difference between predicted median and observed raw values
+* Compare this to the mean absolute difference between a constant prediction (the overall median) and predicted medians
+
+```{r}
+pmed <- ymed(predict(f))
+mean(abs(calpro - pmed))
+mean(abs(calpro - median(calpro)))
+```
+
+* Repeat with a Bayesian fit, using posterior mean regression coefficients to estimate covariate-specific medians
+* A better but slightly more involved approach would be to compute covariate-specific medians for all posterior draws of $\hat{\beta}$.
+
+```{r}
+require(rmsb)
+options(mc.cores = parallel::detectCores() - 1)   # use max # CPUs
+cmdstanr::set_cmdstan_path(cmdstan.loc)
+b <- blrm(calpro ~ endo, backend='cmdstan')
+b
+yquantb <- Quantile(b)
+ymedb   <- function(lp) yquantb(0.5, lp=lp)
+pmedb   <- ymedb(predict(b, cint=0))
+cbind(pmed, pmedb)
+mean(abs(calpro - pmedb))
+```
+
 
 ## Checking Assumptions of the Wilcoxon Test
 
@@ -670,6 +696,7 @@ id	sex	surface	y
 7	male	UP	208
 8	male	UP	252
 '), sep='\t')  #<1>
+require(data.table)
 setDT(d)       #<2>
 ```
 1. `\t` is the tab character
@@ -817,10 +844,6 @@ summary(f)
 * Also get Bayesian posterior probability of an effect, which is more actionable than a p-value
 
 ```{r}
-require(rmsb)
-options(mc.cores = parallel::detectCores() - 1)   # use max # CPUs
-cmdstanr::set_cmdstan_path(cmdstan.loc)
-
 f <- blrm(y ~ drug + cluster(id), data=d, backend='cmdstan')
 f
 draws <- f$draws[, 'drug=B']

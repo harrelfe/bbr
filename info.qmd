@@ -233,7 +233,7 @@ correlation
 
 @wai06fin; See "Dichotomania" (@sen05dic) and @roy06dic
 
-<img src="wai06fin.png" width="80%">
+<img src="images/wai06fin.png" width="80%">
 @wai06fin
 
 **In fact, virtually all published cutpoints are analysis artifacts** caused by finding a threshold that minimizes $P$-values
@@ -248,7 +248,7 @@ between the continuous marker and the outcome remains unchanged.
 ```{r gia14opt,out.width="600px"}
 #| label: fig-info-gia14opt
 #| fig-cap: "Thresholds in cardiac biomarkers"
-knitr::include_graphics('gia14opt-fig2c.png')
+knitr::include_graphics('images/gia14opt-fig2c.png')
 ```
 
 In "positive" studies: threshold 132--800 ng/L, correlation with study
@@ -263,7 +263,7 @@ median $r=0.86$ (@gia14opt)
 * Effects (e.g., odds ratios) will vary with population
 * If the true effect is monotonic, adding subjects in the low range or high range or both will increase odds ratios (and all other effect measures) arbitrarily
 
-<img src="roy06dicb.png" width="80%">
+<img src="images/roy06dicb.png" width="80%">
 
 @roy06dic, @nag11ana, @gia14opt
 
@@ -318,7 +318,7 @@ predictors, especially when using quantile groups.
 * Example: "The treatment is called successful if either the patient has gone down from a baseline diastolic blood pressure of $\geq 95$ mmHg to $\leq 90$ mmHg or has achieved a 10\% reduction in blood pressure from baseline."
 * Senn derived the response probabililty function for this discontinuous concocted endpoint
 
-<img src="dichotomaniaFig3.png" width="80%">
+<img src="images/dichotomaniaFig3.png" width="80%">
 
 @sen05dic after Goetghebeur [1998]
 
@@ -348,7 +348,7 @@ by a factor of 5.
 #| label: fig-info-fed09con
 #| fig-cap: "Power loss from dichotomizing the response variable"
 #| fig.width: 5
-knitr::include_graphics('fed09conFig1.png')
+knitr::include_graphics('images/fed09conFig1.png')
 ```
 
 @fed09con
@@ -383,11 +383,11 @@ individuals in the group.
 
 
 ### Components of Optimal Decisions
-<img src="mdDec.png" width="80%">
+<img src="images/mdDec.png" width="80%">
 
 Statistical models reduce the dimensionality of the problem _but not to unity_
 
-<img src="mdDecm.png" width="80%">
+<img src="images/mdDecm.png" width="80%">
 
 
 ## Problems with Classification of Predictions
@@ -564,14 +564,14 @@ stripplot(z ~ prognosis, data=w, lwd=1.5,
 * Premature ventricular contractions were observed in patients surviving acute myocardial infarction
 * Frequent PVCs $\uparrow$ incidence of sudden death
 
-<img src="pvcDeadlyMedicine.png" width="70%">
+<img src="images/pvcDeadlyMedicine.png" width="70%">
 @moo95dea, p. 46
 
 **Arrhythmia Suppression Hypothesis**
 
 `r quoteit("Any prophylactic program against sudden death must involve the use of anti-arrhythmic drugs to subdue ventricular premature complexes.", "Bernard Lown<br> <small> Widely accepted by 1978")`</small>
 
-<img src="mul83risFig2.jpg" width="70%">
+<img src="images/mul83risFig2.jpg" width="70%">
 
 @moo95dea, p. 49; @mul83ris
 
@@ -584,7 +584,7 @@ Researchers developed a 4-variable model for prognosis after acute MI
 * Lung rales
 * Heart failure class II,III,IV
 
-<img src="mul83risFig3b.jpg" width="80%">
+<img src="images/mul83risFig3b.jpg" width="80%">
 
 @mul83ris
 
@@ -595,7 +595,7 @@ Researchers developed a 4-variable model for prognosis after acute MI
 * Arrhythmias prognostic in isolation, not after adjustment for continuous EF and anatomic variables
 * Arrhythmias predicted by local contraction abnorm., then global function (EF)
 
-<img src="mul83risFig1.jpg" width="80%">
+<img src="images/mul83risFig1.jpg" width="80%">
 
 @mul83ris; @cal82pro
 
@@ -612,7 +612,7 @@ Researchers developed a 4-variable model for prognosis after acute MI
 
 **Conclusions: Class I Anti-Arrhythmics**
 
-<img src="deadlyMedicine.jpg" width="50%">
+<img src="images/deadlyMedicine.jpg" width="50%">
 
 Estimate of excess deaths from Class I anti-arrhythmic drugs: 24,000--69,000<br>
 Estimate of excess deaths from Vioxx: 27,000--55,000
@@ -640,13 +640,13 @@ remission.  The model was overfitted and was not validated.  The
 model's coefficients were scaled and rounded, resulting in the
 following scoring system (see [www.ibdjohn.com/cdai](http://www.ibdjohn.com/cdai)).
 
-<img src="cdai-score1.png" width="80%"><br>
-<img src="cdai-score2.png" width="80%">
+<img src="images/cdai-score1.png" width="80%"><br>
+<img src="images/cdai-score2.png" width="80%">
 
 The original authors plotted the predicted scores against the four
 clinical categories as shown below.
 
-<img src="bes76devFig1.png" width="75%">
+<img src="images/bes76devFig1.png" width="75%">
 
 The authors arbitrarily assigned a cutoff of 150, below which
 indicates "remission."^[However, the authors intended for CDAI to be used on a continuum: "... a numerical index was needed, the numerical value of which would be proportional to degree of illness ... it could be used as the principal measure of response to the therapy under trial ... the CDAI appears to meet those needs. ... The data presented ... is an accurate numerical expression of the physician's over-all assessment of degree of illness in a large group of patients ... we believe that it should be useful to all physicians who treat Crohn's disease as a method of assessing patient progress.".]  It can be seen that
