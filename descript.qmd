@@ -209,6 +209,8 @@ found at [hbiostat.org/R/hreport](https://hbiostat.org/R/hreport)
 especially these notes: [hbiostat.org/doc/graphscourse.pdf](https://hbiostat.org/doc/graphscourse.pdf).
 John Rauser has an [exceptional video](https://www.youtube.com/watch?v=fSgEeI2Xpdc) about principles of good graphics.
 See [datamethods.org/t/journal-graphics](https://discourse.datamethods.org/t/journal-graphics) for graphical methods for journal articles.
+Also see Saloni Dattani's [excellenet article on data visualization]{https://www.scientificdiscovery.dev/p/salonis-guide-to-data-visualization).
+
 
 @mur13inf has an excellent summary of recommendations:
 
