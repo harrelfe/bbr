@@ -608,7 +608,7 @@ Researchers developed a 4-variable model for prognosis after acute MI
 * Tests design as one-tailed; did not entertain possibility of harm
 * Data and Safety Monitoring Board recommended early termination of flecainide and encainide arms
 * Deaths $\frac{56}{730}$ drug, $\frac{22}{725}$ placebo, RR 2.5
-@car89pre
+@inv89pre
 
 **Conclusions: Class I Anti-Arrhythmics**
 

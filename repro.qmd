@@ -214,7 +214,7 @@ A Bad Alternative to `knitr`
 `r mrg(sound("rr-12"))`
 
 * `knitr` is an `R` package on CRAN
-* See [yihui.name/knitr](yihui.name/knitr), @knitrbook, [yihui.github.com/knitr](http://yihui.github.com/knitr)
+* See [yihui.name/knitr](yihui.name/knitr), @xie15dyn, [yihui.github.com/knitr](http://yihui.github.com/knitr)
 * `knitr` works with `Quarto`, `Markdown` and other languages
 * `knitr` is tightly integrated into `RStudio`
 * _Insertions_ are a major component

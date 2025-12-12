@@ -592,7 +592,7 @@ r <- ABM[, {
  scat1d(tpolys); scat1d(glratio, side=4) } ]
 ```
 
-The following example using "super smoother" of @fri84 in place of _loess_ to estimate a complex relationship that has a sharp turn.
+The following example using "super smoother" of @fri84var in place of _loess_ to estimate a complex relationship that has a sharp turn.
 
 ```{r age-abm}
 #| label: fig-corr-age-abm

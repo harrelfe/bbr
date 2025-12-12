@@ -104,7 +104,7 @@ for a nice article on the subject.
 
 
 #### Binary Diagnosis is Problematic Anyway
-`r quoteit('The act of diagnosis requires that patients be placed in a binary category of either having or not having a certain disease. Accordingly, the diseases of particular concern for industrialized countries---such as type 2 diabetes, obesity, or depression---require that a somewhat arbitrary cut-point be chosen on a continuous scale of measurement (for example, a fasting glucose level $>6.9$ mmol/L [$>125$ mg/dL] for type 2 diabetes). These cut-points do not adequately reflect disease biology, may inappropriately treat patients on either side of the cut-point as 2 homogeneous risk groups, fail to incorporate other risk factors, and are invariable to patient preference.', '@vic08aga')`
+`r quoteit('The act of diagnosis requires that patients be placed in a binary category of either having or not having a certain disease. Accordingly, the diseases of particular concern for industrialized countries---such as type 2 diabetes, obesity, or depression---require that a somewhat arbitrary cut-point be chosen on a continuous scale of measurement (for example, a fasting glucose level $>6.9$ mmol/L [$>125$ mg/dL] for type 2 diabetes). These cut-points do not adequately reflect disease biology, may inappropriately treat patients on either side of the cut-point as 2 homogeneous risk groups, fail to incorporate other risk factors, and are invariable to patient preference.', '@vic08dia')`
 
 @new09evi have a strong section about the problems with considering diagnosis to be binary.
 
@@ -218,14 +218,14 @@ Note: Proportional odds model extends to ordinal disease severity $Y$.
 
 ```{r out.width="600px"}
 #| label: fig-dx-cad-nomo
-#| fig-cap: "A nomogram for estimating the likelihood of significant coronary artery disease (CAD) in women.  ECG = electrocardiographic; MI = myocardial infarction. @pry83.  Reprinted from American Journal of Medicine, Vol. 75, D.B. Pryor _et al_, \"Estimating the likelihood of significant coronary artery disease,\" p. 778, Copyright 1983, with permission from Excerpta Medica, Inc."
+#| fig-cap: "A nomogram for estimating the likelihood of significant coronary artery disease (CAD) in women.  ECG = electrocardiographic; MI = myocardial infarction. @pry83est.  Reprinted from American Journal of Medicine, Vol. 75, D.B. Pryor _et al_, \"Estimating the likelihood of significant coronary artery disease,\" p. 778, Copyright 1983, with permission from Excerpta Medica, Inc."
 #| fig-scap: "Nomogram for estimating P(significant coronary disease)"
 knitr::include_graphics('images/cad-nomo.png')
 ```
 
 ```{r out.width="600px"}
 #| label: fig-dx-abm-nomo
-#| fig-cap: "Nomogram for estimating probability of bacterial (ABM) versus viral (AVM) meningitis.  Step 1, place ruler on reading lines for patient's age and month of presentation and mark intersection with line A; step 2, place ruler on values for glucose ratio and total polymorphonuclear leukocyte (PMN) count in cerebrospinal fluid and mark intersection with line B; step 3, use ruler to join marks on lines A and B, then read off the probability of ABM versus AVM.  From @spa89"
+#| fig-cap: "Nomogram for estimating probability of bacterial (ABM) versus viral (AVM) meningitis.  Step 1, place ruler on reading lines for patient's age and month of presentation and mark intersection with line A; step 2, place ruler on values for glucose ratio and total polymorphonuclear leukocyte (PMN) count in cerebrospinal fluid and mark intersection with line B; step 3, use ruler to join marks on lines A and B, then read off the probability of ABM versus AVM.  From @spa89dif"
 #| fig-scap: "Nomogram for estimating probability of meningitis"
 knitr::include_graphics('images/abm-nomo.png')
 ```

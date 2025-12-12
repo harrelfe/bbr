@@ -1546,7 +1546,7 @@ MMOE of `r round(m[n == 20], 2)` in estimating $\sigma$.
 Many researchers use Cohen's standardized effect sizes in planning a
 study. This has the advantage of not requiring pilot data. But such
 effect sizes are not biologically meaningful and may hide important
-issues @len01som. Studies should be designed on the basis
+issues @len01pra. Studies should be designed on the basis
 of effects that are relevant to the investigator and human
 subjects. If, for example, one plans a study to detect a one standard
 deviation (SD) difference in the means and the SD is large, one can

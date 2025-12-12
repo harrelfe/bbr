@@ -143,12 +143,12 @@ these measures using traditional statistical methods that capitalize
 on the summary measures being independent for different subjects.
 This has been called `r ipacue()`
 
-1. Two-stage derived variable analysis [@diggle-longit]
-1. Response feature analysis [@dupmod]
+1. Two-stage derived variable analysis [@dig02ana]
+1. Response feature analysis [@dup08sta]
 1. Longitudinal analysis through summary measures [@mat90ana]
 
 An excellent overview may be found in @mat90ana,
-@dupmod (Chapter 11), and @sen00rep.
+@dup08sta (Chapter 11), and @sen00rep.
 
 Frequently chosen summary measures include the area under the
 time-response curve, slope, intercept, and consideration of multiple
@@ -161,7 +161,7 @@ quadratic equation.  This allows detailed analyses of curve shapes.
 
 ### Data and Summary Measures
 `r mrg(sound("serial-3"))` `r ipacue()` 
-Consider the isoproterenol dose-response analysis [@dupmod] of
+Consider the isoproterenol dose-response analysis [@dup08sta] of
 the original data from Lang^[CC Lang etal NEJM 333:155-60, 1995].  Twenty two normotensive men were studied, 9 of
 them black and 13 white.  Blood flow was measured before the drug was
 given, and at escalating doses of isoproterenol.  Most subjects had 7
@@ -381,7 +381,7 @@ anova(a)
 There is little evidence for a nonlinear dose effect on the log scale, 
 `r mrg(sound("serial-6"))`
 implying that the underlying model is exponential on the original $X$
-and $Y$ scales.  This is consistent with @dupmod.  Re-fit the
+and $Y$ scales.  This is consistent with @dup08sta.  Re-fit the
 model as linear in the logs.  Before taking this as the final model,
 also fit the same model but using a correlation pattern based on time
 rather than dose.  Assume equal time spacing during dose escalation.  `r ipacue()`

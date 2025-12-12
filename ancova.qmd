@@ -137,7 +137,7 @@ treatment in "Table 1."
 
 * Model for probability of event must be nonlinear in predictors unless risk range is tiny
 * Useful summary of relative treatment effect is the odds ratio (OR)
-* Use of binary logistic model for covariable adjustment will result in an **increase** in the S.E. of the treatment effect (log odds ratio) (@rob91som)
+* Use of binary logistic model for covariable adjustment will result in an **increase** in the S.E. of the treatment effect (log odds ratio) (@rob91sur)
 * But even with perfect balance, adjusted OR $\neq$ unadjusted OR
 * Adjusted OR will be farther than 1.0 than unadjusted OR
 
@@ -294,7 +294,7 @@ having heterogeneity in their expected outcomes.  See
 
 * Try to adjust for the bulk of the variation in outcome (@hau98sho,@tuk93tig)
 * @neu98est: "to improve the efficiency of estimated covariate effects of interest, analysts of randomized clinical trial data should adjust for covariates that are strongly associated with the outcome"  `r ipacue()`
-* @raa00how have more guidance for choosing covariables and provide a formula for linear model that shows how the value of adding a covariable depends on the sample size
+* @raa04how have more guidance for choosing covariables and provide a formula for linear model that shows how the value of adding a covariable depends on the sample size
 * Recall that if $R^2$ is an accurate estimate of the large-sample $R^2 \rightarrow$ relative efficiency of unadjusted to adjusted treatment comparison = $1 - R^2$
 * For linear models, adding $q$ d.f. for covariates ($q$ covariates if all act linearly) reduces effective same size by $q$
 * **But** small increases in $R^2$ more than make up for this in increased efficiency
@@ -365,7 +365,7 @@ subgroup analysis.
 
 `r ipacue()`
 
-```{r coxcabg, echo=FALSE, out.width="100%", fig.cap="A display of an interaction between treatment, extent of disease, and calendar year of start of treatment (@cal89)"}
+```{r coxcabg, echo=FALSE, out.width="100%", fig.cap="A display of an interaction between treatment, extent of disease, and calendar year of start of treatment (@cal89evo)"}
 #| label: fig-ancova-coxcabg
 knitr::include_graphics('images/cox-cabg-hazard-ratio.png')
 ```
@@ -774,7 +774,7 @@ contrast(fit, list(treat='b', site=sites),
 * Otherwise: CPMP Working Party: Finalize choice of model, transformations, interactions before merging treatment assignment into analysis dataset. <br>
         @edw99mod: Pre--specify family of models that will be used, along with the strategy for selecting the particular model. <br>
         Masked model derivation does not bias treatment effect.
-* CPMP guidance [@cpmp04poi]
+* CPMP guidance [@com04poi]
     + ``Stratification may be used to ensure balance of treatments across covariates; it may also be used for administrative reasons.  The factors that are the basis of stratification should normally be included as covariates in the primary model.  Even if continuous variables were categorized for the purpose of stratified randomization, the continuous form of the variables should be included in the model [@her23eff]
     + Variables known a priori to be strongly, or at least moderately, associated with the primary outcome and/or variables for which there is a strong clinical rationale for such an association should also be considered as covariates in the primary analysis.  The variables selected on this basis should be pre-specified in the protocol or the statistical analysis plan.
     + Baseline imbalance observed post hoc should not be considered an appropriate reason for including a variable as a covariate in the primary analysis.

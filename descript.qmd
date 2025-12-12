@@ -203,7 +203,7 @@ between any two patients is 7mmHg.
 ## Graphics {#sec-descript-graphics}
 `r mrg(abd("2,3.4"), bmovie(3), ddisc(3), movie("https://youtu.be/fSgEeI2Xpdc"))`
 
-@cle94ele and @cle84sci are the best sources of how-to
+@cle94ele and @cle84graa are the best sources of how-to
 information on making scientific graphs.  Much information may be
 found at [hbiostat.org/R/hreport](https://hbiostat.org/R/hreport)
 especially these notes: [hbiostat.org/doc/graphscourse.pdf](https://hbiostat.org/doc/graphscourse.pdf).
