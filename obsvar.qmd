@@ -43,7 +43,7 @@ will now be presented. The methods uses a general type of statistic
 called the $U$ statistic, invented by
 Hoeffding @hoe48cla^[The Wilcoxon test and the $c$-index are other examples of $U$ statistics.]. For definiteness, an analysis for 3 observers and 2 readings per observer will be
 shown. When designing such a study, the researcher should remember
-that the number of experximental units is usually the critical factor
+that the number of experimental units is usually the critical factor
 in determining the precision of estimates. There is not much to gain
 from having each observer make more than a few readings or from having
 30 observers in the study (although if few observers are used, these

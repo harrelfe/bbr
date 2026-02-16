@@ -768,6 +768,7 @@ contrast(fit, list(treat='b', site=sites),
 ## Statistical Plan for Randomized Trials {#sec-ancova-sap}
 `r mrg(disc("ancova-plan"))`
 
+* See [Covariate adjustment in cardiovascular randomized controlled trials](https://www.clinicalkey.com/#!/content/playContent/1-s2.0-S2213177922001743) by L Pirondini _et al_ 2022
 * [FDA draft guidance](https://hbiostat.org/bib) - advocates for many
   forms of covariate adjustment
 * When a relevant dataset is available before the trial begins, develop the model from the dataset and use the predicted value as a single adjustment covariable in the trial (@kna93cli) `r ipacue()`
