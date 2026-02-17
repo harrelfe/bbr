@@ -593,9 +593,10 @@ mean(abs(calpro - median(calpro)))
 
 ```{r}
 require(rmsb)
-options(mc.cores = parallel::detectCores() - 1)   # use max # CPUs
+options(mc.cores = parallel::detectCores() - 1,
+        rmsb.backend='cmdstan')   # use max # CPUs
 cmdstanr::set_cmdstan_path(cmdstan.loc)
-b <- blrm(calpro ~ endo, backend='cmdstan')
+b <- blrm(calpro ~ endo)
 b
 yquantb <- Quantile(b)
 ymedb   <- function(lp) yquantb(0.5, lp=lp)
@@ -844,7 +845,7 @@ summary(f)
 * Also get Bayesian posterior probability of an effect, which is more actionable than a p-value
 
 ```{r}
-f <- blrm(y ~ drug + cluster(id), data=d, backend='cmdstan')
+f <- blrm(y ~ drug + cluster(id), data=d)
 f
 draws <- f$draws[, 'drug=B']
 beta <- mean(draws)
