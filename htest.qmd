@@ -374,7 +374,10 @@ A $1-\alpha$ two-sided confidence interval is an interval computed such that
 
 * Assuming continuous response from a normal distribution
 * One sample tests for $\mu =$ constant are unusual except when data are paired, e.g., each patient has a pre-- and post--treatment measurement and we are only interested in the mean of post - pre values
-* $t$ tests in general: \beq t = \frac{\textrm{estimate - hypothesized value}}{\textrm{standard deviation of numerator}} $$
+* $t$ tests in general:
+
+$$t = \frac{\text{estimate - hypothesized value}}{\text{standard deviation of numerator}} $$
+
 * The standard deviation of a summary statistic is called its _standard error_, which is the $\sqrt{}$ of the variance of the estimate
 * The one-sample $t$ statistic for testing a single population mean against a constant $\mu_0$ ($H_{0}$: $\mu = \mu_{0}$; often $\mu_{0} = 0$) is
 $$
