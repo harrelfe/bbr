@@ -127,7 +127,7 @@ getRs()             # list available scripts
 getRs(browse='browser')  # open scripts contents in your web browser
 scripts <- getRs()  # store directory of scripts in an object that can easily
                     # be viewed on demand in RStudio (right upper pane)
-getRs('introda.r')  # download introda.r and open in script editor
+getRs('introda.r', put='rstudio')  # download introda.r and open in script editor
 getRs(cats=TRUE)    # list available major and minor categories
 categories <- getRs(cats=TRUE)  # store results in a list for later viewing
 getRs(cats='reg')   # list all scripts in a major category containing 'reg'

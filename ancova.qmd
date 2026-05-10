@@ -64,7 +64,7 @@ different models have different effect measures:
     + without covariate adjustment assumes homogeneity within treatment group
     + unadjusted hazard ratio does not estimate a useful quantity if there is heterogeneity
     + non-proportional hazards is more likely without covariate adjustment than with it
-    
+
        - without adjustment the failure time distribution is really a mixture of multiple distributions
 
 
@@ -378,7 +378,7 @@ The broad strategy that is recommended is based on the following: `r ipacue()`
 * Anything that assumes that the treatment effect has a discontinuity in a continuous variable should be avoided.  Differential effects should be smooth dose-response effects.
 * Anything that results in a finding that has a simpler alternate explanation should be avoided
     + Specify models so that an apparent interaction is not just a stand-in for an omitted main effect
-		
+
 Particulars of the strategy are: `r ipacue()`
 
 * Formulate a subject-matter driven covariate model, including all covariates understood to have strong effects on the outcome.  Ensure that these covariates are adjusted for in every HTE analysis context.
@@ -579,7 +579,7 @@ interact with any patient characteristic(s).
 
 @kla15est described the importance of correctly modeling interactions when estimating absolute treatment benefit.
 
-Now consider the case 
+Now consider the case
 `r mrg(sound("anc-11"))`
 where $Y=1$ is a bad outcome and $Y=0$ is a good outcome, and there is
 differential relative treatment effect according to a truly binary
@@ -890,6 +890,8 @@ and
 supplement to it by Ben Andrew.
 
 [This article](http://www.appliedclinicaltrialsonline.com/well-adjusted-statistician-analysis-covariance-explained) by Stephen Senn is also very helpful.
+
+See also [Covariate adjustment in randomized trials: An overview](https://doi.org/10.1177/17407745261434564) by Stuart Pocock.
 
 ## Study Questions
 
