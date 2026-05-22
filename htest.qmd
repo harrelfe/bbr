@@ -63,7 +63,7 @@ Back to data model---the primary basis for statistical inference:
     + $[\textrm{treatment B}]$: an indicator variable (1 if observation is from treatment B, 0 if from treatment A)
     + $\epsilon$: irreducible error, i.e., unaccountable subject-to-subject variation; biologic variability; has variance $\sigma^2$
     + **Primary goal**: uncover the hidden value of $\delta$ generating our dataset in the presence of noise $\epsilon$
-    
+
        - higher $\sigma^{2} \rightarrow$ larger $|\epsilon| \rightarrow$ harder to uncover $\delta$ (the signal) from the noise
        - were $\epsilon$ always zero (no uncertainties), one _directly observes_ $\delta$ and no statistical analysis is needed
 * Rejecting a straw-man hypothesis implies that _some_ aspect of the model is in doubt
@@ -183,7 +183,7 @@ Here are some examples:
     + Assumes $H_{0}$ is true and tries to amass evidence casting doubt on this assumption
     + Conceives of data as one of many datasets that _might_ have happened; considers the process by which the sample arose
     + Inference is based on long-run operating characteristics not about direct evidence from the sample at hand
-   
+
        - probability of making an assertion of an effect if there is no effect
        - proportion of the time that varying confidence intervals over replicates of the experiment cover the true unknown parameter; no statement about the chance that the current confidence interval covers the true parameter
     + See if data are consistent with $H_{0}$
@@ -202,7 +202,7 @@ Here are some examples:
     + A failure to reject _does not_ imply that we have gathered evidence in favor of $H_0$ --- many reasons for studies to not be impressive, including small sample size ($n$)
     + Ignores _clinical_ significance
     + Is fraught with how to deal with multiplicity problems
-   
+
        - No principled recipe for how they should be handled
        - Arise because<br>type I error is fixed at a number $> 0$<br>backward time ordering of information (transposed conditional)
        - Evidence about one question is changed according to whether other questions are asked (regardless of their answers)
@@ -212,7 +212,7 @@ Here are some examples:
     + Considers the sample data, not how it arose from a sequence of samples but rather the data generating mechanism for _this_ sample
     + Computes the probability that a clinically interesting statement is true, e.g. that the new drug lowers population mean SBP by at least 5mmHg, given what we observed in the data
     + Instead of trying to amass evidence against a single hypothesized effect size, Bayes tries to uncover the hidden parameter generating the data aside from noise (e.g., treatment effect) whatever its value
-   
+
        - Provides evidence for _all possible values_ of an unknown parameter
     + More natural and direct approach but requires more work
     + Because respects forward flow of time/information there is no need for nor availability of methods for correcting for multiplicity^[Bayesian inference assumes only that the prior distribution is "well calibrated" in the sense that one sticks to the pre-specified prior no matter what information is unveiled.]
@@ -236,7 +236,7 @@ Here are some examples:
 * We will deal with classical parametric and nonparametric statistical tests more than Bayesian methods only because of time and because of abundance of easy-to-use software for the former
 
 
-## Errors in Hypothesis Testing; $P$ Values 
+## Errors in Hypothesis Testing; $P$ Values
 
 * Can attempt to reject a formal hypothesis or just compute $P$-value
 * Type I error: rejecting $H_0$ when it is true <br> $\alpha$ is the probability of making this error (typically set at $\alpha=0.05$---for weak reasons)
@@ -336,7 +336,7 @@ A $1-\alpha$ two-sided confidence interval is an interval computed such that
     + large $P$-values can come from small $n$ or large $\sigma^2$
     + these make confidence intervals wide, giving a rational sense of uncertainty
     + A confidence interval that is compatible with both large benefit and large detriment indicates that we don't know much
-    
+
        - large $P$-value means nothing more than "get more data"
 
 **Cons**:
@@ -367,7 +367,7 @@ A $1-\alpha$ two-sided confidence interval is an interval computed such that
 * One must specify a prior distribution
 
 
-## One Sample Test for Mean 
+## One Sample Test for Mean
 `r mrg(bmovie(5), ddisc(5))`
 
 ### Frequentist Method
@@ -683,7 +683,7 @@ ggplot(z, aes(x=n, y=y, color=v)) + geom_line() +
 
 
 
-### Power and Sample Size 
+### Power and Sample Size
 
 * Bayesian power is the probability of hitting a specified large posterior probability and is usually obtained by simulation
 * Frequentist power, though often arbitrary (and inviting optimistic single point values for an effect to detect) is easier to
@@ -736,7 +736,7 @@ pwr.t.test(d = delta / sigma, power = 0.9, sig.level = 0.05, type='one.sample')
 ```
 
 
-### Confidence Interval 
+### Confidence Interval
 `r mrg(abd("6.6"))`
 A 2-sided $1-\alpha$ confidence interval for $\mu$ under normality for $Y$ is
 $$\bar{x} \pm t_{n-1,1-\alpha/2} \times \mathrm{se}$$
@@ -763,7 +763,7 @@ The 2-sided $1-\alpha$ CL includes $\mu_{0}$ if and only if a test of $H_{0}:
 $1 - \alpha$ is called the _confidence level_ or _confidence coefficient_, but it is better to refer to _compatibility_
 
 
-### Sample Size for a Given Precision 
+### Sample Size for a Given Precision {#sec-htest-precision}
 `r mrg(abd("14.7"))`
 There are many reasons for preferring to run estimation studies
 instead of hypothesis testing studies.  A null hypothesis may be
@@ -793,7 +793,7 @@ delta <- 1
     + planning on the basis of precision will allow the resulting study to be interpreted if the $P$-value is large, because the confidence interval will not be so wide as to include both clinically significant improvement and clinically significant worsening
 
 
-## One Sample Method for a Probability 
+## One Sample Method for a Probability
 `r mrg(abd("7"))`
 
 ### Frequentist Methods
@@ -953,7 +953,7 @@ minor.tick()
 ```
 
 
-## Paired Data and One-Sample Tests  
+## Paired Data and One-Sample Tests
 `r mrg(abd("11"))`
 
 * To investigate the relationship between smoking and bone mineral density, Rosner presented a paired analysis in which each person had a nearly perfect control which was his or her twin
@@ -979,7 +979,7 @@ c(tstat=tstat, Pvalue=pval)
 ```
 
 
-## Two Sample Test for Means 
+## Two Sample Test for Means
 `r mrg(abd("12"), bmovie(6), ddisc(6))`
 
 * Two groups of different patients (unpaired data)
@@ -1036,7 +1036,7 @@ c(s=s, se=se, tstat=tstat, Pvalue=pval)
 ```
 
 
-### Confidence Interval  
+### Confidence Interval
 Assuming equal variances
 
 $$\bar{x}_{1}-\bar{x}_{2} \pm t_{n_{1}+n_{2}-2,1-\alpha/2} \times s \times \sqrt{\frac{1}{n_{1}} + \frac{1}{n_{2}}}$$
@@ -1293,7 +1293,7 @@ ttest
     + Subjects given caffeine have on average a log RER that is 0.064
    lower (0.95 CI: [-0.13, 0.002]) than individuals given placebo
     + By anti-logging these 3 numbers we get the fold change scale:
-   
+
        - Median^[If the log ratio has a normal distribution, the log ratio has the same mean as the median and its median anti-logged value is the anti-log of the mean (=median) log difference.  The mean on the anti-logged scale is a more complex function that involves SD of log RER.] fold change is 0.94
        - 0.95 CI for caffeine:placebo fold change: $[0.878, 1.002]$
 
@@ -1450,7 +1450,7 @@ For an excellent tutorial on the use of `brms` for a two-sample $t$-test see [bi
 * If effect is not huge, no information from study
 
 
-### $P$-Values 
+### $P$-Values
 `r mrg(abd("6.2"))`
 
 * Only provide evidence against a _null_ hypothesis,
@@ -1468,7 +1468,7 @@ For an excellent tutorial on the use of `brms` for a two-sample $t$-test see [bi
     + American Statistical Association is on record recommending not using any cutoff or words like _significant_: [bit.ly/asa-p](https://amstat.tandfonline.com/doi/full/10.1080/00031305.2016.1154108) [bit.ly/asa-p2](https://www.tandfonline.com/doi/full/10.1080/00031305.2019.1583913)
 
 
-### How Not to Present Results 
+### How Not to Present Results
 `r mrg(abd("6.2"))`
 
 * $P=0.02$ --- let's put this into clinical practice ignoring the
@@ -1486,7 +1486,7 @@ For an excellent tutorial on the use of `brms` for a two-sample $t$-test see [bi
 * The serum pH for the 15 dogs was $7.3 \pm 0.1$ (mean $\pm$ SE instead of SD or IQR)
 
 
-### How to Present Results 
+### How to Present Results
 `r mrg(abd("6.2"))`
 
 * Estimates should be accompanied by uncertainty intervals or posterior distributions
@@ -1512,7 +1512,7 @@ the original dependent variable scale or a transformation of it such
 as odds or hazard.
 
 
-### Sizing a Pilot Study
+### Sizing a Pilot Study {#sec-htest-pilot-n}
 Frequently, pilot studies are used to obtain estimates of variability
 that allow the sample sized to be calculated for a full study.  With a
 continuous response variable, one can think of the adequacy of the
@@ -1658,7 +1658,7 @@ Consider a frequentist study with four efficacy endpoints and corresponding $P$-
     + Define $Y$=0-100 overridden with 101 for too sick or 102 for death^[Ordinal analysis will not be affected by placing the clinical events at 1001 and 1002 or any other levels that are higher than the highest functional disability level.]
     + Analyze with the proportional odds model
     + Interpretation:
-   
+
        - Primary endpoint is degree of functional disability, penalized by death or being physically unable to be assessed
        - Proportional odds model provides an overall odds ratio for treatments B:A (ratio of odds that $Y \geq j$ for any $j$)
        - Model can also be used to estimate the median disability, where sickness or death will shift the median to the right a little
@@ -1877,7 +1877,7 @@ t.test((drug2 - drug1)[1:5], (drug2 - drug1)[6:10], var.equal=TRUE)
     + Large $P$-value has no interpretation
     + With 0.95 confidence, the carryover effect is between [-2.5 and 1.1] hours, which is not scientifically convincing either way
     + In general, be very cautious when the null hypothesis is something you want to fail to reject in order to validate your analysis method
-   
+
        - Tests of normality are sometimes used to validate using a parametric over a non-parametric test
        - There are also statistical tests for equal variance
        - Both tests may be unreliable and will distort the final inference that is conditional on pre-assessments being correct

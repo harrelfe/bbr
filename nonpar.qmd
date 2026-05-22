@@ -514,6 +514,8 @@ print(k, fun=exp)
 
 ### PO Re-analysis
 
+#### Frequentist
+
 * Reconsider the calprotectin data analyzed in @sec-calprotectin
 * Wilcoxon: $P=0.0068, c=0.837$
 * Frequentist PO model:
@@ -587,6 +589,8 @@ pmed <- ymed(predict(f))
 mean(abs(calpro - pmed))
 mean(abs(calpro - median(calpro)))
 ```
+
+#### Calprotectin Bayesian Wilcoxon Test {#sec-nonpar-cal-bayes}
 
 * Repeat with a Bayesian fit, using posterior mean regression coefficients to estimate covariate-specific medians
 * A better but slightly more involved approach would be to compute covariate-specific medians for all posterior draws of $\hat{\beta}$.
@@ -840,7 +844,10 @@ summary(f)
 ```
 
 * This frequentist mixed model fit seems to be fine
-* A Bayesian mixed effects PO model did not have any trouble
+
+### Bayesian Mixed Effects Model for Rank Difference Test
+
+* A Bayesian mixed effects PO model also works well
 * Mimic a p-value by dividing the posterior mean log odds ratio by the posterior standard deviation of this $\beta$
 * Also get Bayesian posterior probability of an effect, which is more actionable than a p-value
 
@@ -859,6 +866,8 @@ round(c(beta=beta, se=se, z=z, p=p, 'Pr(beta > 0)'=P), 3)
 * Compare the p=0.007 with the rank difference tests's p=0.009
 * Note that $\beta$ is on the log-odds scale and cannot be compared to a difference in means
 * Semiparametric models can be used to estimate means, quantiles, etc. (@sec-nonpar-2way)
+
+### Accounting for Within-Subject Correlation With Cluster Sandwich Estimator
 
 * Try an ordinary PO model with a cluster sandwich covariance estimator
 

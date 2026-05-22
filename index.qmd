@@ -13,12 +13,29 @@ I --> K[New Knowledge] & Dec[Decisions]
 
 The book is aimed at exposing biomedical researchers to modern biostatistical methods and statistical graphics, highlighting those methods that make fewer assumptions, including nonparametric statistics and robust statistical measures. In addition to covering traditional estimation and inferential techniques, the course contrasts those with the Bayesian approach, and also includes several components that have been increasingly important in the past few years, such as challenges of high-dimensional data analysis, modeling for observational treatment comparisons, analysis of differential treatment effect (heterogeneity of treatment effect), statistical methods for biomarker research, medical diagnostic research, and methods for reproducible research.  A glossary of statistical terms for non-statisticians is [here](http://hbiostat.org/glossary).[[BBR course](https://hbiostat.org/bbrc)]{.aside} [`R Workflow`](https://hbiostat.org/rflow) is a useful companion to this book, especially for those needing to manipulate data in preparation for analysis and for those interested in embedding statistical analyses in state-of-the-art reproducible reports.
 
+BBR addresses many of the [common errors](https://discourse.datamethods.org/t/author-checklist) made in study design and analysis, such as the following.
+
+* Using hypothesis tests for pilot and other small studies
+  + Large p-values convey no information in this setting
+  + Estimation is more appropriate than testing for pilot studies
+  + Instead use confidence limits, which are valid for all sample sizes
+  + Instead of power calculations report the likely margin of error in estimating the main quantity of interest (see @sec-htest-precision, @sec-htest-t2-moe, @sec-htest-pilot-n)
+* Using hoped-for effects or effect sizes observed in other studies when doing power calculations
+  - Power calculations should always use the minimum effect you don't want to miss
+  - This effect size is driven by biomedical knowledge, not anyone's data or expectation of results
+* Using a low-information response variable
+  + These require large sample sizes
+* Categorizing continuous or ordinal variables (see #sec-info)
+  + This results in a huge loss of power and a great reduction in the effective sample size
+  + Example: Dichotomizing a variable at the median makes the effective sample size about $\frac{2}{3}n$
+  + Dichotomizing farther from the median makes matters even worse.  For example the effective sample size for a binary response that is 0.1 prevalent is $3np(1-p)$ where $p=0.1$, which is $0.27n$.  I.e. more than $\frac{2}{3}$ of the sample's information is discarded by binning the original measurement.
+* Using non-descriptive descriptive statistics (see @sec-descript)
+* Using the data to select which predictors to include in a regression model, i.e., using [stepwise regression or univariable screening](https://hbiostat.org/rmsc/multivar)
+
 ```{r include=FALSE}
 require(Hmisc)
 getRs('qbookfun.r')
 ```
-
-For information about adding annotations, comments, and questions inside the text click here: `r hypcomment`
 
 ### Symbols Used in the Right Margin of the Text
 
@@ -48,6 +65,9 @@ recordings.
 * <span style="color:blue;">blog</span> in the right margin is a link to a blog entry
 that further discusses the topic.
 
+For information about adding annotations, comments, and questions inside the text click here: `r hypcomment`
+
+
 ## Other Information
 
 * [BBR course](https://hbiostat.org/bbrc)
@@ -70,6 +90,7 @@ This material grew largely out of teaching clinical scholars and in Master of Sc
 
 | Date | Sections | Changes | Thanks To |
 |:-----|:---------|:--------|:----------|
+| 2026-05-21 | Preface                  | Added a list of most common study design and analysis errors and links to methods to prevent them |
 | 2025-04-07 | [-@sec-ancova-bsap]      | New subsection on Bayesian SAPs for ANCOVA |
 | 2024-08-06 | [-@sec-os]               | New overview of chapter, made a few additions throughout |
 | 2024-04-16 | [-@sec-change-kccq]      | New subsection on KCCQ ceiling effect problem |
